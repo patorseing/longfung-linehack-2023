@@ -18,7 +18,7 @@ jobs:
       - name: Deploy to Firebase others
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only firestore, functions, storage, remoteconfig
+          args: deploy --only firestore,functions,storage,remoteconfig
           working-directory: frontend
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
