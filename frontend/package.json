@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "debug": "NODE_OPTIONS='--inspect' next dev",
+    "clean": "rimraf out && rimraf build",
+    "build": "next build && next export",
+    "deploy": "firebase deploy --only functions,hosting",
+    "start": "next start"
   },
   "dependencies": {
     "@next/font": "13.1.6",
