@@ -13,9 +13,10 @@ jobs:
       - uses: actions/checkout@v2
       - run: npm ci && npm run build
         working-directory: frontend
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_LOMA_NKAF }}'
-          channelId: live
-          projectId: loma-nkaf
+          args: deploy --only hosting
+          working-directory: frontend
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
