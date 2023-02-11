@@ -15,6 +15,8 @@ jobs:
           working-directory: frontend
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+      - run: npm install
+        working-directory: functions
       - name: Deploy to Firebase others
         uses: w9jds/firebase-action@master
         with:
