@@ -11,12 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Enable webframeworks
+        uses: w9jds/firebase-action@master
+        with:
+          args: experiments:enable webframeworks
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
-          args: deploy
+          args: deploy --only hosting
+          working-directory: frontend
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           # repoToken: '${{ secrets.GITHUB_TOKEN }}'
           # firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_LOMA_NKAF }}'
