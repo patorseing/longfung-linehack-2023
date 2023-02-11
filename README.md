@@ -9,5 +9,8 @@
 - setting GCP billing
 - setting Firebase
 - create repo
-- set Nextjs
+- set NextJS
 - firebase init
+- set up github action
+- set up liff
+- set up DialogFlow with firebase cloud function
