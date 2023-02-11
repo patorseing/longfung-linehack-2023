@@ -11,20 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Enable webframeworks
-        uses: w9jds/firebase-action@master
+      - run: npm ci && npm run build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          args: experiments:enable webframeworks
-        env:
-          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
-      - name: Deploy to Firebase
-        uses: w9jds/firebase-action@master
-        with:
-          args: deploy --only hosting
-          working-directory: frontend
-        env:
-          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
-          # repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          # firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_LOMA_NKAF }}'
-          # channelId: live
-          # projectId: loma-nkaf
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_LOMA_NKAF }}'
+          channelId: live
+          projectId: loma-nkaf

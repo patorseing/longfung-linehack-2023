@@ -20,8 +20,12 @@
     }
   ],
   "hosting": {
-    "source": "frontend",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+    "public": "frontend/out",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
   },
   "storage": {
     "rules": "storage.rules"
