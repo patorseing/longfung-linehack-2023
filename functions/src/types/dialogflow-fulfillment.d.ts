@@ -1,6 +1,6 @@
 declare module "dialogflow-fulfillment" {
-  import { DialogflowConversation } from "actions-on-google";
-  import { Request, Response } from "express";
+  import {DialogflowConversation} from "actions-on-google";
+  import {Request, Response} from "express";
 
   export class Card extends RichResponse {
     constructor(card: string | object);
@@ -93,7 +93,9 @@ declare module "dialogflow-fulfillment" {
     parameters: { [x: string]: any };
   }
 
-  /** Handles the communication with Dialogflow's webhook fulfillment API v1 & v2 with support for rich responses across 8 platforms and Dialogflow's simulator */
+  /** Handles the communication with Dialogflow's webhook fulfillment API
+   * v1 & v2 with support for rich responses across
+   * 8 platforms and Dialogflow's simulator */
   export class WebhookClient {
     UNSPECIFIED: "PLATFORM_UNSPECIFIED";
     FACEBOOK: "FACEBOOK";
@@ -126,27 +128,40 @@ declare module "dialogflow-fulfillment" {
     /** Dialogflow source included in the request or null if no value  */
     public readonly requestSource: string;
 
-    /** Dialogflow original request object from detectIntent/query or platform integration (Google Assistant, Slack, etc.) in the request or null if no value */
+    /** Dialogflow original request object from
+     * detectIntent/query
+     * or platform integration (Google Assistant, Slack, etc.)
+     * in the request or null if no value */
     public readonly originalRequest: object;
 
-    /** Original user query as indicated by Dialogflow or null if no value */
+    /** Original user query as indicated
+     * by Dialogflow or null if no value */
     public readonly query: string;
 
     /** Original request language code or locale (i.e. "en" or "en-US") */
     public readonly locale: string;
 
-    /** Conversation session identifier of the format projects/{project}/agent/sessions/{session} or projects/{project}/agent/environments/{environment}/users/{user}/sessions/{session}  */
+    /** Conversation session identifier of the format
+     * projects/{project}/agent/sessions/{session}
+     * or projects/{project}/agent/environments
+     * /{environment}/users/{user}/sessions/{session}  */
     public readonly session: string;
 
-    /** List of messages defined in Dialogflow's console for the matched intent */
+    /** List of messages defined in Dialogflow's
+     * console for the matched intent */
     public readonly consoleMessages: RichResponse[];
 
-    /** List of alternative query results. Query results can be from other Dialogflow intents or Knowledge Connectors */
+    /** List of alternative query results.
+     * Query results can be from other Dialogflow intents
+     * or Knowledge Connectors */
     public readonly alternativeQueryResults: object;
 
     /**
-     * Constructor for WebhookClient object To be used in the Dialogflow fulfillment webhook logic
-     * @param options JSON configuration with { request: Express HTTP request object, response: Express HTTP response object }
+     * Constructor for WebhookClient object
+     * To be used in the Dialogflow fulfillment webhook logic
+     * @param options JSON configuration with
+     * { request: Express HTTP request object,
+     * response: Express HTTP response object }
      */
     constructor(options: { request: Request; response: Response } | object);
 
@@ -164,8 +179,10 @@ declare module "dialogflow-fulfillment" {
     ): void;
 
     /**
-     * Add a response or list of responses to be sent to Dialogflow and end the conversation.
-     * Note: Only supported on Dialogflow v2's telephony gateway, Google Assistant and Alexa integrations
+     * Add a response or list of responses to be sent
+     * to Dialogflow and end the conversation.
+     * Note: Only supported on Dialogflow v2's telephony gateway,
+     * Google Assistant and Alexa integrations
      * @param responses (list) or single responses
      */
     public end(
@@ -173,8 +190,10 @@ declare module "dialogflow-fulfillment" {
     ): void;
 
     /**
-     * Handles the incoming Dialogflow request using a handler or Map of handlers Each handler must be a function callback.
-     * @param handler map of Dialogflow action name to handler function or function to handle all requests (regardless of Dialogflow action).
+     * Handles the incoming Dialogflow request using a handler
+     * or Map of handlers Each handler must be a function callback.
+     * @param handler map of Dialogflow action name to handler function
+     * or function to handle all requests (regardless of Dialogflow action).
      */
     public handleRequest(
       handler:
@@ -201,7 +220,8 @@ declare module "dialogflow-fulfillment" {
 
     /**
      * Get an context from the Dialogflow webhook request
-     * @param contextName name of an context present in the Dialogflow webhook request
+     * @param contextName name of an context present
+     * in the Dialogflow webhook request
      */
     public getContext(contextName: string): Context;
 
