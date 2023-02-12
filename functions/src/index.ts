@@ -1,9 +1,6 @@
-import * as functions from "firebase-functions";
+"use strict";
 
-// // Start writing functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-export const helloWorld = functions.https.onRequest((request, response) => {
-  functions.logger.info("Hello logs!", {structuredData: true});
-  response.send("Hello from Firebase!");
-});
+import * as functions from "firebase-functions";
+import {dialogflow} from "./dialogflow";
+
+exports.dialogflowFirebaseFulfillment = functions.https.onRequest(dialogflow);
