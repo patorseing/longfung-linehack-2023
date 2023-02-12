@@ -17,9 +17,15 @@ jobs:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
       - run: npm install
         working-directory: functions
+      - name: Deploy to Firebase functions
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --force --only functions
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
       - name: Deploy to Firebase others
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only firestore,functions,storage,remoteconfig
+          args: deploy --only firestore,storage,remoteconfig
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
