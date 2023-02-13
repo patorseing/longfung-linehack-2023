@@ -1,6 +1,6 @@
 declare module "dialogflow-fulfillment" {
-  import {DialogflowConversation} from "actions-on-google";
-  import {Request, Response} from "express";
+  import { DialogflowConversation } from "actions-on-google";
+  import { Request, Response } from "express";
 
   export class Card extends RichResponse {
     constructor(card: string | object);

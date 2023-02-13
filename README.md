@@ -11,6 +11,16 @@
 - create repo
 - set NextJS
 - firebase init
-- set up github action
+- set up Github action
 - set up liff
 - set up DialogFlow with firebase cloud function
+
+## set up .env
+
+```sh
+  firebase functions:config:set line.channel_access_token="xxxxx" line.channel_secret="xxxxx" dialogflow.agent_id="xxxxx"
+
+  # and check by
+
+  firebase functions:config:get
+```
