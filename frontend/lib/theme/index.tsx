@@ -1,9 +1,11 @@
 import { ChakraProvider, extendTheme } from "@chakra-ui/react"
 
 import colors from "./color"
+import breakpoints from "./breakpoints"
 
 const overideTheme = extendTheme({
   colors,
+  breakpoints,
 })
 
 type Props = {
