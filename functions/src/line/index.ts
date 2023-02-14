@@ -26,6 +26,7 @@ export const webhook = async (
         switch (event.type) {
           case "beacon":
             {
+              // TODO: clear log (keep only for track error)
               functions.logger.info("BODY", req.body);
               const userId = event.source.userId;
               const profile = await getUserProfile(userId);
