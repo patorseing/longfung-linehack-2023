@@ -22,5 +22,5 @@
 
   # and check by
 
-  firebase functions:config:get
+  firebase functions:config:get > functions/.runtimeconfig.json
 ```
