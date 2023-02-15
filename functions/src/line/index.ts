@@ -1,6 +1,6 @@
 import * as functions from "firebase-functions";
-import { beaconEvent } from "./beacon";
 
+import { beaconEvent } from "./beacon";
 import { postToDialogflow, verifySignature, reply } from "./util";
 
 export const webhook = async (
