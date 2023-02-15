@@ -1,6 +1,6 @@
 import { WebhookClient, Payload } from "dialogflow-fulfillment";
 
-import { sleepingBearSticker } from "@dialogflow/contrant";
+import { sleepingBearSticker } from "../contrant";
 
 export const welcome = (agent: WebhookClient) => {
   agent.add("I didn't understand");

@@ -1,8 +1,9 @@
 import * as functions from "firebase-functions";
 import * as line from "@line/bot-sdk";
 
-import { getUserProfile } from "@line/util";
 import { enterEvent } from "./enter";
+
+import { getUserProfile } from "../util";
 
 export const beaconEvent = async (
   req: functions.https.Request,

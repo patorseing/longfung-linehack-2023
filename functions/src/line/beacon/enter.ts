@@ -1,8 +1,8 @@
 import * as functions from "firebase-functions";
 import { Profile } from "@line/bot-sdk";
 
-import { reply } from "@line/util";
-import { enter1, bandTemplete } from "@line/templete";
+import { reply } from "../util";
+import { enter1, bandTemplete } from "../templete";
 
 export const enterEvent = async (profile: Profile, replyToken: string) => {
   const msg = enter1(profile);
