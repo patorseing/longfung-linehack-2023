@@ -8,7 +8,11 @@
     "strict": true,
     "target": "es2017",
     "typeRoots": ["./node_modules/@types", "./src/types"],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "@dialogflow/*": ["./src/dialogflow/*"],
+      "@line/*": ["./src/line/*"]
+    }
   },
   "compileOnSave": true,
   "include": ["src"]
