@@ -1,4 +1,5 @@
-import { Box, Center, Flex, Image, Text } from "@chakra-ui/react"
+import Link from "next/link"
+import { Box, Center, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react"
 
 import { REGISTER_CARD_DATA } from "../constants"
 
@@ -12,7 +13,7 @@ const SelectTypePage = () => {
     >
       <Flex
         sx={{
-          color: "white",
+          color: { base: "white", md: "black" },
           textAlign: "center",
           w: "full",
           flexDirection: "column",
@@ -20,37 +21,54 @@ const SelectTypePage = () => {
           mt: 8,
         }}
       >
-        <Text sx={{ fontSize: "24px", fontWeight: 500 }}>
-          Select Register Type
-        </Text>
-        <Flex
+        <Text
           sx={{
-            w: "60%",
-            flexDirection: "column",
-            mt: 8,
-            gap: 6,
-            filter: "drop-shadow(0px 8px 12px rgba(0, 0, 0, 0.161))",
+            fontSize: { base: "24px", md: "40px", xl: "56px" },
+            fontWeight: { base: 500, xl: 700 },
           }}
         >
-          {REGISTER_CARD_DATA.map((data) => (
-            <Box sx={{ borderRadius: "10px", overflow: "hidden" }}>
-              <Center sx={{ py: 10, bg: "primary.800" }}>
-                <Image src={data.picture} w="64%" />
-              </Center>
-              <Center
+          Select Registration Type
+        </Text>
+        <SimpleGrid
+          columns={{ base: 1, xl: 2 }}
+          sx={{
+            w: { base: "60%", md: "440px", xl: "956px" },
+            mt: { base: 8, xl: 12 },
+            gap: { base: 6, xl: 9 },
+          }}
+        >
+          {REGISTER_CARD_DATA.map((data, idx) => (
+            <Link key={idx} href={`/registration/${data.value}`}>
+              <Box
                 sx={{
-                  py: 4,
-                  bg: "white",
-                  color: "black",
-                  fontSize: "24px",
-                  fontWeight: 700,
+                  borderRadius: "10px",
+                  overflow: "hidden",
+                  filter: "drop-shadow(0px 8px 12px rgba(0, 0, 0, 0.161))",
                 }}
               >
-                {data.title}
-              </Center>
-            </Box>
+                <Center
+                  sx={{ py: { base: 10, xl: "60px" }, bg: "primary.800" }}
+                >
+                  <Image
+                    src={data.picture}
+                    boxSize={{ base: "64%", xl: "305px" }}
+                  />
+                </Center>
+                <Center
+                  sx={{
+                    py: { base: 4, xl: 12 },
+                    bg: "white",
+                    color: "black",
+                    fontSize: { base: "24px", xl: "48px" },
+                    fontWeight: 700,
+                  }}
+                >
+                  {data.title}
+                </Center>
+              </Box>
+            </Link>
           ))}
-        </Flex>
+        </SimpleGrid>
       </Flex>
     </PlatformLayout>
   )
