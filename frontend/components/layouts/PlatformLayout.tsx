@@ -21,7 +21,7 @@ export const PlatformLayout = (props: PlatformLayoutProps) => {
           justifyContent: "space-between",
         }}
       >
-        <Image src="/images/logo.svg" w="93px" />
+        <Image src="/images/logo.svg" alt="loma-logo" w="93px" />
         <HStack spacing="4">
           <Text>Cony</Text>
           <Avatar />

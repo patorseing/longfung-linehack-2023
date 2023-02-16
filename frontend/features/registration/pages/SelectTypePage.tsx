@@ -1,11 +1,12 @@
 import Link from "next/link"
+import { NextPage } from "next"
 import { Box, Center, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react"
 
 import { REGISTER_CARD_DATA } from "../constants"
 
 import { PlatformLayout } from "@/components/layouts"
 
-const SelectTypePage = () => {
+const SelectTypePage: NextPage = () => {
   return (
     <PlatformLayout
       mobileBg="url(/images/bg/mobile.svg)"
