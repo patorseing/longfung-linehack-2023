@@ -1,7 +1,6 @@
 import { Avatar, Box, Flex, HStack, Image, Text } from "@chakra-ui/react"
 
 export type PlatformLayoutProps = {
-  // children: React.ReactNode
   mobileBg?: string
   desktopBg: string
 }

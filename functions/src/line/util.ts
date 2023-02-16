@@ -1,41 +1,64 @@
-import * as functions from "firebase-functions";
-import * as crypto from "crypto";
 import axios from "axios";
 
-const LINE_MESSAGING_API = "https://api.line.me/v2/bot";
-const LINE_CHANNEL_SECRET = functions.config().line.channel_secret;
-const LINE_HEADER = {
-  "Content-Type": "application/json",
-  "Authorization": `Bearer ${functions.config().line.channel_access_token}`,
+import * as admin from "firebase-admin";
+import * as functions from "firebase-functions";
+import * as line from "@line/bot-sdk";
+
+type Error = {
+  message: string;
 };
 
-export const reply = (token: string, payload: any) => {
-  return axios({
-    method: "post",
-    url: `${LINE_MESSAGING_API}/message/reply`,
-    headers: LINE_HEADER,
-    data: JSON.stringify({
-      replyToken: token,
-      messages: [payload],
-    }),
-  });
+const LINE_CHANNEL_SECRET = functions.config().line.channel_secret;
+const LINE_CHANNEL_ACCESS_TOKEN = functions.config().line.channel_access_token;
+
+export const getUserProfile = async (userId: string) => {
+  try {
+    const client = new line.Client({
+      channelAccessToken: LINE_CHANNEL_ACCESS_TOKEN,
+      channelSecret: LINE_CHANNEL_SECRET,
+    });
+    const profile = await client.getProfile(userId);
+    return profile;
+  } catch (error) {
+    functions.logger.error("Utils-getUserProfile", (error as Error).message);
+    return;
+  }
+};
+
+export const reply = async (token: string, payload: any) => {
+  try {
+    const client = new line.Client({
+      channelAccessToken: LINE_CHANNEL_ACCESS_TOKEN,
+      channelSecret: LINE_CHANNEL_SECRET,
+    });
+    await client.replyMessage(token, payload);
+    return true;
+  } catch (error) {
+    functions.logger.error("Utils-reply", (error as Error).message);
+    return false;
+  }
 };
 
 export const postToDialogflow = async (req: functions.https.Request) => {
-  console.log(req.body);
-  req.headers.host = "dialogflow.cloud.google.com";
-  return axios({
-    url: `https://dialogflow.cloud.google.com/v1/integrations/line/webhook/${
-      functions.config().dialogflow.agent_id
-    }`,
-    headers: req.headers,
-    method: "post",
-    data: req.body,
-  });
+  try {
+    req.headers.host = "dialogflow.cloud.google.com";
+    await axios({
+      url: `https://dialogflow.cloud.google.com/v1/integrations/line/webhook/${
+        functions.config().dialogflow.agent_id
+      }`,
+      headers: req.headers,
+      method: "post",
+      data: req.body,
+    });
+    return true;
+  } catch (error) {
+    functions.logger.error("Utils-postToDialogflow", (error as Error).message);
+    return false;
+  }
 };
 
 export const verifySignature = (
-    originalSignature: string | string[] | undefined,
+    signature: string | string[] | undefined,
     body: any
 ) => {
   let text = JSON.stringify(body);
@@ -51,14 +74,47 @@ export const verifySignature = (
         );
       }
   );
-  const signature = crypto
-      .createHmac("SHA256", LINE_CHANNEL_SECRET)
-      .update(text)
-      .digest("base64")
-      .toString();
-  if (signature !== originalSignature) {
+
+  const verified = line.validateSignature(
+      text,
+      LINE_CHANNEL_SECRET,
+    signature as string
+  );
+  if (!verified) {
     functions.logger.error("Unauthorized");
+  }
+  return verified;
+};
+
+export const addBeaconUser = async (profile: { userId: string }) => {
+  const userRef = admin
+      .firestore()
+      .collection("beacons")
+      .doc(`${profile.userId}`);
+  try {
+    const doc = await userRef.get();
+    if (!doc.exists) {
+      await userRef.set(profile);
+    }
+    return true;
+  } catch (error) {
+    functions.logger.error("Utils-addBeaconUser", (error as Error).message);
     return false;
   }
-  return true;
+};
+
+export const richMenuLink = async (userId: string) => {
+  // 10. Fill in your RICH MENU ID
+  const RICH_MENU_ID = "";
+  try {
+    const client = new line.Client({
+      channelAccessToken: LINE_CHANNEL_ACCESS_TOKEN,
+      channelSecret: LINE_CHANNEL_SECRET,
+    });
+    await client.linkRichMenuToUser(userId, RICH_MENU_ID);
+    return true;
+  } catch (error) {
+    functions.logger.error("Utils-richMenuLink", (error as Error).message);
+    return false;
+  }
 };
