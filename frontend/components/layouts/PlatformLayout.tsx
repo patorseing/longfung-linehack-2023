@@ -1,12 +1,12 @@
 import { Avatar, Box, Flex, HStack, Image, Text } from "@chakra-ui/react"
 
-type PlatformLayoutProps = {
-  children: React.ReactNode
-  mobileBg: string
+export type PlatformLayoutProps = {
+  // children: React.ReactNode
+  mobileBg?: string
   desktopBg: string
 }
 
-export const PlatformLayout = (props: PlatformLayoutProps) => {
+export const PlatformLayout = (props: React.PropsWithChildren<PlatformLayoutProps>) => {
   const { children, mobileBg, desktopBg } = props
   return (
     <Box>
@@ -16,23 +16,23 @@ export const PlatformLayout = (props: PlatformLayoutProps) => {
           color: "white",
           px: 5,
           py: 4,
-          h: "80px",
+          h: "50px",
           alignItems: "center",
           justifyContent: "space-between",
         }}
       >
-        <Image src="/images/logo.svg" w="93px" />
+        <Image src="/images/logo.svg" w="60px" />
         <HStack spacing="4">
           <Text>Cony</Text>
-          <Avatar />
+          <Avatar size='sm'/>
         </HStack>
       </Flex>
       <Box
         sx={{
           display: "flex",
-          minH: `calc(100vh - 80px)`,
+          minH: `calc(100vh - 50px)`,
           pb: 12,
-          bg: { base: mobileBg, md: desktopBg },
+          bg: { base: mobileBg?? desktopBg, md: desktopBg },
           bgSize: { base: "cover", md: "cover" },
           bgRepeat: { base: "no-repeat", md: "no-repeat" },
         }}

@@ -2,15 +2,10 @@ import Link from "next/link"
 import { Box, Center, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react"
 
 import { REGISTER_CARD_DATA } from "../constants"
-
 import { PlatformLayout } from "@/components/layouts"
 
 const SelectTypePage = () => {
   return (
-    <PlatformLayout
-      mobileBg="url(/images/bg/mobile.svg)"
-      desktopBg="url(/images/bg/desktop.svg)"
-    >
       <Flex
         sx={{
           color: { base: "white", md: "black" },
@@ -70,8 +65,9 @@ const SelectTypePage = () => {
           ))}
         </SimpleGrid>
       </Flex>
-    </PlatformLayout>
+    
   )
 }
 
+SelectTypePage.LayoutProps = { mobileBg:"url(/images/bg/mobile.svg)",desktopBg:"url(/images/bg/desktop.svg)"}
 export default SelectTypePage
