@@ -1,5 +1,6 @@
 import * as functions from "firebase-functions";
 
+import {beaconEvent} from "./beacon";
 import {postToDialogflow, verifySignature, reply} from "./util";
 
 export const webhook = async (
@@ -14,15 +15,28 @@ export const webhook = async (
     const event = req.body.events[0];
     if (event === undefined) {
       res.end();
-    }
-    if (event.type === "message") {
-      if (event.message.type !== "text") {
-        reply(event.replyToken, {
-          type: "text",
-          text: JSON.stringify(event),
-        });
-      } else {
-        await postToDialogflow(req);
+    } else {
+      const events = req.body.events;
+      for (const event of events) {
+        switch (event.type) {
+          case "beacon":
+            await beaconEvent(req, event);
+            break;
+          case "message":
+            {
+              if (event.message.type !== "text") {
+                await reply(event.replyToken, {
+                  type: "text",
+                  text: JSON.stringify(event),
+                });
+              } else {
+                await postToDialogflow(req);
+              }
+            }
+            break;
+          default:
+            break;
+        }
       }
     }
   }
