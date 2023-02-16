@@ -1,7 +1,7 @@
 import { Avatar, Box, Flex, HStack, Image, Text } from "@chakra-ui/react"
 
 export type PlatformLayoutProps = {
-  mobileBg?: string
+  mobileBg: string
   desktopBg: string
 }
 
@@ -31,7 +31,7 @@ export const PlatformLayout = (props: React.PropsWithChildren<PlatformLayoutProp
           display: "flex",
           minH: `calc(100vh - 50px)`,
           pb: 12,
-          bg: { base: mobileBg?? desktopBg, md: desktopBg },
+          bg: { base: mobileBg, md: desktopBg },
           bgSize: { base: "cover", md: "cover" },
           bgRepeat: { base: "no-repeat", md: "no-repeat" },
         }}

@@ -5,6 +5,4 @@ const BandRegisterPage = () =>{
     return <Stack></Stack>
 }
 
-BandRegisterPage.Layout = PlatformLayout
-
 export default BandRegisterPage
