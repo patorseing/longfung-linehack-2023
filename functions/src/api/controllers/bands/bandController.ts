@@ -4,7 +4,7 @@ import {validationResult} from "express-validator";
 import {compact} from "../../utils/transformPayload";
 import {firestore} from "../../../firebase";
 import {Band} from "./types";
-import { fileUploader } from "../../utils/fileUploader";
+import {fileUploader} from "../../utils/fileUploader";
 
 export const getBands = async (req: Request, res: Response) => {
   const errors = validationResult(req);
@@ -50,15 +50,15 @@ export const createBand = async (req: Request, res: Response) => {
     const bucketName = "loma-nkaf";
 
     if (req.body.bandImage !== undefined) {
-      const imageUrl = await fileUploader(bucketName, req.body.bandImage)
+      const imageUrl = await fileUploader(bucketName, req.body.bandImage);
 
-      band.bandImage = imageUrl
+      band.bandImage = imageUrl;
     }
 
     if (req.body.qrImage !== undefined) {
-      const imageUrl = await fileUploader(bucketName, req.body.qrImage)
+      const imageUrl = await fileUploader(bucketName, req.body.qrImage);
 
-      band.qrImage = imageUrl
+      band.qrImage = imageUrl;
     }
 
     const newBand = await firestore
