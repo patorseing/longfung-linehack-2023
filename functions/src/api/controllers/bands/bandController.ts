@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 
-
-
 import { storage } from "../../../firebase";
 
 export const getBands = async (req: Request, res: Response) => {
@@ -11,7 +9,7 @@ export const getBands = async (req: Request, res: Response) => {
     return res.status(400).json({ errors: errors["errors"] });
   }
 
-  const bandList: any = [];
+  const bandList: FirebaseFirestore.DocumentData[] = [];
 
   await storage
     .collection("Band")
@@ -22,8 +20,6 @@ export const getBands = async (req: Request, res: Response) => {
         bandList.push(doc.data());
       });
     });
-
-
 
   return res.status(200).json({ data: bandList });
 };
