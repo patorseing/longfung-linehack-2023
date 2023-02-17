@@ -26,4 +26,6 @@ export const createBandValidators = [
   body("lineBeacon").optional(),
   body("lineBeacon.*.hardware_id").isString(),
   body("lineBeacon.*.passcode").isString(),
+
+  body("bandImage").optional().notEmpty(),
 ];

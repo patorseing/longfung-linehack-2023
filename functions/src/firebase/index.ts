@@ -5,4 +5,5 @@ const firebaseConfig = functions.config().storage_credential;
 
 const app = admin.initializeApp(firebaseConfig);
 
-export const storage = app.firestore();
+export const firestore = app.firestore();
+export const storage = app.storage();
