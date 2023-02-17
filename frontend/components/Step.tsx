@@ -20,7 +20,10 @@ export const Step = ({ step, value, onChange }: Props) => {
               h: "15px",
               bg: value === i + 1 ? "secondary.500" : "white",
               cursor: "pointer",
-              boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+              _hover: {
+                boxShadow:
+                  "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px",
+              },
             }}
             onClick={() => onChange(i + 1)}
           />

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Flex, Text, VStack } from "@chakra-ui/react";
+import { Text, VStack } from "@chakra-ui/react";
 import { Step } from "@/components";
 
 const BandRegisterPage = () => {
