@@ -16,8 +16,8 @@ export const Step = ({ step, value, onChange }: Props) => {
             key={i + 1}
             sx={{
               borderRadius: "50%",
-              w: "15px",
-              h: "15px",
+              w: { base: "10px", md: "15px" },
+              h: { base: "10px", md: "15px" },
               bg: value === i + 1 ? "secondary.500" : "white",
               cursor: "pointer",
               _hover: {

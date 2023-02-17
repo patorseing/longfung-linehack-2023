@@ -33,7 +33,7 @@ export const PlatformLayout = (
           display: "flex",
           minH: `calc(100vh - 50px)`,
           pt: "20px",
-          px: 12,
+          px: { base: "20px", md: 12 },
           bg: { base: mobileBg, md: desktopBg },
           bgSize: { base: "cover", md: "cover" },
           bgRepeat: { base: "no-repeat", md: "no-repeat" },

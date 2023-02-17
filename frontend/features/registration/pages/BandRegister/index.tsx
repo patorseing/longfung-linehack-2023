@@ -8,11 +8,18 @@ const BandRegisterPage = () => {
     <Box sx={{ w: "100%" }}>
       <BackButton />
       <VStack sx={{ w: "100%", alignItems: "center", mt: "20px" }}>
-        <Text sx={{ fontWeight: "bold", color: "white", fontSize: "40px" }}>
+        <Text
+          sx={{
+            fontWeight: "bold",
+            color: "white",
+            fontSize: { base: "25px", md: "40px" },
+          }}
+        >
           Band Information
         </Text>
         <Step step={4} value={steps} onChange={setSteps} />
       </VStack>
+      <Box layerStyle="formContainer"></Box>
     </Box>
   );
 };

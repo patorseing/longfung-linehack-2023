@@ -6,6 +6,7 @@ const colors = {
   secondary: {
     500: "#2D2B38",
   },
+  formBg:"#FDFCFB"
 }
 
 export default colors
