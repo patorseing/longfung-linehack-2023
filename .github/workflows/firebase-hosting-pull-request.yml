@@ -6,6 +6,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_NEXT_PUBLIC_TEST: ${{ secrets.NEXT_PUBLIC_TEST }}
+          file_name: .env
+          directory: ./
       - run: npm ci && npm run build
         working-directory: frontend
       - name: Deploy to Firebase Hosting
