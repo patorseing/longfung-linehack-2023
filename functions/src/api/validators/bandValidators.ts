@@ -10,7 +10,7 @@ export const createBandValidators = [
 
   body("socialMedia").optional(),
   body("socialMedia.facebook").optional().isString(),
-  body("socialMedia.instragram").optional().isString(),
+  body("socialMedia.instagram").optional().isString(),
   body("socialMedia.tiktok").optional().isString(),
   body("socialMedia.website").optional().isString(),
 

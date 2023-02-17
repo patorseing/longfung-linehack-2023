@@ -1,6 +1,6 @@
 interface SocialMediaItem {
   facebook?: string;
-  instragram?: string;
+  instagram?: string;
   tiktok?: string;
   website?: string;
 }
