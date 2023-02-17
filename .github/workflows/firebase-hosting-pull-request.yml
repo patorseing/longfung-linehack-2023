@@ -11,7 +11,7 @@ jobs:
         with:
           envkey_NEXT_PUBLIC_TEST: ${{ secrets.NEXT_PUBLIC_TEST }}
           file_name: .env
-          working-directory: frontend
+          directory: ./frontend
       - run: npm ci && npm run build
         working-directory: frontend
       - name: Deploy to Firebase Hosting
