@@ -24,4 +24,4 @@ app.use(cors());
 
 app.use("/bands", bandsRouter);
 
-exports.expressAPI = functions.https.onRequest(app);
+exports.api = functions.https.onRequest(app);
