@@ -47,6 +47,7 @@ export const createBand = async (req: Request, res: Response) => {
       lineBeacon: req.body.lineBeacon || [],
     };
 
+    // TODO: hard-coded for now
     const bucketName = "loma-nkaf";
 
     if (req.body.bandImage !== undefined) {
