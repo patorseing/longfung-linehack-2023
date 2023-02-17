@@ -27,4 +27,6 @@ export interface Band {
   songRequest: boolean;
   description?: string;
   lineBeacon?: Array<LineBeaconItem>;
+  bandImage?: string;
+  qrImage?: string;
 }

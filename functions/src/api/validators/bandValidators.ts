@@ -28,4 +28,5 @@ export const createBandValidators = [
   body("lineBeacon.*.passcode").isString(),
 
   body("bandImage").optional().notEmpty(),
+  body("qrImage").optional().notEmpty(),
 ];

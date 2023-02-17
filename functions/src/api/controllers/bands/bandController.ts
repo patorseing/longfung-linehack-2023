@@ -2,8 +2,9 @@ import {Request, Response} from "express";
 import {validationResult} from "express-validator";
 
 import {compact} from "../../utils/transformPayload";
-import {firestore, storage} from "../../../firebase";
+import {firestore} from "../../../firebase";
 import {Band} from "./types";
+import { fileUploader } from "../../utils/fileUploader";
 
 export const getBands = async (req: Request, res: Response) => {
   const errors = validationResult(req);
@@ -47,16 +48,22 @@ export const createBand = async (req: Request, res: Response) => {
     };
 
     const bucketName = "loma-nkaf";
-    const bandImage = await storage
-        .bucket("loma-nkaf")
-        .upload(req.body.bandImage);
 
-    const fileName = encodeURIComponent(bandImage[0].metadata.name);
-    const bandImageUrl = `https://firebasestorage.googleapis.com/v0/b/${bucketName}/o/${fileName}?alt=media`;
+    if (req.body.bandImage !== undefined) {
+      const imageUrl = await fileUploader(bucketName, req.body.bandImage)
+
+      band.bandImage = imageUrl
+    }
+
+    if (req.body.qrImage !== undefined) {
+      const imageUrl = await fileUploader(bucketName, req.body.qrImage)
+
+      band.qrImage = imageUrl
+    }
 
     const newBand = await firestore
         .collection("Band")
-        .add(compact({...band, bandImage: bandImageUrl}));
+        .add(compact(band));
 
     return res.status(201).send({data: newBand});
   } catch (err) {
