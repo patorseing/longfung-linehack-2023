@@ -1,8 +1,8 @@
-import { PlatformLayout } from "@/components/layouts"
-import { Stack } from "@chakra-ui/react"
+import { Stack } from "@chakra-ui/react";
 
-const BandRegisterPage = () =>{
-    return <Stack></Stack>
-}
+const BandRegisterPage = () => {
+  console.log(process.env.NEXT_PUBLIC_TEST);
+  return <Stack></Stack>;
+};
 
-export default BandRegisterPage
+export default BandRegisterPage;
