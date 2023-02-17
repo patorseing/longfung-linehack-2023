@@ -1,1 +1,1 @@
-export * from "./routes/bandRoutes";
+export * as router from "./routes/bandRoutes";

@@ -16,15 +16,15 @@ interface LineBeaconItem {
   passcode: string;
 }
 
-interface Band {
+export interface Band {
   bandName: string;
   firstPromotedSong?: string;
   secondPromotedSong?: string;
   userId: string;
-  socialMedia?: Array<SocialMediaItem>;
-  streamingPlatform?: Array<SteamingPlatformItem>;
+  socialMedia?: SocialMediaItem;
+  streamingPlatform?: SteamingPlatformItem;
   lineMelody?: string;
   songRequest: boolean;
   description?: string;
-  lineBeacon: Array<LineBeaconItem>;
+  lineBeacon?: Array<LineBeaconItem>;
 }
