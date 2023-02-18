@@ -11,6 +11,7 @@ export type BandFormValue = {
   second_song: string
   facebook_url: string
   instagram_account: string
+  website_url: string
   tiktok_url: string
   spotify_url: string
   youtube_url: string

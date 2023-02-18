@@ -56,6 +56,11 @@ export const FormStep1 = () => {
           placeholder="TikTok url (optional)"
           register={register("tiktok_url")}
         />
+        <FormInput
+          filedLogo="/images/social/website.svg"
+          placeholder="Website url (optional)"
+          register={register("website_url")}
+        />
       </Grid>
 
       <Grid
