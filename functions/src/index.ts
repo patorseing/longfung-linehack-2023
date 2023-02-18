@@ -17,6 +17,7 @@ import healthCheckRouter from "./api/routes/healthcheck";
 
 import * as bodyParser from "body-parser";
 import * as cors from "cors";
+import tokenVerification from "./api/middlewares/tokenVerification";
 
 const app = express();
 
@@ -24,7 +25,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors());
 
-app.use("/bands", bandsRouter);
-app.use("/healthcheck", healthCheckRouter);
+app.use("/bands", tokenVerification, bandsRouter);
+app.use("/healthcheck", tokenVerification, healthCheckRouter);
 
 exports.api = functions.https.onRequest(app);
