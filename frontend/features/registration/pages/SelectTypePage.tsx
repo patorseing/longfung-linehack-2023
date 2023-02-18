@@ -1,9 +1,19 @@
-import Link from "next/link"
-import { Box, Center, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react"
+import Link from "next/link";
+import { Box, Center, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
 
-import { REGISTER_CARD_DATA } from "../constants"
+import { _axios, useDefaultAxiosHeader } from "@/lib/hooks/axios";
+
+import { REGISTER_CARD_DATA } from "../constants";
 
 const SelectTypePage = () => {
+  const headers = useDefaultAxiosHeader();
+
+  const { isLoading, isError, data, error } = useQuery({
+    queryKey: ["healthcheck"],
+    queryFn: () => _axios({ method: "get", url: "/healthcheck", headers }),
+  });
+
   return (
     <Flex
       sx={{

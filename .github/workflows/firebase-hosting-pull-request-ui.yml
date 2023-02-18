@@ -1,10 +1,12 @@
-name: Deploy to Firebase Hosting on merge
-'on':
-  push:
-    branches:
-      - main
+name: Deploy to Firebase Hosting on PR
+
+on:
+  pull_request:
+    types: [ labeled ]
+
 jobs:
-  build_and_deploy:
+  build_and_preview:
+    if: ${{ github.event.label.name == 'UI' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -29,7 +31,7 @@ jobs:
       - name: Deploy to Firebase Hosting
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only hosting
+          args: hosting:channel:deploy preview_name --expires 1d
           working-directory: frontend
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
