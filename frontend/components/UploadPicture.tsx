@@ -1,19 +1,18 @@
 import { useState } from "react"
 import { MdAddPhotoAlternate } from "react-icons/md"
-import { Box, Button, Flex, Icon, Image, Stack, Text } from "@chakra-ui/react"
+import { Button, Flex, Icon, Image, Stack, Text } from "@chakra-ui/react"
 import { useDropzone, FileWithPath } from "react-dropzone"
 
 type UploadPictureProps = {
+  fileSrc: string
   onDropFile: (files: FileWithPath[]) => void
   onDeleteFile: () => void
 }
 
 export const UploadPicture = (props: UploadPictureProps) => {
-  const { onDeleteFile, onDropFile } = props
-  const [fileSrc, setFileSrc] = useState<string>("")
+  const { fileSrc, onDeleteFile, onDropFile } = props
 
   const onDrop = (files: FileWithPath[]) => {
-    setFileSrc(URL.createObjectURL(files[0]))
     onDropFile(files)
   }
   const { getRootProps, getInputProps } = useDropzone({
@@ -51,7 +50,6 @@ export const UploadPicture = (props: UploadPictureProps) => {
             _hover: { bg: "red.300" },
           }}
           onClick={() => {
-            setFileSrc("")
             onDeleteFile()
           }}
         >
