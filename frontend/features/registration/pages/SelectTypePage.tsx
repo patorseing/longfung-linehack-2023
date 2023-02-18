@@ -10,11 +10,9 @@ const SelectTypePage = () => {
   const headers = useDefaultAxiosHeader();
 
   const { isLoading, isError, data, error } = useQuery({
-    queryKey: ["todos"],
+    queryKey: ["healthcheck"],
     queryFn: () => _axios({ method: "get", url: "/healthcheck", headers }),
   });
-
-  console.log(isLoading, isError, data?.data, error);
 
   return (
     <Flex

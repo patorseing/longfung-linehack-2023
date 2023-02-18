@@ -24,6 +24,7 @@
     "firebase": "^9.17.1",
     "framer-motion": "^9.0.2",
     "next": "13.1.6",
+    "next-recaptcha-v3": "^1.1.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "reactfire": "^4.2.2",

@@ -5,6 +5,7 @@ import { NextPage } from "next";
 import { FirebaseAppProvider } from "reactfire";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ReCaptchaProvider } from "next-recaptcha-v3";
 
 import { ThemeProvider } from "@/lib/theme";
 import { FirebaseAppCheckProvider } from "@/lib/firebase/FirebaseAppCheckProvider";
@@ -30,21 +31,23 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     Component.LayoutProps?.mobileBg ?? "url(/images/bg/mobile-top.svg)";
 
   return (
-    <FirebaseAppProvider firebaseConfig={firebaseConfig}>
-      <FirebaseAppCheckProvider>
-        <QueryClientProvider client={queryClient}>
-          <ThemeProvider>
-            <Layout
-              desktopBg={desktopBg}
-              mobileBg={mobileBg}
-              {...Component.LayoutProps}
-            >
-              <Component {...pageProps} />
-            </Layout>
-          </ThemeProvider>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-      </FirebaseAppCheckProvider>
-    </FirebaseAppProvider>
+    <ReCaptchaProvider reCaptchaKey={process.env.NEXT_PUBLIC_APPCHECK_KEY}>
+      <FirebaseAppProvider firebaseConfig={firebaseConfig}>
+        <FirebaseAppCheckProvider>
+          <QueryClientProvider client={queryClient}>
+            <ThemeProvider>
+              <Layout
+                desktopBg={desktopBg}
+                mobileBg={mobileBg}
+                {...Component.LayoutProps}
+              >
+                <Component {...pageProps} />
+              </Layout>
+            </ThemeProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryClientProvider>
+        </FirebaseAppCheckProvider>
+      </FirebaseAppProvider>
+    </ReCaptchaProvider>
   );
 }
