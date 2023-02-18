@@ -1,0 +1,25 @@
+name: Deploy to Firebase Others on PR
+
+on:
+  pull_request:
+    types: [ labeled ]
+
+jobs:
+  build_and_preview:
+    if: ${{ github.event.label.name == 'BE' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm install
+        working-directory: functions
+      - name: Deploy to Firebase functions
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only functions --debug
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+      - name: Deploy to Firebase others
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only firestore,storage,remoteconfig
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
