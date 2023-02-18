@@ -23,5 +23,26 @@ export const checkDuplicatedKey = async (collection: string, key: string) => {
         return doc.data();
       });
 
-  return existingRecord !== undefined;
+  if (existingRecord !== undefined) {
+    return key;
+  }
+  return undefined;
+};
+
+export const compactArray = (
+    arr: Array<string | undefined | null>
+): Array<string> => {
+  return arr.join("").split("");
+};
+
+type LineBeacon = {
+  hardwareId: string;
+  passcode: string;
+};
+
+export const checkDuplicatedHardwareIds = async (lineBeacon: LineBeacon[]) => {
+  const results = lineBeacon.map((el) =>
+    checkDuplicatedKey("LineBeacon", el.hardwareId)
+  );
+  return Promise.all(results);
 };
