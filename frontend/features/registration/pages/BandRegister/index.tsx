@@ -1,57 +1,57 @@
-import { useState } from "react"
-import { FormProvider, useForm } from "react-hook-form"
-import { Box, Button, Flex, Icon, Text } from "@chakra-ui/react"
-import { MdArrowForward, MdArrowBack } from "react-icons/md"
-import { yupResolver } from "@hookform/resolvers/yup"
+import { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { Box, Button, Flex, Icon, Text } from "@chakra-ui/react";
+import { MdArrowForward, MdArrowBack } from "react-icons/md";
+import { yupResolver } from "@hookform/resolvers/yup";
 
-import { BandFormValue } from "../../types"
-import { bandSchema } from "../../schema"
+import { BandFormValue } from "../../types";
+import { bandSchema } from "../../schema";
 
-import { Step } from "@/components/Step"
-import { PictureContextProvider } from "../../context/previewImage"
-import { FormStep1, FormStep2, FormStep3 } from "../../components/band"
+import { Step } from "@/components/Step";
+import { PictureContextProvider } from "../../context/previewImage";
+import { FormStep1, FormStep2, FormStep3 } from "../../components/band";
 
 const BandRegisterPage = () => {
-  const [step, setStep] = useState<number>(1)
+  const [step, setStep] = useState<number>(1);
 
   const methods = useForm<BandFormValue>({
     resolver: yupResolver(bandSchema),
-  })
+  });
 
   const onNextStep = async () => {
     switch (step) {
       case 1:
-        const result = await methods.trigger(["name", "first_song"])
+        const result = await methods.trigger(["name", "first_song"]);
 
-        if (!result) return
+        if (!result) return;
 
-        setStep((prev) => prev + 1)
+        setStep((prev) => prev + 1);
 
-        break
+        break;
       case 2:
-        setStep((prev) => prev + 1)
-        break
+        setStep((prev) => prev + 1);
+        break;
       default:
-        return
+        return;
     }
-  }
+  };
 
   const onSubmit = methods.handleSubmit((data, e) => {
-    console.log(data)
-  })
+    console.log(data);
+  });
 
   const renderForm = () => {
     switch (step) {
       case 1:
-        return <FormStep1 />
+        return <FormStep1 />;
       case 2:
-        return <FormStep2 />
+        return <FormStep2 />;
       case 3:
-        return <FormStep3 />
+        return <FormStep3 />;
       default:
-        return
+        return;
     }
-  }
+  };
 
   return (
     <PictureContextProvider>
@@ -109,7 +109,7 @@ const BandRegisterPage = () => {
                   }}
                   leftIcon={<Icon as={MdArrowBack} fontSize="20px" />}
                   onClick={() => {
-                    setStep((prev) => prev - 1)
+                    setStep((prev) => prev - 1);
                   }}
                 >
                   Back
@@ -143,7 +143,7 @@ const BandRegisterPage = () => {
         </form>
       </FormProvider>
     </PictureContextProvider>
-  )
-}
+  );
+};
 
-export default BandRegisterPage
+export default BandRegisterPage;

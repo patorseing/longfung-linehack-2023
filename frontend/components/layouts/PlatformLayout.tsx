@@ -1,14 +1,14 @@
-import { Avatar, Box, Flex, HStack, Image, Text } from "@chakra-ui/react"
+import { Avatar, Box, Flex, HStack, Image, Text } from "@chakra-ui/react";
 
 export type PlatformLayoutProps = {
-  mobileBg: string
-  desktopBg: string
-}
+  mobileBg: string;
+  desktopBg: string;
+};
 
 export const PlatformLayout = (
   props: React.PropsWithChildren<PlatformLayoutProps>
 ) => {
-  const { children, mobileBg, desktopBg } = props
+  const { children, mobileBg, desktopBg } = props;
   return (
     <Box>
       <Flex
@@ -41,5 +41,5 @@ export const PlatformLayout = (
         {children}
       </Box>
     </Box>
-  )
-}
+  );
+};
