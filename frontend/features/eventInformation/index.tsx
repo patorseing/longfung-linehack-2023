@@ -72,16 +72,17 @@ const EventInfoPage = () => {
     ],
   };
   return (
-    <VStack sx={{ w: "100%", alignItems: "center" }}>
+    <VStack sx={{ w: "100%", alignItems: "center", pt: 9, px: { base: 6 } }}>
       <Text
         sx={{
           fontSize: { base: "24px", md: "40px" },
           fontWeight: "bold",
           color: "white",
-          mb: { base: "28px", md: "32px" },
+
+          mb: { base: 2, xl: 4 },
         }}
       >
-        Event Name
+        {MOCK.event_name}
       </Text>
       <Grid
         sx={{
