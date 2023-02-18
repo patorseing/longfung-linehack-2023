@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from "express";
-import * as functions from 'firebase-functions'
+import * as functions from "firebase-functions";
 
 import {appCheck} from "../../firebase";
 
@@ -8,8 +8,8 @@ const tokenVerification = async (
     res: Response,
     next: NextFunction
 ) => {
-  if (functions.config().environment.mode == 'dev') {
-    return next()
+  if (functions.config().environment.mode == "dev") {
+    return next();
   }
 
   const token = req.header("X-Firebase-AppCheck");
