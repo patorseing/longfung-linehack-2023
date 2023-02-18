@@ -1,10 +1,21 @@
 import Link from "next/link";
 import { Box, Center, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
+
+import { _axios, useDefaultAxiosHeader } from "@/lib/hooks/axios";
 
 import { REGISTER_CARD_DATA } from "../constants";
-import { PlatformLayout } from "@/components/layouts";
 
 const SelectTypePage = () => {
+  const headers = useDefaultAxiosHeader();
+
+  const { isLoading, isError, data, error } = useQuery({
+    queryKey: ["todos"],
+    queryFn: () => _axios({ method: "get", url: "/testtest", headers }),
+  });
+
+  console.log(isLoading, isError, data?.data, error);
+
   return (
     <Flex
       sx={{
