@@ -1,5 +1,6 @@
 const colors = {
   primary: {
+    100: "#ff980133",
     500: "#FF9801",
     800: "#FD8424",
   },
@@ -13,6 +14,11 @@ const colors = {
   errorHover: "rgba(253, 75, 36, 0.8)",
   success: "#02C042",
   successHover: "rgba(2, 192, 66, 0.8)",
+  customGray: {
+    100: "#96969652",
+    200: "#0000005E",
+    400: "#B5B5B5",
+  },
 };
 
 export default colors;
