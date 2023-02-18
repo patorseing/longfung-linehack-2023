@@ -3,7 +3,7 @@ import { Box, Button, Flex, Icon, Text } from "@chakra-ui/react"
 import { MdArrowForward, MdArrowBack } from "react-icons/md"
 
 import { Step } from "@/components/Step"
-import { FormStep1 } from "../../components/band"
+import { FormStep1, FormStep2 } from "../../components/band"
 
 const BandRegisterPage = () => {
   const [step, setStep] = useState<number>(1)
@@ -13,7 +13,7 @@ const BandRegisterPage = () => {
       case 1:
         return <FormStep1 />
       case 2:
-        return <p>fdfd</p>
+        return <FormStep2 />
       default:
         return
     }
