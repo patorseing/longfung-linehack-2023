@@ -1,13 +1,28 @@
-import * as functions from "firebase-functions";
-import {Profile} from "@line/bot-sdk";
+// import * as functions from "firebase-functions";
+import { Profile } from "@line/bot-sdk";
 
-import {reply} from "../util";
-import {enter1, bandTemplete} from "../templete";
+import { firestore } from "../../firebase";
+import { reply } from "../util";
 
-export const enterEvent = async (profile: Profile, replyToken: string) => {
-  const msg = enter1(profile);
-  const bandMsg = bandTemplete();
-  functions.logger.info("WELCOME MSG", msg);
-  functions.logger.info("BAND MSG", bandMsg);
-  await reply(replyToken, [msg, bandMsg]);
+export const enterEvent = async (
+  beacon_hwid: string,
+  profile: Profile,
+  replyToken: string
+) => {
+  const lineBeaconRef = firestore.collection("LineBeacon").doc(beacon_hwid);
+  const uniqueLineBeacon = await lineBeaconRef.get();
+
+  let eventMessage;
+  if (uniqueLineBeacon.data()?.eventName) {
+    eventMessage = {
+      type: "text",
+      text: `สวัสดีครับ ${profile.displayName} น้องโลมายินดีต้อนรับสู่งาน ${
+        uniqueLineBeacon.data()?.eventName
+      } 🎶`,
+    };
+  }
+
+  if (eventMessage) {
+    await reply(replyToken, [...([eventMessage] ?? [])]);
+  }
 };
