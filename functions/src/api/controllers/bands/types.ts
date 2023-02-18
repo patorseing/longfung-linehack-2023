@@ -16,11 +16,10 @@ interface LineBeaconItem {
   passcode: string;
 }
 
-
 export interface lineBeacon {
-  hardwareId: string
-  bandName?: string
-  eventName?: string
+  hardwareId: string;
+  bandName?: string;
+  eventName?: string;
 }
 
 export interface Band {
