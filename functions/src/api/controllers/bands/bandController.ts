@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import {validationResult} from "express-validator";
 
-import {compact} from "../../utils/transformPayload";
+import {checkDuplicatedKey, compact} from "../../utils/payload";
 import {firestore} from "../../../firebase";
 import {Band} from "./types";
 import {fileUploader} from "../../utils/fileUploader";
@@ -62,9 +62,14 @@ export const createBand = async (req: Request, res: Response) => {
       band.qrImage = imageUrl;
     }
 
+    if (await checkDuplicatedKey("Band", band.bandName)) {
+      return res.status(422).json({error: "duplicated bane name"});
+    }
+
     const newBand = await firestore
         .collection("Band")
-        .add(compact(band));
+        .doc(band.bandName)
+        .set(compact(band));
 
     return res.status(201).send({data: newBand});
   } catch (err) {
