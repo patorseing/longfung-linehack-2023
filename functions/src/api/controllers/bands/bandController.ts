@@ -119,6 +119,20 @@ export const updateBand = async (req: Request, res: Response) => {
         (item) => !newHardwareIds?.includes(item)
     );
 
+    const bucketName = functions.config().uploader.bucket_name;
+
+    if (requestBody.bandImage !== undefined) {
+      const imageUrl = await fileUploader(bucketName, requestBody.bandImage);
+
+      band.bandImage = imageUrl;
+    }
+
+    if (requestBody.qrImage !== undefined) {
+      const imageUrl = await fileUploader(bucketName, requestBody.qrImage);
+
+      band.qrImage = imageUrl;
+    }
+
     await Promise.all(
         deletedHardwareIds.map((hardwareId) =>
           firestore.collection("LineBeacon").doc(hardwareId).delete()
