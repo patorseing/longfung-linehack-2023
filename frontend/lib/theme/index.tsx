@@ -1,16 +1,18 @@
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
-import colors from "./color";
-import breakpoints from "./breakpoints";
+import colors from "./color"
+import breakpoints from "./breakpoints"
+import components from "./components"
 
 const fonts = {
   body: "Poppins",
   heading: "Poppins",
-};
+}
 
 const overideTheme = extendTheme({
   fonts,
   colors,
+  components,
   breakpoints,
 });
 
