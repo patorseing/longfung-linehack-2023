@@ -47,6 +47,10 @@ export const createBand = async (req: Request, res: Response) => {
       lineBeacon: req.body.lineBeacon || [],
     };
 
+    if (await checkDuplicatedKey("Band", band.bandName)) {
+      return res.status(422).json({error: "duplicated bane name"});
+    }
+
     // TODO: hard-coded for now
     const bucketName = "loma-nkaf";
 
@@ -60,10 +64,6 @@ export const createBand = async (req: Request, res: Response) => {
       const imageUrl = await fileUploader(bucketName, req.body.qrImage);
 
       band.qrImage = imageUrl;
-    }
-
-    if (await checkDuplicatedKey("Band", band.bandName)) {
-      return res.status(422).json({error: "duplicated bane name"});
     }
 
     const newBand = await firestore
