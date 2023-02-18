@@ -1,12 +1,30 @@
-import { useCallback, useContext } from "react";
-import { AppCheckSdkContext } from "reactfire";
-import { getToken } from "firebase/app-check";
+import { useCallback, useMemo } from "react";
+import { useFirebaseApp } from "reactfire";
+import {
+  initializeAppCheck,
+  ReCaptchaV3Provider,
+  getToken,
+} from "firebase/app-check";
 
 export function useGetAppCheckToken() {
   // instead of using useAppCheck()
   // we manually request the SDK
   // because we *may not have initialized it*
-  const sdk = useContext(AppCheckSdkContext);
+  const app = useFirebaseApp();
+
+  const sdk = useMemo(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    const provider = new ReCaptchaV3Provider(
+      process.env.NEXT_PUBLIC_APPCHECK_KEY ?? ""
+    );
+
+    return initializeAppCheck(app, {
+      provider,
+      isTokenAutoRefreshEnabled: true,
+    });
+  }, [app]);
 
   return useCallback(async () => {
     try {

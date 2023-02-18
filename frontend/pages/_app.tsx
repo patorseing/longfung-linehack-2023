@@ -8,7 +8,6 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ReCaptchaProvider } from "next-recaptcha-v3";
 
 import { ThemeProvider } from "@/lib/theme";
-import { FirebaseAppCheckProvider } from "@/lib/firebase/FirebaseAppCheckProvider";
 import { firebaseConfig } from "@/lib/firebase/config";
 import { PlatformLayout, PlatformLayoutProps } from "@/components/layouts";
 
@@ -33,20 +32,18 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <ReCaptchaProvider reCaptchaKey={process.env.NEXT_PUBLIC_APPCHECK_KEY}>
       <FirebaseAppProvider firebaseConfig={firebaseConfig}>
-        <FirebaseAppCheckProvider>
-          <QueryClientProvider client={queryClient}>
-            <ThemeProvider>
-              <Layout
-                desktopBg={desktopBg}
-                mobileBg={mobileBg}
-                {...Component.LayoutProps}
-              >
-                <Component {...pageProps} />
-              </Layout>
-            </ThemeProvider>
-            <ReactQueryDevtools initialIsOpen={false} />
-          </QueryClientProvider>
-        </FirebaseAppCheckProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider>
+            <Layout
+              desktopBg={desktopBg}
+              mobileBg={mobileBg}
+              {...Component.LayoutProps}
+            >
+              <Component {...pageProps} />
+            </Layout>
+          </ThemeProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
       </FirebaseAppProvider>
     </ReCaptchaProvider>
   );
