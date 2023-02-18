@@ -14,7 +14,9 @@ import { FormStep1, FormStep2, FormStep3 } from "../../components/band"
 const BandRegisterPage = () => {
   const [step, setStep] = useState<number>(1)
 
-  const methods = useForm<BandFormValue>({ resolver: yupResolver(bandSchema) })
+  const methods = useForm<BandFormValue>({
+    resolver: yupResolver(bandSchema),
+  })
 
   const onNextStep = async () => {
     switch (step) {
@@ -34,7 +36,7 @@ const BandRegisterPage = () => {
     }
   }
 
-  const onSubmit = methods.handleSubmit((data) => {
+  const onSubmit = methods.handleSubmit((data, e) => {
     console.log(data)
   })
 
@@ -101,9 +103,6 @@ const BandRegisterPage = () => {
                   variant="outline"
                   sx={{
                     w: "155px",
-                    bg: "white",
-                    borderColor: "primary.800",
-                    color: "primary.800",
                     _hover: {
                       bg: "white",
                     },
@@ -116,25 +115,20 @@ const BandRegisterPage = () => {
                   Back
                 </Button>
               )}
-              {step === 3 ? (
+              {step === 3 && (
                 <Button
                   type="submit"
                   sx={{
-                    bg: "primary.800",
-                    _hover: { bg: "primary.500" },
-                    color: "white",
                     w: "155px",
                     ml: "auto",
                   }}
                 >
                   Submit
                 </Button>
-              ) : (
+              )}
+              {step !== 3 && (
                 <Button
                   sx={{
-                    bg: "primary.800",
-                    _hover: { bg: "primary.500" },
-                    color: "white",
                     w: "155px",
                     ml: "auto",
                   }}

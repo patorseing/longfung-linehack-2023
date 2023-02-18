@@ -2,7 +2,6 @@ import {
   Flex,
   Grid,
   IconButton,
-  Input,
   Stack,
   HStack,
   Text,
@@ -10,15 +9,30 @@ import {
 } from "@chakra-ui/react"
 import { MdAdd } from "react-icons/md"
 import { IoTrashOutline } from "react-icons/io5"
+import { UseFormRegisterReturn } from "react-hook-form"
+
+import { FormInput } from "./FormInput"
 
 type BeaconCardProps = {
   name: string
   onAdd: () => void
   onDelete: () => void
+  hardwareRegister?: UseFormRegisterReturn
+  passcodeRegister?: UseFormRegisterReturn
+  hardwareError?: string
+  passcodeError?: string
 }
 
 export const BeaconCard = (props: BeaconCardProps) => {
-  const { name } = props
+  const {
+    name,
+    onAdd,
+    onDelete,
+    hardwareRegister,
+    passcodeRegister,
+    hardwareError,
+    passcodeError,
+  } = props
   const isMobile = useBreakpointValue({
     base: true,
     md: false,
@@ -41,34 +55,44 @@ export const BeaconCard = (props: BeaconCardProps) => {
             <IconButton
               size="sm"
               aria-label="add-beacon"
-              as={MdAdd}
+              icon={<MdAdd />}
               sx={{
                 borderRadius: "full",
-                p: 1,
+                fontSize: "20px",
                 bg: "primary.800",
                 color: "white",
                 cursor: "pointer",
                 _hover: { bg: "primary.500" },
               }}
+              onClick={onAdd}
             />
             <IconButton
               size="sm"
               aria-label="delete-beacon"
-              as={IoTrashOutline}
+              icon={<IoTrashOutline />}
               sx={{
                 borderRadius: "full",
-                p: 1,
+                fontSize: "20px",
                 bg: "primary.800",
                 color: "white",
                 cursor: "pointer",
                 _hover: { bg: "primary.500" },
               }}
+              onClick={onDelete}
             />
           </HStack>
         </Flex>
 
-        <Input placeholder="Hardware ID" />
-        <Input placeholder="Passcode" />
+        <FormInput
+          placeholder="Hardware ID"
+          register={hardwareRegister}
+          errorMessage={hardwareError}
+        />
+        <FormInput
+          placeholder="Passcode"
+          register={passcodeRegister}
+          errorMessage={passcodeError}
+        />
       </Stack>
     )
   }
@@ -77,34 +101,44 @@ export const BeaconCard = (props: BeaconCardProps) => {
     <Stack>
       <Text>{name}</Text>
       <Grid gridTemplateColumns="repeat(2, 1fr) 80px" gap={4}>
-        <Input placeholder="Hardware ID" />
-        <Input placeholder="Passcode" />
+        <FormInput
+          placeholder="Hardware ID"
+          register={hardwareRegister}
+          errorMessage={hardwareError}
+        />
+        <FormInput
+          placeholder="Passcode"
+          register={passcodeRegister}
+          errorMessage={passcodeError}
+        />
         <Flex justifyContent="space-between">
           <IconButton
             size="sm"
             aria-label="add-beacon"
-            as={MdAdd}
+            icon={<MdAdd />}
             sx={{
               borderRadius: "full",
-              p: 1,
+              fontSize: "20px",
               bg: "primary.800",
               color: "white",
               cursor: "pointer",
               _hover: { bg: "primary.500" },
             }}
+            onClick={onAdd}
           />
           <IconButton
             size="sm"
             aria-label="delete-beacon"
-            as={IoTrashOutline}
+            icon={<IoTrashOutline />}
             sx={{
               borderRadius: "full",
-              p: 1,
+              fontSize: "20px",
               bg: "primary.800",
               color: "white",
               cursor: "pointer",
               _hover: { bg: "primary.500" },
             }}
+            onClick={onDelete}
           />
         </Flex>
       </Grid>

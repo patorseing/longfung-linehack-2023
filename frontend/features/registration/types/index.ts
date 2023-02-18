@@ -16,8 +16,8 @@ export type BandFormValue = {
   youtube_url: string
   apple_music_url: string
   line_melody_url: string
-  band_image: FileWithPath
-  qr_image: FileWithPath
+  band_image: FileWithPath | undefined
+  qr_image: FileWithPath | undefined
   song_request: boolean
   description: string
   beacons: Beacon[]
