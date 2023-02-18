@@ -1,5 +1,6 @@
 import {Request, Response} from "express";
 import {validationResult} from "express-validator";
+import * as functions from 'firebase-functions'
 
 import {
   checkDuplicatedHardwareIds,
@@ -69,8 +70,7 @@ export const createBand = async (req: Request, res: Response) => {
       });
     }
 
-    // TODO: hard-coded for now
-    const bucketName = "loma-nkaf";
+    const bucketName = functions.config().uploader.bucket_name;
 
     if (req.body.bandImage !== undefined) {
       const imageUrl = await fileUploader(bucketName, req.body.bandImage);
