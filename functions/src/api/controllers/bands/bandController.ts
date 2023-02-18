@@ -1,7 +1,13 @@
 import {Request, Response} from "express";
 import {validationResult} from "express-validator";
+import * as functions from 'firebase-functions'
 
-import {checkDuplicatedKey, compact} from "../../utils/payload";
+import {
+  checkDuplicatedHardwareIds,
+  checkDuplicatedKey,
+  compact,
+  compactArray,
+} from "../../utils/payload";
 import {firestore} from "../../../firebase";
 import {Band} from "./types";
 import {fileUploader} from "../../utils/fileUploader";
@@ -48,11 +54,23 @@ export const createBand = async (req: Request, res: Response) => {
     };
 
     if (await checkDuplicatedKey("Band", band.bandName)) {
-      return res.status(422).json({error: "duplicated bane name"});
+      return res
+          .status(422)
+          .json({error: "Duplicated bandName", param: band.bandName});
     }
 
-    // TODO: hard-coded for now
-    const bucketName = "loma-nkaf";
+    const duplicatedHardwareIdErrors = await checkDuplicatedHardwareIds(
+        band.lineBeacon || []
+    );
+
+    if (compactArray(duplicatedHardwareIdErrors).length > 0) {
+      return res.status(422).json({
+        error: "Duplicated hardwareId",
+        param: compactArray(duplicatedHardwareIdErrors),
+      });
+    }
+
+    const bucketName = functions.config().uploader.bucket_name;
 
     if (req.body.bandImage !== undefined) {
       const imageUrl = await fileUploader(bucketName, req.body.bandImage);
@@ -65,6 +83,13 @@ export const createBand = async (req: Request, res: Response) => {
 
       band.qrImage = imageUrl;
     }
+
+    band.lineBeacon?.forEach(async (el) => {
+      await firestore.collection("LineBeacon").doc(el.hardwareId).set({
+        hardwareId: el.hardwareId,
+        bandName: band.bandName,
+      });
+    });
 
     const newBand = await firestore
         .collection("Band")

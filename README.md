@@ -58,6 +58,12 @@ and already set GitHub action
   npm run serve
 ```
 
+## env for FE
+
+- download file .env from --> [link](https://drive.google.com/file/d/1mkhZj3z7S-pt7WYWJ_7OxTCNEg9-phGO/view?usp=share_link)
+- place it in folder `frontend`
+- run it `npm i && npm run dev`
+
 ## CI/CD
 
 ### Open PR
@@ -65,9 +71,8 @@ and already set GitHub action
 Step:
 
 1. checkout code
-2. deploy hosting to preview
-3. deploy functions
-4. deploy others
+2. add label `UI`, deploy hosting to preview
+3. add label `BE`, if you want to deploy functions and others
 
 ### Merge to main
 

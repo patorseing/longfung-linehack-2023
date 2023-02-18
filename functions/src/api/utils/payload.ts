@@ -18,10 +18,27 @@ export const checkDuplicatedKey = async (collection: string, key: string) => {
   const existingRecord = await firestore
       .collection(collection)
       .doc(key)
-      .get()
-      .then((doc) => {
-        return doc.data();
-      });
+      .get();
 
-  return existingRecord !== undefined;
+  return existingRecord.exists ? key : undefined;
+};
+
+export const compactArray = (
+    arr: Array<string | undefined | null>
+) => {
+  return arr.filter((el) => {
+    return el !== null && el !== undefined;
+  });
+};
+
+type LineBeacon = {
+  hardwareId: string;
+  passcode: string;
+};
+
+export const checkDuplicatedHardwareIds = async (lineBeacons: LineBeacon[]) => {
+  const results = await Promise.all(lineBeacons.map(({hardwareId}) =>
+    checkDuplicatedKey("LineBeacon", hardwareId)
+  ));
+  return results;
 };

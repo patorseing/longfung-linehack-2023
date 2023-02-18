@@ -12,8 +12,15 @@ interface SteamingPlatformItem {
 }
 
 interface LineBeaconItem {
-  hardware_id: string;
+  hardwareId: string;
   passcode: string;
+}
+
+
+export interface lineBeacon {
+  hardwareId: string
+  bandName?: string
+  eventName?: string
 }
 
 export interface Band {
