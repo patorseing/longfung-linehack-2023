@@ -8,6 +8,12 @@ const colors = {
     500: "#2D2B38",
   },
   formBg: "#FDFCFB",
+  textDescription: "#929292",
+  placeholder: "#A0AEC0",
+  error: "#FD4B24",
+  errorHover: "rgba(253, 75, 36, 0.8)",
+  success: "#02C042",
+  successHover: "rgba(2, 192, 66, 0.8)",
   customGray: {
     100: "#96969652",
     200: "#0000005E",
