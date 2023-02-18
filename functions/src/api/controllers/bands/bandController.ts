@@ -52,14 +52,12 @@ export const createBand = async (req: Request, res: Response) => {
       lineBeacon: req.body.lineBeacon || [],
     };
 
-    // check duplicated band name
     if (await checkDuplicatedKey("Band", band.bandName)) {
       return res
           .status(422)
           .json({error: "Duplicated bandName", param: band.bandName});
     }
 
-    // check duplicated hardware id
     const duplicatedHardwareIdErrors = await checkDuplicatedHardwareIds(
         band.lineBeacon || []
     );
@@ -67,7 +65,7 @@ export const createBand = async (req: Request, res: Response) => {
     if (compactArray(duplicatedHardwareIdErrors).length > 0) {
       return res.status(422).json({
         error: "Duplicated hardwareId",
-        param: duplicatedHardwareIdErrors,
+        param: compactArray(duplicatedHardwareIdErrors),
       });
     }
 

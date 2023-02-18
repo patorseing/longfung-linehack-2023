@@ -31,8 +31,10 @@ export const checkDuplicatedKey = async (collection: string, key: string) => {
 
 export const compactArray = (
     arr: Array<string | undefined | null>
-): Array<string> => {
-  return arr.join("").split("");
+) => {
+  return arr.filter((el) => {
+    return el !== null && el !== undefined
+  })
 };
 
 type LineBeacon = {
