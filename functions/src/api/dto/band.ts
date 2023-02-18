@@ -16,13 +16,7 @@ interface LineBeaconItem {
   passcode: string;
 }
 
-export interface LineBeacon {
-  hardwareId: string;
-  bandName?: string;
-  eventName?: string;
-}
-
-export interface Band {
+export interface createBandDTO {
   bandName: string;
   firstPromotedSong?: string;
   secondPromotedSong?: string;
@@ -31,6 +25,19 @@ export interface Band {
   streamingPlatform?: SteamingPlatformItem;
   lineMelody?: string;
   songRequest: boolean;
+  description?: string;
+  lineBeacon?: LineBeaconItem[];
+  bandImage?: string;
+  qrImage?: string;
+}
+
+export interface updateBandDTO {
+  firstPromotedSong?: string;
+  secondPromotedSong?: string;
+  socialMedia?: SocialMediaItem;
+  streamingPlatform?: SteamingPlatformItem;
+  lineMelody?: string;
+  songRequest?: boolean;
   description?: string;
   lineBeacon?: LineBeaconItem[];
   bandImage?: string;

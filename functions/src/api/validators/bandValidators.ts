@@ -30,3 +30,31 @@ export const createBandValidators = [
   body("bandImage").optional().notEmpty(),
   body("qrImage").optional().notEmpty(),
 ];
+
+export const updateBandValidators = [
+  body("bandName").notEmpty(),
+  body("firstPromotedSong").optional().isString(),
+  body("secondPromotedSong").optional().isString(),
+
+  body("socialMedia").optional(),
+  body("socialMedia.facebook").optional().isString(),
+  body("socialMedia.instagram").optional().isString(),
+  body("socialMedia.tiktok").optional().isString(),
+  body("socialMedia.website").optional().isString(),
+
+  body("streamingPlatform").optional(),
+  body("streamingPlatform.spotify").optional().isString(),
+  body("streamingPlatform.youtube").optional().isString(),
+  body("streamingPlatform.apple_music").optional().isString(),
+
+  body("lineMelody").optional().isString(),
+  body("songRequest").optional().isBoolean(),
+  body("description").optional().isString(),
+
+  body("lineBeacon").optional(),
+  body("lineBeacon.*.hardwareId").isString(),
+  body("lineBeacon.*.passcode").isString(),
+
+  body("bandImage").optional().notEmpty(),
+  body("qrImage").optional().notEmpty(),
+];
