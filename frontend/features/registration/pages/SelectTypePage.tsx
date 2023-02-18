@@ -11,7 +11,7 @@ const SelectTypePage = () => {
 
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ["todos"],
-    queryFn: () => _axios({ method: "get", url: "/testtest", headers }),
+    queryFn: () => _axios({ method: "get", url: "/healthcheck", headers }),
   });
 
   console.log(isLoading, isError, data?.data, error);
