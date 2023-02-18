@@ -21,7 +21,11 @@
     "framer-motion": "^9.0.2",
     "next": "13.1.6",
     "react": "18.2.0",
+    "react-datepicker": "^4.10.0",
     "react-dom": "18.2.0",
     "typescript": "4.9.5"
+  },
+  "devDependencies": {
+    "@types/react-datepicker": "^4.8.0"
   }
 }

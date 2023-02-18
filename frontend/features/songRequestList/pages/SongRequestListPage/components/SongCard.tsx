@@ -10,7 +10,6 @@ import {
 import { IoMdClose } from "react-icons/io";
 import { FiCheck } from "react-icons/fi";
 import { SongListType } from "..";
-import { Fragment } from "react";
 
 type Props = {
   data: SongListType;

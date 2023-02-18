@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Box, Stack, Text, VStack } from "@chakra-ui/react";
-import { BackButton, Step } from "@/components";
+import { BackButton, Calendar, Step } from "@/components";
 
 const BandRegisterPage = () => {
   const [steps, setSteps] = useState<number>(1);
@@ -19,7 +19,9 @@ const BandRegisterPage = () => {
         </Text>
         <Step step={4} value={steps} onChange={setSteps} />
       </VStack>
-      <Box layerStyle="formContainer"></Box>
+      <Box layerStyle="formContainer">
+        <Calendar label="Event Date" />
+      </Box>
     </Box>
   );
 };
