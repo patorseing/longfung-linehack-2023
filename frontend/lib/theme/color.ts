@@ -1,5 +1,6 @@
 const colors = {
   primary: {
+    100: "#ff980133",
     500: "#FF9801",
     800: "#FD8424",
   },
@@ -16,6 +17,11 @@ const colors = {
   border: "#EFEFEF",
   link: "#3182CE",
   bgGray: "#F3F3F3",
+  customGray: {
+    100: "#96969652",
+    200: "#0000005E",
+    400: "#B5B5B5",
+  },
 };
 
 export default colors;

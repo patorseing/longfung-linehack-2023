@@ -1,8 +1,9 @@
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
+import layerStyles from "./layerStyles";
 import colors from "./color";
 import breakpoints from "./breakpoints";
-import layerStyles from "./layerStyles";
+import components from "./components";
 
 const fonts = {
   body: "Poppins",
@@ -20,6 +21,7 @@ const overideTheme = extendTheme({
   fontWeight,
   fonts,
   colors,
+  components,
   breakpoints,
   layerStyles,
 });

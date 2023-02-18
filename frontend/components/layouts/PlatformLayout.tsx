@@ -17,23 +17,22 @@ export const PlatformLayout = (
           color: "white",
           px: 5,
           py: 4,
-          h: "50px",
+          h: { base: "60px", md: "80px" },
           alignItems: "center",
           justifyContent: "space-between",
         }}
       >
-        <Image src="/images/logo.svg" w="60px" />
+        <Image src="/images/logo.svg" w={{ base: "60px", md: "80px" }} />
         <HStack spacing="4">
           <Text>Cony</Text>
-          <Avatar size="sm" />
+          <Avatar size={{ base: "sm", md: "md" }} />
         </HStack>
       </Flex>
       <Box
         sx={{
           display: "flex",
-          minH: `calc(100vh - 50px)`,
-          pt: "20px",
-          px: { base: "20px", md: 12 },
+          minH: { base: `calc(100vh - 60px)`, md: `calc(100vh - 80px)` },
+          pb: 12,
           bg: { base: mobileBg, md: desktopBg },
           bgSize: { base: "cover", md: "cover" },
           bgRepeat: { base: "no-repeat", md: "no-repeat" },
