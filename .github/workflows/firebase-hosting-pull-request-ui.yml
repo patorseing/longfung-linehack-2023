@@ -6,7 +6,7 @@ on:
 
 jobs:
   build_and_preview:
-    if: ${{ github.event.label.name == 'UI' }}
+    if: ${{ contains( github.event.pull_request.labels.*.name, 'UI') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
