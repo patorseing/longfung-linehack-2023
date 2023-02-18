@@ -17,9 +17,11 @@ export const getBands = async (req: Request, res: Response) => {
 
   const bandList: FirebaseFirestore.DocumentData[] = [];
 
+  const {body: requestBody} = req;
+
   await firestore
       .collection("Band")
-      .where("userId", "==", req.body["userId"])
+      .where("userId", "==", requestBody["userId"])
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
@@ -36,33 +38,35 @@ export const createBand = async (req: Request, res: Response) => {
     return res.status(400).json({errors: errors["errors"]});
   }
 
+  const {body: requestBody} = req;
+
   try {
     const band: createBandDTO = {
-      bandName: req.body.bandName,
-      firstPromotedSong: req.body.firstPromotedSong || null,
-      secondPromotedSong: req.body.secondPromotedSong || null,
-      userId: req.body.userId,
-      socialMedia: {...defaultSocialMedia, ...req.body.socialMedia},
+      bandName: requestBody.bandName,
+      firstPromotedSong: requestBody.firstPromotedSong || null,
+      secondPromotedSong: requestBody.secondPromotedSong || null,
+      userId: requestBody.userId,
+      socialMedia: {...defaultSocialMedia, ...requestBody.socialMedia},
       streamingPlatform: {
         ...defaultSteamingPlatform,
-        ...req.body.streamingPlatform,
+        ...requestBody.streamingPlatform,
       },
-      lineMelody: req.body.lineMelody || null,
-      songRequest: req.body.songRequest || false,
-      description: req.body.description || null,
-      lineBeacon: req.body.lineBeacon || [],
+      lineMelody: requestBody.lineMelody || null,
+      songRequest: requestBody.songRequest || false,
+      description: requestBody.description || null,
+      lineBeacon: requestBody.lineBeacon || [],
     };
 
     const bucketName = functions.config().uploader.bucket_name;
 
-    if (req.body.bandImage !== undefined) {
-      const imageUrl = await fileUploader(bucketName, req.body.bandImage);
+    if (requestBody.bandImage !== undefined) {
+      const imageUrl = await fileUploader(bucketName, requestBody.bandImage);
 
       band.bandImage = imageUrl;
     }
 
-    if (req.body.qrImage !== undefined) {
-      const imageUrl = await fileUploader(bucketName, req.body.qrImage);
+    if (requestBody.qrImage !== undefined) {
+      const imageUrl = await fileUploader(bucketName, requestBody.qrImage);
 
       band.qrImage = imageUrl;
     }
@@ -86,49 +90,53 @@ export const createBand = async (req: Request, res: Response) => {
 };
 
 export const updateBand = async (req: Request, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({errors: errors["errors"]});
-  }
-
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({errors: errors["errors"]});
+    }
+
+    const {body: requestBody} = req;
+
     const band: updateBandDTO = {
-      firstPromotedSong: req.body.firstPromotedSong || null,
-      secondPromotedSong: req.body.secondPromotedSong || null,
-      socialMedia: {...defaultSocialMedia, ...req.body.socialMedia},
+      firstPromotedSong: requestBody.firstPromotedSong || null,
+      secondPromotedSong: requestBody.secondPromotedSong || null,
+      socialMedia: {...defaultSocialMedia, ...requestBody.socialMedia},
       streamingPlatform: {
         ...defaultSteamingPlatform,
-        ...req.body.streamingPlatform,
+        ...requestBody.streamingPlatform,
       },
-      lineMelody: req.body.lineMelody || null,
-      songRequest: req.body.songRequest || false,
-      description: req.body.description || null,
-      lineBeacon: req.body.lineBeacon || [],
+      lineMelody: requestBody.lineMelody || null,
+      songRequest: requestBody.songRequest || false,
+      description: requestBody.description || null,
+      lineBeacon: requestBody.lineBeacon || [],
     };
 
-    const oldHardwareIds = await getOldHardwareIds(req.body.bandName);
-    const newHardwareIds = band.lineBeacon?.map((el) => {
-      return el.hardwareId;
-    });
+    const oldHardwareIds = await getOldHardwareIds(requestBody.bandName);
+    const newHardwareIds = band.lineBeacon?.map(({hardwareId}) => hardwareId);
 
     const deletedHardwareIds = oldHardwareIds.filter(
         (item) => !newHardwareIds?.includes(item)
     );
 
-    deletedHardwareIds.forEach(async (hardwareId) => {
-      await firestore.collection("LineBeacon").doc(hardwareId).delete();
-    });
+    await Promise.all(
+        deletedHardwareIds.map((hardwareId) =>
+          firestore.collection("LineBeacon").doc(hardwareId).delete()
+        )
+    );
 
-    newHardwareIds?.forEach(async (hardwareId) => {
-      await firestore.collection("LineBeacon").doc(hardwareId).set({
-        hardwareId: hardwareId,
-        bandName: req.body.bandName,
-      });
-    });
+    await Promise.all(
+        newHardwareIds?.map((hardwareId) =>
+          firestore.collection("LineBeacon").doc(hardwareId).set({
+            hardwareId,
+            bandName: requestBody.bandName,
+          })
+        ) || []
+    );
 
     const updatedBand = await firestore
         .collection("Band")
-        .doc(req.body.bandName)
+        .doc(requestBody.bandName)
         .update(band);
 
     return res.status(201).send({data: updatedBand});
