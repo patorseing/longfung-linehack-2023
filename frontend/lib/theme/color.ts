@@ -13,6 +13,9 @@ const colors = {
   errorHover: "rgba(253, 75, 36, 0.8)",
   success: "#02C042",
   successHover: "rgba(2, 192, 66, 0.8)",
+  border: "#EFEFEF",
+  link: "#3182CE",
+  bgGray: "#F3F3F3",
 };
 
 export default colors;
