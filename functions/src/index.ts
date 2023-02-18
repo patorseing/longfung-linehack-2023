@@ -26,6 +26,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors());
 
 app.use("/bands", tokenVerification, bandsRouter);
-app.use("/healthcheck", healthCheckRouter);
+app.use("/healthcheck", tokenVerification, healthCheckRouter);
 
 exports.api = functions.https.onRequest(app);
