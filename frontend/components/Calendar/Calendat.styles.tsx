@@ -3,7 +3,7 @@ import colors from "@/lib/theme/color";
 export const DateRankContainer = styled.div({
   display: "flex",
   fontFamily: "Poppins",
-  minWidth: "300px",
+  minWidth: "100%",
 
   ".react-datepicker__header": {
     background: colors.primary[500],

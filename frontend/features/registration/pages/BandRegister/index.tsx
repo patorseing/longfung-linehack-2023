@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Box, Stack, Text, VStack } from "@chakra-ui/react";
-import { BackButton, Calendar, Step } from "@/components";
+import { BackButton, Calendar, Step, TimePicker } from "@/components";
 
 const BandRegisterPage = () => {
   const [steps, setSteps] = useState<number>(1);
@@ -21,6 +21,7 @@ const BandRegisterPage = () => {
       </VStack>
       <Box layerStyle="formContainer">
         <Calendar label="Event Date" />
+        <TimePicker time="16:52" />
       </Box>
     </Box>
   );

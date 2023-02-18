@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
-import { Box, Button, Flex, forwardRef, Text, VStack } from "@chakra-ui/react";
-
+import { Button, forwardRef, Text, VStack } from "@chakra-ui/react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { AiTwotoneCalendar } from "react-icons/ai";
+
 import colors from "@/lib/theme/color";
 import { DateRankContainer } from "./Calendat.styles";
 type Props = {
   date?: Date;
   label?: string;
+  onChange?: (date: Date) => void;
 };
-export const Calendar = ({ date, label }: Props) => {
+export const Calendar = ({ date, label, onChange }: Props) => {
   const [selectedDate, setSelectedDate] = useState<Date>();
-  const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => {
+  const CustomInput = forwardRef(({ value, onClick }, ref) => {
     return (
       <Button
         className="example-custom-input"
@@ -47,8 +48,11 @@ export const Calendar = ({ date, label }: Props) => {
       <DateRankContainer>
         <DatePicker
           selected={selectedDate}
-          onChange={(date: Date) => setSelectedDate(date)}
-          customInput={<ExampleCustomInput />}
+          onChange={(date: Date) => {
+            onChange?.(date);
+            setSelectedDate(date);
+          }}
+          customInput={<CustomInput />}
           dateFormat="d MMMM yyyy"
         />
       </DateRankContainer>
