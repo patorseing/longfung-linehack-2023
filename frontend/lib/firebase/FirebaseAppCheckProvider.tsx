@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { AppCheckProvider, useFirebaseApp } from "reactfire";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
@@ -13,13 +12,6 @@ export const FirebaseAppCheckProvider = ({
 
   if (!siteKey) {
     return <>{children}</>;
-  }
-
-  if (typeof window !== undefined) {
-    Object.assign(window, {
-      FIREBASE_APPCHECK_DEBUG_TOKEN:
-        process.env.NEXT_PUBLIC_APPCHECK_DEBUG_TOKEN,
-    });
   }
 
   const provider = new ReCaptchaV3Provider(siteKey);
