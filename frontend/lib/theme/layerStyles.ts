@@ -1,12 +1,17 @@
 const layerStyles = {
   formContainer: {
-    m: "24px auto",
-    w: { base: "366px", md: "897px" },
-    h: { base: "610px", md: "484px" },
-    p: { base: "", md: "24px" },
+    w: { base: "full", lg: "900px" },
+    p: { base: 4, xl: 6 },
+    mt: { base: 6, xl: 8 },
     borderRadius: "10px",
-    boxShadow: "0px 2px 4px -1px #0000000F",
     bg: "formBg",
+    boxShadow:
+      "0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06)",
+  },
+  formTwoCol: {
+    gridTemplateColumns: { base: "1fr", md: "repeat(2, 1fr)" },
+    gap: { base: 2, md: 4 },
+    alignItems: "end",
   },
   songLayout: {
     borderRight: { base: "none", md: "1px solid" },
