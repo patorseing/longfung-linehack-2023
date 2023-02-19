@@ -132,7 +132,6 @@ export const LineupCard = (props: Props) => {
         <HStack sx={{ alignItems: "end" }}>
           <FormInput
             fontSize={14}
-            label="Time"
             placeholder="HH:MM"
             register={startTimeRegister}
             errorMessage={startTimeError}
@@ -147,7 +146,6 @@ export const LineupCard = (props: Props) => {
 
         <FormInput
           fontSize={14}
-          label="Music band"
           placeholder="Music band"
           register={bandRegister}
           errorMessage={bandNameError}

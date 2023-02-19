@@ -1,4 +1,4 @@
-import { Button, Stack, Text, VStack } from "@chakra-ui/react";
+import { Button, Grid, HStack, Stack, Text, VStack } from "@chakra-ui/react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 import { EventFormValue } from "../../types";
@@ -27,6 +27,17 @@ export const FormStep4 = () => {
             >
               Add line up
             </Button>
+          )}
+          {fields.length && (
+            <Grid
+              sx={{
+                gridTemplateColumns: "repeat(2, 1fr) 80px",
+                display: { base: "none", md: "grid" },
+              }}
+            >
+              <Text>Time</Text>
+              <Text>Music band</Text>
+            </Grid>
           )}
           {fields.map((beacon, idx) => (
             <LineupCard
