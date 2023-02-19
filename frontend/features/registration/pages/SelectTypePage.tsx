@@ -1,19 +1,10 @@
-import Link from "next/link";
-import { Box, Center, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
+import Link from "next/link"
 
-import { _axios, useDefaultAxiosHeader } from "@/lib/hooks/axios";
+import { Box, Center, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react"
 
-import { REGISTER_CARD_DATA } from "../constants";
+import { REGISTER_CARD_DATA } from "../constants"
 
 const SelectTypePage = () => {
-  const headers = useDefaultAxiosHeader();
-
-  const { isLoading, isError, data, error } = useQuery({
-    queryKey: ["healthcheck"],
-    queryFn: () => _axios({ method: "get", url: "/healthcheck", headers }),
-  });
-
   return (
     <Flex
       sx={{
@@ -47,7 +38,7 @@ const SelectTypePage = () => {
               sx={{
                 borderRadius: "16px",
                 overflow: "hidden",
-                filter: "drop-shadow(0px 8px 12px rgba(0, 0, 0, 0.161))",
+                boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
               }}
             >
               <Center
@@ -80,6 +71,7 @@ const SelectTypePage = () => {
 SelectTypePage.LayoutProps = {
   mobileBg: "url(/images/bg/mobile-bottom.svg)",
   desktopBg: "url(/images/bg/desktop.svg)",
+  headTitle: "Registration | LongFung",
 }
 
 export default SelectTypePage
