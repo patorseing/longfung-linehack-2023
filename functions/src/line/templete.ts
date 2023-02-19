@@ -155,7 +155,7 @@ export const enterEventTemplate = (event: Event) => ({
           action: {
             type: "message",
             label: "ติดตามอีเว้นท์นี้",
-            text: `ฉันอยากติดตตาม ${event.eventName}`,
+            text: `ฉันอยากติดตาม ${event.eventName}`,
           },
           height: "sm",
         },
