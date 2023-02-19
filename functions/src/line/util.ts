@@ -100,3 +100,25 @@ export const richMenuLink = async (userId: string) => {
     return false;
   }
 };
+
+export const validateLineMsg = async (
+  type: "push" | "reply",
+  messages: Array<any>
+) => {
+  try {
+    const res = await axios({
+      url: `https://api.line.me/v2/bot/message/validate/${type}`,
+      headers: {
+        Authorization: `Bearer ${LINE_CHANNEL_ACCESS_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      method: "post",
+      data: { messages },
+    });
+
+    return res.status === 200;
+  } catch (error) {
+    functions.logger.error("Utils-validateLineMsg", (error as Error).message);
+    return false;
+  }
+};
