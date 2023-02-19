@@ -1,6 +1,8 @@
+import { useState } from "react"
+import { useRouter } from "next/router"
 import { Flex, Stack, Text } from "@chakra-ui/react"
 
-import { BandCard, SuccessCard, SongRequestForm } from "../components"
+import { BandCard, NotificationCard, SongRequestForm } from "../components"
 
 const Container = (props: React.PropsWithChildren) => {
   return (
@@ -19,13 +21,25 @@ const Container = (props: React.PropsWithChildren) => {
 }
 
 const SongRequest = () => {
-  if (true) {
+  const { query } = useRouter()
+  const [mockSuccess, setMockSuccess] = useState(false)
+
+  if (query.mockTimeOut) {
     return (
       <Container>
-        <SuccessCard />
+        <NotificationCard type="timeout" />
       </Container>
     )
   }
+
+  if (mockSuccess) {
+    return (
+      <Container>
+        <NotificationCard type="thanks" />
+      </Container>
+    )
+  }
+
   return (
     <Container>
       <Text
@@ -45,7 +59,11 @@ const SongRequest = () => {
         }}
       >
         <BandCard name="Paper planes" />
-        <SongRequestForm />
+        <SongRequestForm
+          onSubmit={(data) => {
+            setMockSuccess(true)
+          }}
+        />
       </Stack>
     </Container>
   )

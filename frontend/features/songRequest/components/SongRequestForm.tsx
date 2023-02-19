@@ -8,7 +8,12 @@ import { songRequestSchema } from "../schema"
 import { FormInput } from "@/components/FormInput"
 import { FormTextarea } from "@/components/FormTextarea"
 
-export const SongRequestForm = () => {
+type SongRequestFromProps = {
+  onSubmit: (data: SongRequestValue) => void
+}
+
+export const SongRequestForm = (props: SongRequestFromProps) => {
+  const { onSubmit } = props
   const {
     register,
     handleSubmit,
@@ -20,7 +25,7 @@ export const SongRequestForm = () => {
   return (
     <form
       onSubmit={handleSubmit((data) => {
-        console.log(data)
+        onSubmit(data)
       })}
     >
       <Stack
