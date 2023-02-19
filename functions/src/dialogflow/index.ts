@@ -1,6 +1,6 @@
 import * as functions from "firebase-functions";
 import {WebhookClient} from "dialogflow-fulfillment";
-import {welcome, inputNumber, fallback} from "./func";
+import {interestEvent, moreEventInfo} from "./func";
 process.env.DEBUG = "dialogflow:debug"; // enables lib debugging statements
 
 export const dialogflow = (
@@ -13,10 +13,8 @@ export const dialogflow = (
 
   // Run the proper function handler based on the matched Dialogflow intent name
   const intentMap = new Map();
-  intentMap.set("Default Welcome Intent", welcome);
-  intentMap.set("InputNumber", inputNumber);
-  intentMap.set("Default Fallback Intent", fallback);
-  // intentMap.set('your intent name here', yourFunctionHandler);
+  intentMap.set("Interest Event", interestEvent);
+  intentMap.set("More Event Information", moreEventInfo);
   // intentMap.set('your intent name here', googleAssistantHandler);
   agent.handleRequest(intentMap);
 };

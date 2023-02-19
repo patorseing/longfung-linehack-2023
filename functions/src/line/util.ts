@@ -1,6 +1,5 @@
 import axios from "axios";
 
-import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
 import * as line from "@line/bot-sdk";
 
@@ -35,6 +34,20 @@ export const reply = async (token: string, payload: any) => {
     return true;
   } catch (error) {
     functions.logger.error("Utils-reply", (error as Error).message);
+    return false;
+  }
+};
+
+export const pushMessage = async (userid: string, payload: any) => {
+  try {
+    const client = new line.Client({
+      channelAccessToken: LINE_CHANNEL_ACCESS_TOKEN,
+      channelSecret: LINE_CHANNEL_SECRET,
+    });
+    await client.pushMessage(userid, payload);
+    return true;
+  } catch (error) {
+    functions.logger.error("Utils-push", (error as Error).message);
     return false;
   }
 };
@@ -86,23 +99,6 @@ export const verifySignature = (
   return verified;
 };
 
-export const addBeaconUser = async (profile: { userId: string }) => {
-  const userRef = admin
-      .firestore()
-      .collection("beacons")
-      .doc(`${profile.userId}`);
-  try {
-    const doc = await userRef.get();
-    if (!doc.exists) {
-      await userRef.set(profile);
-    }
-    return true;
-  } catch (error) {
-    functions.logger.error("Utils-addBeaconUser", (error as Error).message);
-    return false;
-  }
-};
-
 export const richMenuLink = async (userId: string) => {
   // 10. Fill in your RICH MENU ID
   const RICH_MENU_ID = "";
@@ -115,6 +111,28 @@ export const richMenuLink = async (userId: string) => {
     return true;
   } catch (error) {
     functions.logger.error("Utils-richMenuLink", (error as Error).message);
+    return false;
+  }
+};
+
+export const validateLineMsg = async (
+    type: "push" | "reply",
+    messages: Array<any>
+) => {
+  try {
+    const res = await axios({
+      url: `https://api.line.me/v2/bot/message/validate/${type}`,
+      headers: {
+        "Authorization": `Bearer ${LINE_CHANNEL_ACCESS_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      method: "post",
+      data: {messages},
+    });
+
+    return res.status === 200;
+  } catch (error) {
+    functions.logger.error("Utils-validateLineMsg", (error as Error).message);
     return false;
   }
 };

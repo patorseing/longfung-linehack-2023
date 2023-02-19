@@ -5,19 +5,18 @@ import {enterEvent} from "./enter";
 
 import {getUserProfile} from "../util";
 
-export const beaconEvent = async (
-    req: functions.https.Request,
-    event: line.BeaconEvent
-) => {
-  // TODO: clear log (keep only for track error)
-  functions.logger.info("BODY", req.body);
+export const beaconEvent = async (event: line.BeaconEvent) => {
+  functions.logger.debug("BEACON EVENT", event);
+  const replyToken = event.replyToken;
   const userId = event.source.userId;
+  const hardwareId = event.beacon.hwid;
+  const eventType = event.beacon.type;
   const profile = await getUserProfile(userId as string);
   functions.logger.info("PROFILE", profile);
   if (profile) {
-    switch (event.beacon.type) {
+    switch (eventType) {
       case "enter":
-        await enterEvent(profile, event.replyToken);
+        await enterEvent(hardwareId, profile, replyToken);
         break;
 
       default:
