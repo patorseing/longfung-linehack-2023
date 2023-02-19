@@ -1,8 +1,8 @@
 import { Flex, Stack, Text } from "@chakra-ui/react"
 
-import { BandCard, SongRequestForm } from "../components"
+import { BandCard, SuccessCard, SongRequestForm } from "../components"
 
-const SongRequest = () => {
+const Container = (props: React.PropsWithChildren) => {
   return (
     <Flex
       sx={{
@@ -13,6 +13,21 @@ const SongRequest = () => {
         px: 6,
       }}
     >
+      {props.children}
+    </Flex>
+  )
+}
+
+const SongRequest = () => {
+  if (true) {
+    return (
+      <Container>
+        <SuccessCard />
+      </Container>
+    )
+  }
+  return (
+    <Container>
       <Text
         sx={{
           color: "white",
@@ -32,7 +47,7 @@ const SongRequest = () => {
         <BandCard name="Paper planes" />
         <SongRequestForm />
       </Stack>
-    </Flex>
+    </Container>
   )
 }
 
