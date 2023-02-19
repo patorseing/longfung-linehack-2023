@@ -1,8 +1,8 @@
 import * as functions from "firebase-functions";
-import { format } from "date-fns-tz";
-import { add } from "date-fns";
+import {format} from "date-fns-tz";
+import {add} from "date-fns";
 
-import { beaconEvent } from "./beacon";
+import {beaconEvent} from "./beacon";
 import {
   postToDialogflow,
   verifySignature,
@@ -11,13 +11,13 @@ import {
   pushMessage,
 } from "./util";
 
-import { Event } from "../api/controllers/events/types";
-import { enterEventTemplate } from "../line/templete";
-import { firestore } from "../firebase";
+import {Event} from "../api/dto/event";
+import {enterEventTemplate} from "../line/templete";
+import {firestore} from "../firebase";
 
 export const webhook = async (
-  req: functions.https.Request,
-  res: functions.Response
+    req: functions.https.Request,
+    res: functions.Response
 ) => {
   if (req.method === "POST") {
     if (!verifySignature(req.headers["x-line-signature"], req.body)) {
@@ -59,31 +59,31 @@ export const remindEventForUserPubSub = async () => {
   const start = format(new Date(), "dd/MM/yyyy", {
     timeZone: "Asia/Bangkok",
   });
-  const end = format(add(new Date(), { days: 7 }), "dd/MM/yyyy", {
+  const end = format(add(new Date(), {days: 7}), "dd/MM/yyyy", {
     timeZone: "Asia/Bangkok",
   });
 
   functions.logger.debug("ALERT EVENT", start, end);
   const eventRef = firestore
-    .collection("Event")
-    .where(
-      "eventDate",
-      ">=",
-      format(new Date(), "dd/MM/yyyy", { timeZone: "Asia/Bangkok" })
-    )
-    .where(
-      "eventDate",
-      "<",
-      format(add(new Date(), { days: 7 }), "dd/MM/yyyy", {
-        timeZone: "Asia/Bangkok",
-      })
-    );
+      .collection("Event")
+      .where(
+          "eventDate",
+          ">=",
+          format(new Date(), "dd/MM/yyyy", {timeZone: "Asia/Bangkok"})
+      )
+      .where(
+          "eventDate",
+          "<",
+          format(add(new Date(), {days: 7}), "dd/MM/yyyy", {
+            timeZone: "Asia/Bangkok",
+          })
+      );
 
   const events = await eventRef.get();
 
   for (const event of events.docs) {
     const eventData = event.data() as Event;
-    const temp = enterEventTemplate(eventData);
+    const temp = enterEventTemplate({event: eventData, interested: true});
     const payload = [temp];
     functions.logger.debug(temp);
     const isValidMsg = await validateLineMsg("push", payload);

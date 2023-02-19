@@ -7,6 +7,10 @@ const colors = {
   secondary: {
     500: "#2D2B38",
   },
+  gray: {
+    200: "#E2E8F0",
+    400: "#A0AEC0",
+  },
   formBg: "#FDFCFB",
   textDescription: "#929292",
   placeholder: "#A0AEC0",
