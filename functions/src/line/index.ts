@@ -1,11 +1,11 @@
 import * as functions from "firebase-functions";
 
-import { beaconEvent } from "./beacon";
-import { postToDialogflow, verifySignature, reply } from "./util";
+import {beaconEvent} from "./beacon";
+import {postToDialogflow, verifySignature, reply} from "./util";
 
 export const webhook = async (
-  req: functions.https.Request,
-  res: functions.Response
+    req: functions.https.Request,
+    res: functions.Response
 ) => {
   if (req.method === "POST") {
     if (!verifySignature(req.headers["x-line-signature"], req.body)) {
@@ -20,7 +20,7 @@ export const webhook = async (
       for (const event of events) {
         switch (event.type) {
           case "beacon":
-            await beaconEvent(req, event);
+            await beaconEvent(event);
             break;
           case "message":
             {

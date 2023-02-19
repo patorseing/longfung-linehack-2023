@@ -61,7 +61,7 @@ and already set GitHub action
 ## env for FE
 
 - download file .env from --> [link](https://drive.google.com/file/d/1mkhZj3z7S-pt7WYWJ_7OxTCNEg9-phGO/view?usp=share_link)
-- place it in folder `frontend`
+- place it in the folder `frontend`
 - run it `npm i && npm run dev`
 
 ## CI/CD
@@ -71,8 +71,10 @@ and already set GitHub action
 Step:
 
 1. checkout code
-2. add label `UI`, deploy hosting to preview
-3. add label `BE`, if you want to deploy functions and others
+~~2. add label `UI`, deploy hosting to preview~~
+~~3. add label `BE`, if you want to deploy functions and others~~
+2. add `UI:` at the beginning of the title of the PR, deploy hosting to preview~~
+3. add `BE:` at the beginning of the title of the PR, if you want to deploy functions and others
 
 ### Merge to main
 
@@ -83,7 +85,7 @@ Step:
 
 ## Database Design
 
-### ERD
+### Entity Relationship Diagram
 
 [![erd](https://mermaid.ink/img/pako:eNq1VU2P2jAQ_SuRz-yhPeaWBauKtIQVZCu1QoqGeAALx876Y1cI-O91koWSxhGn-hJr5s2H3zzHJ1IqhiQmqGccdhqqtYz8ek6yWXTq9s0yVnO5iyRUODDyCnZYOC3-ejZKicgouSs0vjs01uMGcQxNqXltuZIDX61VpSyyok3y7YH_e-e_dJ_VYpomL8WcztIkcIYtlOj7O_Q7vp5lFzRbfrBdRBT1a-VLmszT7EegENS1wKJyhpfBpKZWlm-PQd9ROes2d9H_1F36kvkio4Gygksfh0Kxu9RfYa_JrznN8kDUu26EEJgilJZ_YC_LS5rR4pkm00UWyLQHzT5BY8HZcGxgTFOnl67V2vn89KTO_dnFPpcJYG6cjwBu5Iz4rywE3afe8eKGzoMpPrndd0j6M0xg8GowsEOjsaCt5QE4Sta3S1dtUEfwAYLDRjR6R7BDv79_glfcQv8ydQMUpdor8f-u7VUVi2mSp0FJBLmpoB7osyP3gRZ6oFtVPylVerqHoEcTbb1vr4G-H04qGuv-dMsa-4NKz_SIzlqEKffAnB9vB3pb0WWgG2dQp6xXMc1yuqSrnN5-1qFW7lB3NLZVRhBkQirUFXDmn4Y285rYPXoiSOy3DPRhTdby4nHgrFodZUliqx1OiKsb0X89JiTegjDeioxbpefdW9M-ORNSg_yt1BVz-QM75_3X?type=png)](https://mermaid.live/edit#pako:eNq1VU2P2jAQ_SuRz-yhPeaWBauKtIQVZCu1QoqGeAALx876Y1cI-O91koWSxhGn-hJr5s2H3zzHJ1IqhiQmqGccdhqqtYz8ek6yWXTq9s0yVnO5iyRUODDyCnZYOC3-ejZKicgouSs0vjs01uMGcQxNqXltuZIDX61VpSyyok3y7YH_e-e_dJ_VYpomL8WcztIkcIYtlOj7O_Q7vp5lFzRbfrBdRBT1a-VLmszT7EegENS1wKJyhpfBpKZWlm-PQd9ROes2d9H_1F36kvkio4Gygksfh0Kxu9RfYa_JrznN8kDUu26EEJgilJZ_YC_LS5rR4pkm00UWyLQHzT5BY8HZcGxgTFOnl67V2vn89KTO_dnFPpcJYG6cjwBu5Iz4rywE3afe8eKGzoMpPrndd0j6M0xg8GowsEOjsaCt5QE4Sta3S1dtUEfwAYLDRjR6R7BDv79_glfcQv8ydQMUpdor8f-u7VUVi2mSp0FJBLmpoB7osyP3gRZ6oFtVPylVerqHoEcTbb1vr4G-H04qGuv-dMsa-4NKz_SIzlqEKffAnB9vB3pb0WWgG2dQp6xXMc1yuqSrnN5-1qFW7lB3NLZVRhBkQirUFXDmn4Y285rYPXoiSOy3DPRhTdby4nHgrFodZUliqx1OiKsb0X89JiTegjDeioxbpefdW9M-ORNSg_yt1BVz-QM75_3X)
 

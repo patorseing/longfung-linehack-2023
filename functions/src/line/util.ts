@@ -1,6 +1,5 @@
 import axios from "axios";
 
-import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
 import * as line from "@line/bot-sdk";
 
@@ -58,49 +57,32 @@ export const postToDialogflow = async (req: functions.https.Request) => {
 };
 
 export const verifySignature = (
-    signature: string | string[] | undefined,
-    body: any
+  signature: string | string[] | undefined,
+  body: any
 ) => {
   let text = JSON.stringify(body);
   /* eslint max-len: ["error", { "code": 125 }]*/
   text = text.replace(
-      /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
-      (e) => {
-        return (
-          "\\u" +
+    /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
+    (e) => {
+      return (
+        "\\u" +
         e.charCodeAt(0).toString(16).toUpperCase() +
         "\\u" +
         e.charCodeAt(1).toString(16).toUpperCase()
-        );
-      }
+      );
+    }
   );
 
   const verified = line.validateSignature(
-      text,
-      LINE_CHANNEL_SECRET,
+    text,
+    LINE_CHANNEL_SECRET,
     signature as string
   );
   if (!verified) {
     functions.logger.error("Unauthorized");
   }
   return verified;
-};
-
-export const addBeaconUser = async (profile: { userId: string }) => {
-  const userRef = admin
-      .firestore()
-      .collection("beacons")
-      .doc(`${profile.userId}`);
-  try {
-    const doc = await userRef.get();
-    if (!doc.exists) {
-      await userRef.set(profile);
-    }
-    return true;
-  } catch (error) {
-    functions.logger.error("Utils-addBeaconUser", (error as Error).message);
-    return false;
-  }
 };
 
 export const richMenuLink = async (userId: string) => {
