@@ -1,29 +1,29 @@
 import * as functions from "firebase-functions";
-import {Profile} from "@line/bot-sdk";
+import { Profile } from "@line/bot-sdk";
 
-import {reply} from "../util";
-import {enterEventTemplate} from "../templete";
-import {Event} from "../../api/controllers/events/types";
+import { reply, validateLineMsg } from "../util";
+import { enterEventTemplate } from "../templete";
+import { Event } from "../../api/controllers/events/types";
 
-import {firestore} from "../../firebase";
+import { firestore } from "../../firebase";
 
 export const enterEvent = async (
-    hardwareId: string,
-    profile: Profile,
-    replyToken: string
+  hardwareId: string,
+  profile: Profile,
+  replyToken: string
 ) => {
   const lineBeaconRef = firestore.collection("LineBeacon").doc(hardwareId);
   const uniqueLineBeacon = await lineBeaconRef.get();
   const eventName = uniqueLineBeacon.data()?.eventName;
 
-  let eventMessage;
-  let enterEventTemp;
+  let eventMessage: Array<any> = [];
 
   if (eventName) {
     const eventRef = firestore.collection("Event").doc(eventName);
     const event = await eventRef.get();
     const eventData = event.data();
 
+    let enterEventTemp;
     if (eventData) {
       enterEventTemp = enterEventTemplate(eventData as Event);
     }
@@ -40,7 +40,9 @@ export const enterEvent = async (
     functions.logger.debug("FLEX", enterEventTemp);
   }
 
-  if (eventMessage) {
+  const isValidMsg = await validateLineMsg("reply", eventMessage);
+
+  if (isValidMsg) {
     functions.logger.debug("MESSAGE", eventMessage);
     await reply(replyToken, eventMessage);
   }
