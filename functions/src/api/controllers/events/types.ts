@@ -26,3 +26,20 @@ export interface location {
 export interface interested {
   userId?: string
 }
+
+export interface Event {
+  eventName: string;
+  eventImage?: string;
+  ticketType: {
+    free: boolean;
+    price?: number;
+  };
+  eventDate: string;
+  eventStartTime: string;
+  eventEndTime: string;
+  eventLocation: {
+    address: string;
+    googleMapLink?: string;
+  };
+  interestedPerson: Array<string>;
+}
