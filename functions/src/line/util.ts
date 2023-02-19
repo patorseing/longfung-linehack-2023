@@ -25,6 +25,20 @@ export const getUserProfile = async (userId: string) => {
   }
 };
 
+export const push = async (userId: string, payload: any) => {
+  try {
+    const client = new line.Client({
+      channelAccessToken: LINE_CHANNEL_ACCESS_TOKEN,
+      channelSecret: LINE_CHANNEL_SECRET,
+    });
+    await client.pushMessage(userId, payload);
+    return true;
+  } catch (error) {
+    functions.logger.error("Utils-push", (error as Error).message);
+    return false;
+  }
+};
+
 export const reply = async (token: string, payload: any) => {
   try {
     const client = new line.Client({
