@@ -58,7 +58,7 @@ export const createEvent = async (req: Request, res: Response) => {
     const bucketName = functions.config().uploader.bucket_name;
 
 
-    if (req.body.eventImage !== undefined) {
+    if (!req.body.eventImage == undefined) {
       const imageUrl = await fileUploader(bucketName, req.body.eventImage);
 
       event.eventImage = imageUrl;
