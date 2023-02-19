@@ -1,3 +1,5 @@
+import colors from "./color";
+
 const layerStyles = {
   formContainer: {
     m: "24px auto",
@@ -11,6 +13,12 @@ const layerStyles = {
   songLayout: {
     borderRight: { base: "none", md: "1px solid" },
     borderColor: { base: "none", md: "rgba(253, 132, 36, 0.5)" },
+  },
+  infoItem: {
+    w: "100%",
+    borderBottom: `1px solid ${colors.border}`,
+    gap: "6px",
+    py: "16px",
   },
   //text
   textDescription: {
