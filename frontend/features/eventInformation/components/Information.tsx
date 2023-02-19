@@ -166,7 +166,7 @@ export const Information = ({ data }: Props) => {
         <Text sx={{ fontSize: { base: "14px", md: "16px" } }}>
           รายละเอียดเพิ่มเติม
         </Text>
-        <Text sx={{ fontSize: { base: "10px", md: "13px" } }}>
+        <Text sx={{ fontSize: { base: "14px", md: "14px" } }}>
           {data.description}
         </Text>
       </VStack>
