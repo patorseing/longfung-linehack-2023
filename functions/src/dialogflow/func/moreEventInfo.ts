@@ -1,6 +1,6 @@
-import { WebhookClient } from "dialogflow-fulfillment";
+import {WebhookClient} from "dialogflow-fulfillment";
 
-import { firestore } from "../../firebase";
+import {firestore} from "../../firebase";
 
 export const moreEventInfo = async (agent: WebhookClient) => {
   const eventName = agent.parameters.eventName;
@@ -11,8 +11,8 @@ export const moreEventInfo = async (agent: WebhookClient) => {
 
   if (eventData) {
     agent.add(
-      /* eslint max-len: ["error", { "code": 83 }]*/
-      `https://liff.line.me/1657898632-vkQB6aYy/event-info?event=${eventName}`
+        /* eslint max-len: ["error", { "code": 83 }]*/
+        `https://liff.line.me/1657898632-vkQB6aYy/event-info?event=${eventName}`
     );
   } else {
     agent.add("น้องโลมาหางานดนตรีที่คุณอยากทราบไม่เจอครับ โปรดลองใหม่อีกครั้ง");
