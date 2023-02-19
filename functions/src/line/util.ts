@@ -38,6 +38,20 @@ export const reply = async (token: string, payload: any) => {
   }
 };
 
+export const pushMessage = async (userid: string, payload: any) => {
+  try {
+    const client = new line.Client({
+      channelAccessToken: LINE_CHANNEL_ACCESS_TOKEN,
+      channelSecret: LINE_CHANNEL_SECRET,
+    });
+    await client.pushMessage(userid, payload);
+    return true;
+  } catch (error) {
+    functions.logger.error("Utils-push", (error as Error).message);
+    return false;
+  }
+};
+
 export const postToDialogflow = async (req: functions.https.Request) => {
   try {
     req.headers.host = "dialogflow.cloud.google.com";
@@ -57,26 +71,26 @@ export const postToDialogflow = async (req: functions.https.Request) => {
 };
 
 export const verifySignature = (
-  signature: string | string[] | undefined,
-  body: any
+    signature: string | string[] | undefined,
+    body: any
 ) => {
   let text = JSON.stringify(body);
   /* eslint max-len: ["error", { "code": 125 }]*/
   text = text.replace(
-    /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
-    (e) => {
-      return (
-        "\\u" +
+      /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
+      (e) => {
+        return (
+          "\\u" +
         e.charCodeAt(0).toString(16).toUpperCase() +
         "\\u" +
         e.charCodeAt(1).toString(16).toUpperCase()
-      );
-    }
+        );
+      }
   );
 
   const verified = line.validateSignature(
-    text,
-    LINE_CHANNEL_SECRET,
+      text,
+      LINE_CHANNEL_SECRET,
     signature as string
   );
   if (!verified) {
@@ -102,18 +116,18 @@ export const richMenuLink = async (userId: string) => {
 };
 
 export const validateLineMsg = async (
-  type: "push" | "reply",
-  messages: Array<any>
+    type: "push" | "reply",
+    messages: Array<any>
 ) => {
   try {
     const res = await axios({
       url: `https://api.line.me/v2/bot/message/validate/${type}`,
       headers: {
-        Authorization: `Bearer ${LINE_CHANNEL_ACCESS_TOKEN}`,
+        "Authorization": `Bearer ${LINE_CHANNEL_ACCESS_TOKEN}`,
         "Content-Type": "application/json",
       },
       method: "post",
-      data: { messages },
+      data: {messages},
     });
 
     return res.status === 200;

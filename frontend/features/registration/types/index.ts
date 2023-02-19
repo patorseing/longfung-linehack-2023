@@ -23,3 +23,33 @@ export type BandFormValue = {
   description: string;
   beacons: Beacon[];
 };
+
+export type LineUpType = {
+  startTime: string;
+  endTime: string;
+  bandName: string;
+};
+
+export type EventFormValue = {
+  eventName: string;
+  eventDate: string;
+  startTime: string;
+  endTime: string;
+  socialMedia: {
+    facebookURL: string;
+    instagramURL: string;
+    website: string;
+  };
+  location: string;
+  googleMapURL: string;
+  availableSeat: string;
+  ageLimit: string;
+  isTicket: boolean;
+  ticketPrice?: number;
+  alcoholPermission: boolean;
+  songRequest: boolean;
+  description: string;
+  eventImage?: FileWithPath;
+  beacons: Beacon[];
+  lineup: LineUpType[];
+};

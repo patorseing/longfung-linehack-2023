@@ -2,7 +2,7 @@
 
 import * as functions from "firebase-functions";
 
-import {webhook} from "./line";
+import {webhook, remindEventForUserPubSub} from "./line";
 
 exports.webhook = functions.https.onRequest(webhook);
 
@@ -29,3 +29,8 @@ app.use("/bands", tokenVerification, bandsRouter);
 app.use("/healthcheck", tokenVerification, healthCheckRouter);
 
 exports.api = functions.https.onRequest(app);
+
+exports.remindEventForUserPubSub = functions.pubsub
+    .schedule("30 19 * * 5")
+    .timeZone("Asia/Bangkok")
+    .onRun(remindEventForUserPubSub);

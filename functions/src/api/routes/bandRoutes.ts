@@ -1,11 +1,18 @@
 import * as express from "express";
 
-import {createBand, getBands} from "../controllers/bands/bandController";
 import {
+  createBand,
+  getBands,
+  updateBand,
+} from "../controllers/bands/bandController";
+import {
+  checkBandExisting,
   checkDuplicatedBandName,
   checkDuplicatedHardwareId,
+  checkUpdatedHardwareId,
+  validateCreateBandSchema,
+  validateUpdateBandSchema,
 } from "../middlewares/bandMiddleware";
-import {createBandValidators} from "../validators/bandValidators";
 
 /* eslint new-cap: "warn"*/
 const router = express.Router();
@@ -14,10 +21,18 @@ router.get("/", getBands);
 
 router.post(
     "/",
-    createBandValidators,
+    validateCreateBandSchema,
     checkDuplicatedBandName,
     checkDuplicatedHardwareId,
     createBand
+);
+
+router.put(
+    "/",
+    validateUpdateBandSchema,
+    checkBandExisting,
+    checkUpdatedHardwareId,
+    updateBand
 );
 
 export default router;

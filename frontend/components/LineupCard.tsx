@@ -6,6 +6,7 @@ import {
   HStack,
   Text,
   useBreakpointValue,
+  VStack,
 } from "@chakra-ui/react";
 import { MdAdd } from "react-icons/md";
 import { IoTrashOutline } from "react-icons/io5";
@@ -13,25 +14,29 @@ import { UseFormRegisterReturn } from "react-hook-form";
 
 import { FormInput } from "./FormInput";
 
-type BeaconCardProps = {
+type Props = {
   name?: string;
   onAdd: () => void;
   onDelete: () => void;
-  hardwareRegister?: UseFormRegisterReturn;
-  passcodeRegister?: UseFormRegisterReturn;
-  hardwareError?: string;
-  passcodeError?: string;
+  startTimeRegister?: UseFormRegisterReturn;
+  endTimeRegister?: UseFormRegisterReturn;
+  bandRegister?: UseFormRegisterReturn;
+  startTimeError?: string;
+  endTimeError?: string;
+  bandNameError?: string;
 };
 
-export const BeaconCard = (props: BeaconCardProps) => {
+export const LineupCard = (props: Props) => {
   const {
     name,
     onAdd,
     onDelete,
-    hardwareRegister,
-    passcodeRegister,
-    hardwareError,
-    passcodeError,
+    startTimeRegister,
+    endTimeRegister,
+    bandRegister,
+    startTimeError,
+    endTimeError,
+    bandNameError,
   } = props;
   const isMobile = useBreakpointValue({
     base: true,
@@ -47,12 +52,17 @@ export const BeaconCard = (props: BeaconCardProps) => {
           boxShadow:
             "0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06)",
           borderRadius: "8px",
-          gap: 3,
-          pb: 5,
         }}
       >
-        <Flex sx={{ alignItems: "center", justifyContent: "space-between" }}>
-          <Text sx={{ fontSize: "14px", py: "2" }}>{name}</Text>
+        <HStack
+          sx={{
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text py="2" sx={{ fontSize: "14px" }}>
+            {name}
+          </Text>
           <HStack spacing={3}>
             <IconButton
               size="sm"
@@ -83,37 +93,64 @@ export const BeaconCard = (props: BeaconCardProps) => {
               onClick={onDelete}
             />
           </HStack>
-        </Flex>
+        </HStack>
 
-        <FormInput
-          placeholder="Hardware ID"
-          register={hardwareRegister}
-          errorMessage={hardwareError}
-        />
-        <FormInput
-          placeholder="Passcode"
-          register={passcodeRegister}
-          errorMessage={passcodeError}
-        />
+        <VStack sx={{ gap: 3, pb: 5 }}>
+          <FormInput
+            fontSize={14}
+            label="Start Time"
+            placeholder="HH:MM"
+            register={startTimeRegister}
+            errorMessage={startTimeError}
+          />
+          <FormInput
+            fontSize={14}
+            label="End Time"
+            placeholder="HH:MM"
+            register={endTimeRegister}
+            errorMessage={endTimeError}
+          />
+          <FormInput
+            fontSize={14}
+            label="Music band"
+            placeholder="Music band"
+            register={bandRegister}
+            errorMessage={bandNameError}
+          />
+        </VStack>
       </Stack>
     );
   }
 
   return (
     <Stack>
-      <Text sx={{ fontSize: "14px" }}>{name}</Text>
-      <Grid gridTemplateColumns="repeat(2, 1fr) 80px" gap={4}>
+      <Grid
+        gridTemplateColumns="repeat(2, 1fr) 80px"
+        gap={4}
+        sx={{ alignItems: "end" }}
+      >
+        <HStack sx={{ alignItems: "end" }}>
+          <FormInput
+            fontSize={14}
+            placeholder="HH:MM"
+            register={startTimeRegister}
+            errorMessage={startTimeError}
+          />
+          <FormInput
+            fontSize={14}
+            placeholder="HH:MM"
+            register={endTimeRegister}
+            errorMessage={endTimeError}
+          />
+        </HStack>
+
         <FormInput
-          placeholder="Hardware ID"
-          register={hardwareRegister}
-          errorMessage={hardwareError}
+          fontSize={14}
+          placeholder="Music band"
+          register={bandRegister}
+          errorMessage={bandNameError}
         />
-        <FormInput
-          placeholder="Passcode"
-          register={passcodeRegister}
-          errorMessage={passcodeError}
-        />
-        <Flex justifyContent="space-between">
+        <Flex sx={{ justifyContent: "space-between", pb: "6px" }}>
           <IconButton
             size="sm"
             aria-label="add-beacon"
