@@ -18,6 +18,7 @@ export const interestEvent = async (agent: WebhookClient) => {
       ),
     });
     agent.add(
+      /* eslint max-len: ["error", { "code": 83 }]*/
       `น้องโลมาได้เพิ่มการติดตามของคุณแล้วครับ ใกล้วันงานจะมีการแจ้งเตือนน้าาาาา`
     );
   } else {
