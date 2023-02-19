@@ -11,7 +11,7 @@ import {
   pushMessage,
 } from "./util";
 
-import { Event } from "../api/controllers/events/types";
+import { Event } from "../api/dto/event";
 import { enterEventTemplate } from "../line/templete";
 import { firestore } from "../firebase";
 
