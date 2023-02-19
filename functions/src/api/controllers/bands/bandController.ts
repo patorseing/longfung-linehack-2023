@@ -133,7 +133,7 @@ export const updateBand = async (req: Request, res: Response) => {
 
       const bucketName = functions.config().uploader.bucket_name;
 
-      const bandImage = files.bandImage
+      const bandImage = files.bandImage;
 
       if (bandImage !== undefined) {
         const imageUrl = await fileUploader(bucketName, bandImage.path);
@@ -141,7 +141,7 @@ export const updateBand = async (req: Request, res: Response) => {
         band.bandImage = imageUrl;
       }
 
-      const qrImage = files.qrImage
+      const qrImage = files.qrImage;
 
       if (qrImage !== undefined) {
         const imageUrl = await fileUploader(bucketName, qrImage.path);

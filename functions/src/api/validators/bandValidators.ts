@@ -1,7 +1,4 @@
-import {body} from "express-validator";
 import * as Joi from "joi";
-
-export const getBandsValidators = [body("userId").notEmpty()];
 
 export const getBandSchema = Joi.object({
   userId: Joi.string().required(),
