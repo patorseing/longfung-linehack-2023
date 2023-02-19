@@ -6,7 +6,7 @@ on:
 
 jobs:
   build_and_preview:
-    if: ${{ contains( github.event.pull_request.labels.*.name, 'UI') }}
+    if: ${{ startsWith( github.event.pull_request.title, 'FE:') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
