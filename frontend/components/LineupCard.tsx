@@ -95,7 +95,7 @@ export const LineupCard = (props: Props) => {
           </HStack>
         </HStack>
 
-        <VStack>
+        <VStack sx={{ gap: 3, pb: 5 }}>
           <FormInput
             fontSize={14}
             label="Start Time"

@@ -10,7 +10,7 @@ const layerStyles = {
   },
   formTwoCol: {
     gridTemplateColumns: { base: "1fr", md: "repeat(2, 1fr)" },
-    gap: { base: 2, md: 4 },
+    gap: { base: 4, md: 6 },
     alignItems: "end",
   },
   songLayout: {

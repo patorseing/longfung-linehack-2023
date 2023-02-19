@@ -47,6 +47,8 @@ export const BeaconCard = (props: BeaconCardProps) => {
           boxShadow:
             "0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06)",
           borderRadius: "8px",
+          gap: 3,
+          pb: 5,
         }}
       >
         <Flex sx={{ alignItems: "center", justifyContent: "space-between" }}>

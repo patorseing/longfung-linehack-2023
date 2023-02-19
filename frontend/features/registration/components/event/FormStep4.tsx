@@ -18,7 +18,7 @@ export const FormStep4 = () => {
     <Stack spacing={6}>
       <VStack sx={{ alignItems: "baseline" }}>
         <Text>Line Up Schedule</Text>
-        <Stack spacing={4} sx={{ w: "100%" }}>
+        <Stack sx={{ w: "100%" }}>
           {!fields.length && (
             <Button
               onClick={() => {
@@ -39,24 +39,26 @@ export const FormStep4 = () => {
               <Text>Music band</Text>
             </Grid>
           )}
-          {fields.map((beacon, idx) => (
-            <LineupCard
-              key={beacon.id}
-              name={`Queue ${idx + 1}`}
-              onAdd={() => {
-                append({ startTime: "", endTime: "", bandName: "" });
-              }}
-              onDelete={() => {
-                remove(idx);
-              }}
-              startTimeRegister={register(`lineup.${idx}.startTime`)}
-              endTimeRegister={register(`lineup.${idx}.endTime`)}
-              bandRegister={register(`lineup.${idx}.bandName`)}
-              startTimeError={errors.lineup?.[idx]?.startTime?.message}
-              endTimeError={errors.lineup?.[idx]?.endTime?.message}
-              bandNameError={errors.lineup?.[idx]?.bandName?.message}
-            />
-          ))}
+          <Stack spacing={5} sx={{ w: "100%" }}>
+            {fields.map((beacon, idx) => (
+              <LineupCard
+                key={beacon.id}
+                name={`Queue ${idx + 1}`}
+                onAdd={() => {
+                  append({ startTime: "", endTime: "", bandName: "" });
+                }}
+                onDelete={() => {
+                  remove(idx);
+                }}
+                startTimeRegister={register(`lineup.${idx}.startTime`)}
+                endTimeRegister={register(`lineup.${idx}.endTime`)}
+                bandRegister={register(`lineup.${idx}.bandName`)}
+                startTimeError={errors.lineup?.[idx]?.startTime?.message}
+                endTimeError={errors.lineup?.[idx]?.endTime?.message}
+                bandNameError={errors.lineup?.[idx]?.bandName?.message}
+              />
+            ))}
+          </Stack>
         </Stack>
       </VStack>
     </Stack>
