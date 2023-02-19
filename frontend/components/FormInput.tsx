@@ -6,26 +6,59 @@ import {
   Image,
   FormErrorMessage,
   InputProps,
-} from "@chakra-ui/react"
-import { UseFormRegisterReturn } from "react-hook-form"
+} from "@chakra-ui/react";
+import { UseFormRegisterReturn } from "react-hook-form";
 
 type FormInputProps = InputProps & {
-  label?: string
-  errorMessage?: string
-  filedLogo?: string
-  register?: UseFormRegisterReturn
-}
+  label?: string;
+  errorMessage?: string;
+  filedLogo?: string;
+  register?: UseFormRegisterReturn;
+  disable?: boolean;
+  fontSize?: number;
+  type?: string;
+};
 
 export const FormInput = (props: FormInputProps) => {
-  const { label, errorMessage, filedLogo, register, ...rest } = props
+  const {
+    label,
+    errorMessage,
+    filedLogo,
+    register,
+    disable,
+    fontSize = 16,
+    type,
+    ...rest
+  } = props;
+
   return (
     <FormControl isInvalid={!!errorMessage}>
-      {label && <FormLabel>{label}</FormLabel>}
+      {label && (
+        <FormLabel sx={{ fontSize: { base: "14px", md: `${fontSize}px` } }}>
+          {label}
+        </FormLabel>
+      )}
       <HStack>
         {filedLogo && <Image src={filedLogo} />}
-        <Input {...rest} {...register} />
+        <Input
+          type={type ?? "string"}
+          {...rest}
+          {...register}
+          disabled={disable}
+          sx={{ fontSize: { base: "14px", md: "16px" } }}
+        />
       </HStack>
-      {errorMessage && <FormErrorMessage>{errorMessage}</FormErrorMessage>}
+      {errorMessage && (
+        <FormErrorMessage
+          sx={{
+            fontSize: { base: "10px", md: "10px" },
+            mt: "4px",
+            position: "absolute",
+          }}
+        >
+          {errorMessage}
+        </FormErrorMessage>
+      )}
     </FormControl>
-  )
-}
+  );
+};

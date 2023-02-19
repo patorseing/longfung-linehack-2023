@@ -1,17 +1,20 @@
-import { Box, Button, Stack, Text } from "@chakra-ui/react"
-import { useFormContext, useFieldArray } from "react-hook-form"
+import { Box, Button, Stack, Text } from "@chakra-ui/react";
+import { useFormContext, useFieldArray } from "react-hook-form";
 
-import { BandFormValue } from "../../types"
+import { BandFormValue } from "../../types";
 
-import { BeaconCard } from "@/components/BeaconCard"
+import { BeaconCard } from "@/components/BeaconCard";
 
 export const FormStep3 = () => {
   const {
     register,
     control,
     formState: { errors },
-  } = useFormContext<BandFormValue>()
-  const { fields, append, remove } = useFieldArray({ name: "beacons", control })
+  } = useFormContext<BandFormValue>();
+  const { fields, append, remove } = useFieldArray({
+    name: "beacons",
+    control,
+  });
 
   return (
     <Box>
@@ -20,7 +23,7 @@ export const FormStep3 = () => {
         {!fields.length && (
           <Button
             onClick={() => {
-              append({ hardware_id: "", passcode: "" })
+              append({ hardware_id: "", passcode: "" });
             }}
           >
             Add new device
@@ -29,12 +32,12 @@ export const FormStep3 = () => {
         {fields.map((beacon, idx) => (
           <BeaconCard
             key={beacon.id}
-            name={`Device${idx + 1}`}
+            name={`Device ${idx + 1}`}
             onAdd={() => {
-              append({ hardware_id: "", passcode: "" })
+              append({ hardware_id: "", passcode: "" });
             }}
             onDelete={() => {
-              remove(idx)
+              remove(idx);
             }}
             hardwareRegister={register(`beacons.${idx}.hardware_id`)}
             passcodeRegister={register(`beacons.${idx}.passcode`)}
@@ -44,5 +47,5 @@ export const FormStep3 = () => {
         ))}
       </Stack>
     </Box>
-  )
-}
+  );
+};
