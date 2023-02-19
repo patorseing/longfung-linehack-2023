@@ -117,7 +117,7 @@ export const Information = ({ data }: Props) => {
     },
     {
       img: "social/line-melody",
-      link: data.line_melody_url,
+      link: undefined,
     },
   ];
   return (
@@ -128,9 +128,11 @@ export const Information = ({ data }: Props) => {
         ))}
       </VStack>
       <VStack layerStyle="infoItem" sx={{ alignItems: "baseline" }}>
-        {socilaSection.map((item, index) => (
-          <SocialInfo key={index} {...item} />
-        ))}
+        {socilaSection
+          .filter((social) => social.link)
+          .map((item, index) => (
+            <SocialInfo key={index} {...item} />
+          ))}
       </VStack>
       <VStack sx={{ alignItems: "baseline" }}>
         <Text sx={{ fontSize: { base: "14px", md: "16px" } }}>
