@@ -7,7 +7,7 @@ import {
   checkDuplicatedKey,
   compactArray,
 } from "../utils/payload";
-import {createBandSchema} from "../validators/bandValidators";
+import {createBandSchema, updateBandSchema} from "../validators/bandValidators";
 
 export const validateCreateBandSchema = async (
     req: Request,
@@ -24,6 +24,36 @@ export const validateCreateBandSchema = async (
     const lineBeacon = JSON.parse(fields.lineBeacon || "[]");
 
     const {error} = createBandSchema.validate({
+      ...fields,
+      socialMedia,
+      streamingPlatform,
+      songRequest,
+      lineBeacon,
+    });
+
+    if (error !== undefined) {
+      return res.status(400).json({error: error.details});
+    }
+
+    return next();
+  });
+};
+
+export const validateUpdateBandSchema = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+  /* eslint new-cap: "warn"*/
+  const form = formidable.IncomingForm({multiples: true});
+
+  form.parse(req, async (err: any, fields: any, files: any) => {
+    const socialMedia = JSON.parse(fields.socialMedia || "{}");
+    const streamingPlatform = JSON.parse(fields.streamingPlatform || "{}");
+    const songRequest = fields.songRequest === "true";
+    const lineBeacon = JSON.parse(fields.lineBeacon || "[]");
+
+    const {error} = updateBandSchema.validate({
       ...fields,
       socialMedia,
       streamingPlatform,
@@ -91,18 +121,23 @@ export const checkBandExisting = async (
     res: Response,
     next: NextFunction
 ) => {
-  const updateBand = await firestore
-      .collection("Band")
-      .doc(req.body.bandName)
-      .get();
+  /* eslint new-cap: "warn"*/
+  const form = formidable.IncomingForm({multiples: true});
 
-  if (!updateBand.exists) {
-    return res
-        .status(404)
-        .json({error: "Band not found", param: req.body.bandName});
-  }
+  form.parse(req, async (err: any, fields: any, files: any) => {
+    const updateBand = await firestore
+        .collection("Band")
+        .doc(fields.bandName)
+        .get();
 
-  return next();
+    if (!updateBand.exists) {
+      return res
+          .status(404)
+          .json({error: "Band not found", param: fields.bandName});
+    }
+
+    return next();
+  });
 };
 
 export const checkUpdatedHardwareId = async (
@@ -110,23 +145,29 @@ export const checkUpdatedHardwareId = async (
     res: Response,
     next: NextFunction
 ) => {
-  const {lineBeacon = [], bandName} = req.body;
+  /* eslint new-cap: "warn"*/
+  const form = formidable.IncomingForm({multiples: true});
 
-  const duplicatedHardwareIds = await checkDuplicatedHardwareIds(lineBeacon);
-  const compactedDuplicated = compactArray(duplicatedHardwareIds);
-  const oldHardwareIds = await getOldHardwareIds(bandName);
+  form.parse(req, async (err: any, fields: any, files: any) => {
+    const bandName = fields.bandName;
+    const lineBeacon = JSON.parse(fields.lineBeacon || "[]");
 
-  const diffErrors = compactedDuplicated.filter(
-      (item) => !oldHardwareIds.includes(item)
-  );
+    const duplicatedHardwareIds = await checkDuplicatedHardwareIds(lineBeacon);
+    const compactedDuplicated = compactArray(duplicatedHardwareIds);
+    const oldHardwareIds = await getOldHardwareIds(bandName);
 
-  if (diffErrors.length > 0) {
-    return res
-        .status(422)
-        .json({error: "Duplicated hardwareId", param: diffErrors});
-  }
+    const diffErrors = compactedDuplicated.filter(
+        (item) => !oldHardwareIds.includes(item)
+    );
 
-  return next();
+    if (diffErrors.length > 0) {
+      return res
+          .status(422)
+          .json({error: "Duplicated hardwareId", param: diffErrors});
+    }
+
+    return next();
+  });
 };
 
 export const getOldHardwareIds = async (bandName: string) => {

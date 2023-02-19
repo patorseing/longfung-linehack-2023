@@ -11,10 +11,8 @@ import {
   checkDuplicatedHardwareId,
   checkUpdatedHardwareId,
   validateCreateBandSchema,
+  validateUpdateBandSchema,
 } from "../middlewares/bandMiddleware";
-import {
-  updateBandValidators,
-} from "../validators/bandValidators";
 
 /* eslint new-cap: "warn"*/
 const router = express.Router();
@@ -31,8 +29,8 @@ router.post(
 
 router.put(
     "/",
+    validateUpdateBandSchema,
     checkBandExisting,
-    updateBandValidators,
     checkUpdatedHardwareId,
     updateBand
 );

@@ -1,5 +1,4 @@
 import {Request, Response} from "express";
-import {validationResult} from "express-validator";
 import * as functions from "firebase-functions";
 import * as formidable from "formidable-serverless";
 
@@ -9,11 +8,13 @@ import {createBandDTO, updateBandDTO} from "../../dto/band";
 import {fileUploader} from "../../utils/fileUploader";
 import {defaultSocialMedia, defaultSteamingPlatform} from "../../constants";
 import {getOldHardwareIds} from "../../middlewares/bandMiddleware";
+import {getBandSchema} from "../../validators/bandValidators";
 
 export const getBands = async (req: Request, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({errors: errors["errors"]});
+  const {error} = getBandSchema.validate(req.body);
+
+  if (error !== undefined) {
+    return res.status(400).json({error: error.details});
   }
 
   const bandList: FirebaseFirestore.DocumentData[] = [];
@@ -97,70 +98,80 @@ export const createBand = async (req: Request, res: Response) => {
 };
 
 export const updateBand = async (req: Request, res: Response) => {
+  /* eslint new-cap: "warn"*/
+  const form = formidable.IncomingForm({multiples: true});
+
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({errors: errors["errors"]});
-    }
+    form.parse(req, async (err: any, fields: any, files: any) => {
+      const socialMedia = JSON.parse(fields.socialMedia || "{}");
+      const streamingPlatform = JSON.parse(fields.streamingPlatform || "{}");
+      const songRequest = fields.songRequest === "true";
+      const lineBeacon = JSON.parse(fields.lineBeacon || "[]");
 
-    const {body: requestBody} = req;
+      const band: updateBandDTO = {
+        firstPromotedSong: fields.firstPromotedSong || null,
+        secondPromotedSong: fields.secondPromotedSong || null,
+        socialMedia: {...defaultSocialMedia, ...socialMedia},
+        streamingPlatform: {
+          ...defaultSteamingPlatform,
+          ...streamingPlatform,
+        },
+        lineMelody: fields.lineMelody || null,
+        songRequest: songRequest || false,
+        description: fields.description || null,
+        lineBeacon: lineBeacon || [],
+      };
 
-    const band: updateBandDTO = {
-      firstPromotedSong: requestBody.firstPromotedSong || null,
-      secondPromotedSong: requestBody.secondPromotedSong || null,
-      socialMedia: {...defaultSocialMedia, ...requestBody.socialMedia},
-      streamingPlatform: {
-        ...defaultSteamingPlatform,
-        ...requestBody.streamingPlatform,
-      },
-      lineMelody: requestBody.lineMelody || null,
-      songRequest: requestBody.songRequest || false,
-      description: requestBody.description || null,
-      lineBeacon: requestBody.lineBeacon || [],
-    };
+      const oldHardwareIds = await getOldHardwareIds(fields.bandName);
+      const newHardwareIds = band.lineBeacon?.map(
+          ({hardwareId}) => hardwareId
+      );
 
-    const oldHardwareIds = await getOldHardwareIds(requestBody.bandName);
-    const newHardwareIds = band.lineBeacon?.map(({hardwareId}) => hardwareId);
+      const deletedHardwareIds = oldHardwareIds.filter(
+          (item) => !newHardwareIds?.includes(item)
+      );
 
-    const deletedHardwareIds = oldHardwareIds.filter(
-        (item) => !newHardwareIds?.includes(item)
-    );
+      const bucketName = functions.config().uploader.bucket_name;
 
-    const bucketName = functions.config().uploader.bucket_name;
+      const bandImage = files.bandImage
 
-    if (requestBody.bandImage !== undefined) {
-      const imageUrl = await fileUploader(bucketName, requestBody.bandImage);
+      if (bandImage !== undefined) {
+        const imageUrl = await fileUploader(bucketName, bandImage.path);
 
-      band.bandImage = imageUrl;
-    }
+        band.bandImage = imageUrl;
+      }
 
-    if (requestBody.qrImage !== undefined) {
-      const imageUrl = await fileUploader(bucketName, requestBody.qrImage);
+      const qrImage = files.qrImage
 
-      band.qrImage = imageUrl;
-    }
+      if (qrImage !== undefined) {
+        const imageUrl = await fileUploader(bucketName, qrImage.path);
 
-    await Promise.all(
-        deletedHardwareIds.map((hardwareId) =>
-          firestore.collection("LineBeacon").doc(hardwareId).delete()
-        )
-    );
+        band.qrImage = imageUrl;
+      }
 
-    await Promise.all(
-        newHardwareIds?.map((hardwareId) =>
-          firestore.collection("LineBeacon").doc(hardwareId).set({
-            hardwareId,
-            bandName: requestBody.bandName,
-          })
-        ) || []
-    );
+      await Promise.all(
+          deletedHardwareIds.map((hardwareId) =>
+            firestore.collection("LineBeacon").doc(hardwareId).delete()
+          )
+      );
 
-    const updatedBand = await firestore
-        .collection("Band")
-        .doc(requestBody.bandName)
-        .update(band);
+      await Promise.all(
+          newHardwareIds?.map((hardwareId) =>
+            firestore.collection("LineBeacon").doc(hardwareId).set({
+              hardwareId,
+              bandName: fields.bandName,
+            })
+          ) || []
+      );
 
-    return res.status(201).send({data: updatedBand});
+      const updatedBand = await firestore
+          .collection("Band")
+          .doc(fields.bandName)
+          .update(band);
+
+      return res.status(201).send({data: updatedBand});
+    });
+    return;
   } catch (err) {
     return res.status(500).send(err);
   }
