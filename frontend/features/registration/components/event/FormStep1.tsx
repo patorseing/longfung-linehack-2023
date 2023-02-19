@@ -3,11 +3,13 @@ import { useFormContext } from "react-hook-form";
 
 import { EventFormValue } from "../../types";
 import { FormInput } from "@/components/FormInput";
+import { Calendar } from "@/components";
 
 export const FormStep1 = () => {
   const {
     register,
     formState: { errors },
+    setValue,
   } = useFormContext<EventFormValue>();
 
   return (
@@ -19,11 +21,14 @@ export const FormStep1 = () => {
         register={register("eventName")}
       />
       <Grid layerStyle="formTwoCol">
-        <FormInput
+        <Calendar
           label="Event Date"
           placeholder="DD:MM:YY"
           errorMessage={errors.eventDate?.message}
           register={register("eventDate")}
+          onChange={(value) => {
+            setValue("eventDate", value as string);
+          }}
         />
         <HStack sx={{ alignItems: "end" }}>
           <FormInput

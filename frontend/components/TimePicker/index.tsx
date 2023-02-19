@@ -11,8 +11,7 @@ import {
   Grid,
   Flex,
 } from "@chakra-ui/react";
-import "react-time-picker/dist/TimePicker.css";
-import "react-clock/src/Clock.css";
+// import "react-clock/src/Clock.css";
 import { useState } from "react";
 import { IoMdTime } from "react-icons/io";
 import { TimePickerContainer } from "./TimePicker.styles";
@@ -142,7 +141,7 @@ export const TimePicker = ({ label, time }: Props) => {
           dateFormat="hh:mm"
         />
       </TimePickerContainer> */}
-      <ReactTimePicker onChange={onChange} value={value} />
+      {/* <ReactTimePicker onChange={onChange} value={value} /> */}
     </VStack>
   );
 };

@@ -1,17 +1,34 @@
 import { useEffect, useState } from "react";
-import { Button, forwardRef, Text, VStack } from "@chakra-ui/react";
+import { UseFormRegisterReturn } from "react-hook-form";
+import {
+  Button,
+  forwardRef,
+  FormLabel,
+  InputProps,
+  FormControl,
+} from "@chakra-ui/react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { AiTwotoneCalendar } from "react-icons/ai";
-
+import dayjs from "dayjs";
 import colors from "@/lib/theme/color";
 import { DateRankContainer } from "./Calendat.styles";
-type Props = {
+type Props = InputProps & {
   date?: Date;
   label?: string;
-  onChange?: (date: Date) => void;
+  onChange?: (date: string) => void;
+  register?: UseFormRegisterReturn;
+  errorMessage?: string;
+  fontSize?: number;
 };
-export const Calendar = ({ date, label, onChange }: Props) => {
+export const Calendar = ({
+  date,
+  label,
+  onChange,
+  errorMessage,
+
+  fontSize = 16,
+}: Props) => {
   const [selectedDate, setSelectedDate] = useState<Date>();
   const CustomInput = forwardRef(({ value, onClick }, ref) => {
     return (
@@ -42,20 +59,24 @@ export const Calendar = ({ date, label, onChange }: Props) => {
       setSelectedDate(date);
     }
   }, [date]);
+
   return (
-    <VStack sx={{ alignItems: "baseline" }}>
-      {label && <Text sx={{ fontWeight: "light" }}>{label}</Text>}
+    <FormControl isInvalid={!!errorMessage}>
+      {label && (
+        <FormLabel sx={{ fontSize: { base: "14px", md: `${fontSize}px` } }}>
+          {label}
+        </FormLabel>
+      )}
       <DateRankContainer>
         <DatePicker
           selected={selectedDate}
           onChange={(date: Date) => {
-            onChange?.(date);
+            onChange?.(dayjs(date).format("DD/MM/YYYY"));
             setSelectedDate(date);
           }}
           customInput={<CustomInput />}
-          dateFormat="d MMMM yyyy"
         />
       </DateRankContainer>
-    </VStack>
+    </FormControl>
   );
 };
