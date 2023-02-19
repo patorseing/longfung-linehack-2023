@@ -1,6 +1,6 @@
 declare module "dialogflow-fulfillment" {
-  import {DialogflowConversation} from "actions-on-google";
-  import {Request, Response} from "express";
+  import { DialogflowConversation } from "actions-on-google";
+  import { Request, Response } from "express";
 
   export class Card extends RichResponse {
     constructor(card: string | object);
@@ -132,7 +132,25 @@ declare module "dialogflow-fulfillment" {
      * detectIntent/query
      * or platform integration (Google Assistant, Slack, etc.)
      * in the request or null if no value */
-    public readonly originalRequest: object;
+    public readonly originalRequest: {
+      source: "line";
+      payload: {
+        data: {
+          type: "message";
+          replyToken: string;
+          message: {
+            id: string;
+            type: "text";
+            text: string;
+          };
+          source: {
+            userId: string;
+            type: string;
+          };
+          timestamp: string;
+        };
+      };
+    };
 
     /** Original user query as indicated
      * by Dialogflow or null if no value */

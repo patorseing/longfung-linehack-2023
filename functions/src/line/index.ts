@@ -20,7 +20,7 @@ export const webhook = async (
       for (const event of events) {
         switch (event.type) {
           case "beacon":
-            await beaconEvent(req, event);
+            await beaconEvent(event);
             break;
           case "message":
             {

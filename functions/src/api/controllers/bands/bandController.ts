@@ -1,15 +1,10 @@
 import {Request, Response} from "express";
 import {validationResult} from "express-validator";
-import * as functions from 'firebase-functions'
+import * as functions from "firebase-functions";
 
-import {
-  checkDuplicatedHardwareIds,
-  checkDuplicatedKey,
-  compact,
-  compactArray,
-} from "../../utils/payload";
+import {compact} from "../../utils/payload";
 import {firestore} from "../../../firebase";
-import {Band} from "./types";
+import {Band} from "../../dto/band";
 import {fileUploader} from "../../utils/fileUploader";
 
 export const getBands = async (req: Request, res: Response) => {
@@ -52,23 +47,6 @@ export const createBand = async (req: Request, res: Response) => {
       description: req.body.description || null,
       lineBeacon: req.body.lineBeacon || [],
     };
-
-    if (await checkDuplicatedKey("Band", band.bandName)) {
-      return res
-          .status(422)
-          .json({error: "Duplicated bandName", param: band.bandName});
-    }
-
-    const duplicatedHardwareIdErrors = await checkDuplicatedHardwareIds(
-        band.lineBeacon || []
-    );
-
-    if (compactArray(duplicatedHardwareIdErrors).length > 0) {
-      return res.status(422).json({
-        error: "Duplicated hardwareId",
-        param: compactArray(duplicatedHardwareIdErrors),
-      });
-    }
 
     const bucketName = functions.config().uploader.bucket_name;
 
