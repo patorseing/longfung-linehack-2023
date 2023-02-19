@@ -5,16 +5,16 @@ export const getBandSchema = Joi.object({
 });
 
 export const socialMediaSchema = Joi.object({
-  facebook: Joi.string().allow(null, undefined, ''),
-  instagram: Joi.string().allow(null, undefined, ''),
-  tiktok: Joi.string().allow(null, undefined, ''),
-  website: Joi.string().allow(null, undefined, ''),
+  facebook: Joi.string().allow(null, ''),
+  instagram: Joi.string().allow(null, ''),
+  tiktok: Joi.string().allow(null, ''),
+  website: Joi.string().allow(null, ''),
 });
 
 export const streamingPlatformSchema = Joi.object({
-  spotify: Joi.string().allow(null, undefined, ''),
-  youtube: Joi.string().allow(null, undefined, ''),
-  appleMusic: Joi.string().allow(null, undefined, ''),
+  spotify: Joi.string().allow(null, ''),
+  youtube: Joi.string().allow(null, ''),
+  appleMusic: Joi.string().allow(null, ''),
 });
 
 export const lineBeaconSchema = Joi.object({
@@ -24,35 +24,35 @@ export const lineBeaconSchema = Joi.object({
 
 export const createBandSchema = Joi.object({
   bandName: Joi.string().required(),
-  firstPromotedSong: Joi.string().allow(null, undefined, ''),
-  secondPromotedSong: Joi.string().allow(null, undefined, ''),
+  firstPromotedSong: Joi.string().allow(null, ''),
+  secondPromotedSong: Joi.string().allow(null, ''),
   userId: Joi.string().required(),
 
   socialMedia: socialMediaSchema,
   streamingPlatform: streamingPlatformSchema,
 
-  lineMelody: Joi.string().allow(null, undefined, ''),
-  songRequest: Joi.boolean().allow(null, undefined, '').default(false),
-  description: Joi.string().allow(null, undefined, ''),
+  lineMelody: Joi.string().allow(null, ''),
+  songRequest: Joi.boolean().allow(null, '').default(false),
+  description: Joi.string().allow(null, ''),
 
   lineBeacon: Joi.array().items(lineBeaconSchema),
-  bandImage: Joi.string().allow(null, undefined, ''),
-  qrImage: Joi.string().allow(null, undefined, ''),
+  bandImage: Joi.string().allow(null, ''),
+  qrImage: Joi.string().allow(null, ''),
 });
 
 export const updateBandSchema = Joi.object({
   bandName: Joi.string().required(),
-  firePromotedSong: Joi.string().allow(null, undefined, ''),
-  secondPromotedSong: Joi.string().allow(null, undefined, ''),
+  firePromotedSong: Joi.string().allow(null, ''),
+  secondPromotedSong: Joi.string().allow(null, ''),
 
   socialMedia: socialMediaSchema,
   streamingPlatform: streamingPlatformSchema,
 
-  lineMelody: Joi.string().allow(null, undefined, ''),
-  songRequest: Joi.boolean().allow(null, undefined, ''),
-  description: Joi.string().allow(null, undefined, ''),
+  lineMelody: Joi.string().allow(null, ''),
+  songRequest: Joi.boolean().allow(null, ''),
+  description: Joi.string().allow(null, ''),
 
   lineBeacon: Joi.array().items(lineBeaconSchema),
-  bandImage: Joi.string().allow(null, undefined, ''),
-  qrImage: Joi.string().allow(null, undefined, ''),
+  bandImage: Joi.string().allow(null, ''),
+  qrImage: Joi.string().allow(null, ''),
 });
