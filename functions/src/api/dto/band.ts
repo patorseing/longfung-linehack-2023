@@ -8,7 +8,7 @@ interface SocialMediaItem {
 interface SteamingPlatformItem {
   spotify?: string;
   youtube?: string;
-  apple_music?: string;
+  appleMusic?: string;
 }
 
 interface LineBeaconItem {
@@ -16,7 +16,7 @@ interface LineBeaconItem {
   passcode: string;
 }
 
-export interface lineBeacon {
+export interface LineBeacon {
   hardwareId: string;
   bandName?: string;
   eventName?: string;
@@ -32,7 +32,7 @@ export interface Band {
   lineMelody?: string;
   songRequest: boolean;
   description?: string;
-  lineBeacon?: Array<LineBeaconItem>;
+  lineBeacon?: LineBeaconItem[];
   bandImage?: string;
   qrImage?: string;
 }

@@ -7,3 +7,4 @@ const app = admin.initializeApp(firebaseConfig);
 
 export const firestore = app.firestore();
 export const storage = app.storage();
+export const appCheck = app.appCheck();
