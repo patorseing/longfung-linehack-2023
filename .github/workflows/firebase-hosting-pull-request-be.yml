@@ -1,9 +1,6 @@
 name: Deploy to Firebase Others on PR
 
-on:
-  pull_request_target:
-    types:
-      - opened
+'on': pull_request
 
 jobs:
   build_and_preview:
