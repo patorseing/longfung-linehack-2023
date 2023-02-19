@@ -23,9 +23,10 @@
     "date-fns": "^2.29.3",
     "date-fns-tz": "^2.0.0",
     "dialogflow-fulfillment": "^0.6.1",
-    "express-validator": "^6.15.0",
     "firebase-admin": "^10.0.2",
     "firebase-functions": "^4.2.1",
+    "formidable-serverless": "^1.1.1",
+    "joi": "^17.8.1",
     "uuid-v4": "^0.1.0"
   },
   "devDependencies": {

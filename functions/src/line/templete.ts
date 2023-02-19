@@ -29,18 +29,18 @@ export const enterEventTemplate = ({
       layout: "vertical",
       contents: [
         ...[
-          event.ticketType.free
-            ? {
-                type: "text",
-                text: "Free Event",
-                color: "#F83333",
-                size: "xs",
-              }
-            : {
-                type: "text",
-                text: `${event.ticketType?.price} ฿`,
-                size: "xs",
-              },
+          event.ticketType.free ?
+            {
+              type: "text",
+              text: "Free Event",
+              color: "#F83333",
+              size: "xs",
+            } :
+            {
+              type: "text",
+              text: `${event.ticketType?.price} ฿`,
+              size: "xs",
+            },
         ],
         {
           type: "box",
@@ -144,33 +144,33 @@ export const enterEventTemplate = ({
       type: "box",
       layout: "vertical",
       contents: [
-        ...(event.eventLocation?.googleMapLink
-          ? [
-              {
-                type: "button",
-                action: {
-                  type: "uri",
-                  label: "เปิดแผนที่",
-                  uri: event.eventLocation?.googleMapLink,
-                },
-                style: "link",
-                height: "sm",
+        ...(event.eventLocation?.googleMapLink ?
+          [
+            {
+              type: "button",
+              action: {
+                type: "uri",
+                label: "เปิดแผนที่",
+                uri: event.eventLocation?.googleMapLink,
               },
-            ]
-          : []),
-        ...(interested || event.interestedPerson.includes(userId ?? "")
-          ? []
-          : [
-              {
-                type: "button",
-                action: {
-                  type: "message",
-                  label: "ติดตามอีเว้นท์นี้",
-                  text: `ฉันอยากติดตาม ${event.eventName}`,
-                },
-                height: "sm",
+              style: "link",
+              height: "sm",
+            },
+          ] :
+          []),
+        ...(interested || event.interestedPerson.includes(userId ?? "") ?
+          [] :
+          [
+            {
+              type: "button",
+              action: {
+                type: "message",
+                label: "ติดตามอีเว้นท์นี้",
+                text: `ฉันอยากติดตาม ${event.eventName}`,
               },
-            ]),
+              height: "sm",
+            },
+          ]),
         {
           type: "button",
           action: {

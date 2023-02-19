@@ -1,16 +1,16 @@
 import * as functions from "firebase-functions";
-import { Profile } from "@line/bot-sdk";
+import {Profile} from "@line/bot-sdk";
 
 import {reply, validateLineMsg} from "../util";
 import {enterEventTemplate} from "../templete";
 import {Event} from "../../api/dto/event";
 
-import { firestore } from "../../firebase";
+import {firestore} from "../../firebase";
 
 export const enterEvent = async (
-  hardwareId: string,
-  profile: Profile,
-  replyToken: string
+    hardwareId: string,
+    profile: Profile,
+    replyToken: string
 ) => {
   const lineBeaconRef = firestore.collection("LineBeacon").doc(hardwareId);
   const uniqueLineBeacon = await lineBeaconRef.get();
