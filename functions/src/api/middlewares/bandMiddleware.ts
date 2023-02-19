@@ -1,26 +1,64 @@
 import {Response, Request, NextFunction} from "express";
+import * as formidable from "formidable-serverless";
+
 import {firestore} from "../../firebase";
 import {
   checkDuplicatedHardwareIds,
   checkDuplicatedKey,
   compactArray,
 } from "../utils/payload";
+import {createBandSchema} from "../validators/bandValidators";
+
+export const validateCreateBandSchema = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+  /* eslint new-cap: "warn"*/
+  const form = formidable.IncomingForm({multiples: true});
+
+  form.parse(req, async (err: any, fields: any, files: any) => {
+    const socialMedia = JSON.parse(fields.socialMedia || "{}");
+    const streamingPlatform = JSON.parse(fields.streamingPlatform || "{}");
+    const songRequest = fields.songRequest === "true";
+    const lineBeacon = JSON.parse(fields.lineBeacon || "[]");
+
+    const {error} = createBandSchema.validate({
+      ...fields,
+      socialMedia,
+      streamingPlatform,
+      songRequest,
+      lineBeacon,
+    });
+
+    if (error !== undefined) {
+      return res.status(400).json({error: error.details});
+    }
+
+    return next();
+  });
+};
 
 export const checkDuplicatedBandName = async (
     req: Request,
     res: Response,
     next: NextFunction
 ) => {
-  const bandName = req.body.bandName;
-  const isDuplicated = await checkDuplicatedKey("Band", bandName);
+  /* eslint new-cap: "warn"*/
+  const form = formidable.IncomingForm({multiples: true});
 
-  if (isDuplicated) {
-    return res
-        .status(422)
-        .json({error: "Duplicated bandName", param: bandName});
-  }
+  form.parse(req, async (err: any, fields: any, files: any) => {
+    const bandName = fields.bandName;
+    const isDuplicated = await checkDuplicatedKey("Band", bandName);
 
-  return next();
+    if (isDuplicated) {
+      return res
+          .status(422)
+          .json({error: "Duplicated bandName", param: bandName});
+    }
+
+    return next();
+  });
 };
 
 export const checkDuplicatedHardwareId = async (
@@ -28,19 +66,24 @@ export const checkDuplicatedHardwareId = async (
     res: Response,
     next: NextFunction
 ) => {
-  const hardwareIds = req.body.lineBeacon || [];
-  const duplicatedHardwareIdErrors = await checkDuplicatedHardwareIds(
-      hardwareIds
-  );
-  const compactedErrors = compactArray(duplicatedHardwareIdErrors);
+  /* eslint new-cap: "warn"*/
+  const form = formidable.IncomingForm({multiples: true});
 
-  if (compactedErrors.length > 0) {
-    return res
-        .status(422)
-        .json({error: "Duplicated hardwareId", param: compactedErrors});
-  }
+  form.parse(req, async (err: any, fields: any, files: any) => {
+    const hardwareIds = JSON.parse(fields.lineBeacon || "[]");
+    const duplicatedHardwareIdErrors = await checkDuplicatedHardwareIds(
+        hardwareIds
+    );
+    const compactedErrors = compactArray(duplicatedHardwareIdErrors);
 
-  return next();
+    if (compactedErrors.length > 0) {
+      return res
+          .status(422)
+          .json({error: "Duplicated hardwareId", param: compactedErrors});
+    }
+
+    return next();
+  });
 };
 
 export const checkBandExisting = async (

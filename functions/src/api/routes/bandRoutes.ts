@@ -10,9 +10,9 @@ import {
   checkDuplicatedBandName,
   checkDuplicatedHardwareId,
   checkUpdatedHardwareId,
+  validateCreateBandSchema,
 } from "../middlewares/bandMiddleware";
 import {
-  createBandValidators,
   updateBandValidators,
 } from "../validators/bandValidators";
 
@@ -23,7 +23,7 @@ router.get("/", getBands);
 
 router.post(
     "/",
-    createBandValidators,
+    validateCreateBandSchema,
     checkDuplicatedBandName,
     checkDuplicatedHardwareId,
     createBand
