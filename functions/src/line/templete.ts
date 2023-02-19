@@ -1,4 +1,4 @@
-import { Event } from "../api/controllers/events/types";
+import {Event} from "../api/controllers/events/types";
 
 export const enterEventTemplate = (event: Event) => ({
   type: "flex",
@@ -21,18 +21,18 @@ export const enterEventTemplate = (event: Event) => ({
       layout: "vertical",
       contents: [
         ...[
-          event.ticketType.free
-            ? {
-                type: "text",
-                text: "Free Event",
-                color: "#F83333",
-                size: "xs",
-              }
-            : {
-                type: "text",
-                text: `${event.ticketType?.price} ฿`,
-                size: "xs",
-              },
+          event.ticketType.free ?
+            {
+              type: "text",
+              text: "Free Event",
+              color: "#F83333",
+              size: "xs",
+            } :
+            {
+              type: "text",
+              text: `${event.ticketType?.price} ฿`,
+              size: "xs",
+            },
         ],
         {
           type: "box",
@@ -136,20 +136,20 @@ export const enterEventTemplate = (event: Event) => ({
       type: "box",
       layout: "vertical",
       contents: [
-        ...(event.eventLocation?.googleMapLink
-          ? [
-              {
-                type: "button",
-                action: {
-                  type: "uri",
-                  label: "เปิดแผนที่",
-                  uri: event.eventLocation?.googleMapLink,
-                },
-                style: "link",
-                height: "sm",
+        ...(event.eventLocation?.googleMapLink ?
+          [
+            {
+              type: "button",
+              action: {
+                type: "uri",
+                label: "เปิดแผนที่",
+                uri: event.eventLocation?.googleMapLink,
               },
-            ]
-          : []),
+              style: "link",
+              height: "sm",
+            },
+          ] :
+          []),
         {
           type: "button",
           action: {

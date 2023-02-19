@@ -2,11 +2,11 @@
 
 import * as functions from "firebase-functions";
 
-import {webhook} from "./line";
+import { webhook, remindEventForUserPubSub } from "./line";
 
 exports.webhook = functions.https.onRequest(webhook);
 
-import {dialogflow} from "./dialogflow";
+import { dialogflow } from "./dialogflow";
 
 exports.dialogflowFirebaseFulfillment = functions.https.onRequest(dialogflow);
 
@@ -22,10 +22,15 @@ import tokenVerification from "./api/middlewares/tokenVerification";
 const app = express();
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 app.use("/bands", tokenVerification, bandsRouter);
 app.use("/healthcheck", tokenVerification, healthCheckRouter);
 
 exports.api = functions.https.onRequest(app);
+
+exports.remindEventForUserPubSub = functions.pubsub
+  .schedule("30 19 * * 5")
+  .timeZone("Asia/Bangkok")
+  .onRun(remindEventForUserPubSub);
