@@ -31,8 +31,8 @@ export const enterEvent = async (
     eventMessage = [
       {
         type: "text",
-        text: `สวัสดีครับ ${profile.displayName}
-        น้องโลมายินดีต้อนรับสู่งาน ${eventName} 🎶`,
+        /* eslint max-len: ["error", { "code": 100 }]*/
+        text: `สวัสดีครับ ${profile.displayName} น้องโลมายินดีต้อนรับสู่งาน ${eventName} 🎶`,
       },
       ...(enterEventTemp ? [enterEventTemp] : []),
     ];
