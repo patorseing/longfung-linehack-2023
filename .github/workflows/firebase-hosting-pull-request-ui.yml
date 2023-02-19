@@ -24,6 +24,8 @@ jobs:
           envkey_NEXT_PUBLIC_BASE_URL: ${{secrets.NEXT_PUBLIC_BASE_URL}}
           file_name: .env
           directory: ./frontend
+      - run: npm i
+        working-directory: frontend
       - run: npm ci && npm run build
         working-directory: frontend
       - name: Deploy to Firebase Hosting

@@ -1,40 +1,53 @@
+import { Step } from "@/components";
+import { Flex, VStack, Text, Box, Button, Icon } from "@chakra-ui/react";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { Box, Button, Flex, Icon, Text } from "@chakra-ui/react";
-import { MdArrowForward, MdArrowBack } from "react-icons/md";
-import { yupResolver } from "@hookform/resolvers/yup";
-
-import { Step } from "@/components/Step";
-import { BandFormValue } from "../../types";
-import { bandSchema } from "../../schema";
+import { MdArrowBack, MdArrowForward } from "react-icons/md";
+import {
+  FormStep1,
+  FormStep2,
+  FormStep3,
+  FormStep4,
+} from "../../components/event";
 import { PictureContextProvider } from "../../context/previewImage";
-import { FormStep1, FormStep2, FormStep3 } from "../../components/band";
+import { eventSchema } from "../../schema";
+import { EventFormValue } from "../../types";
 
-const BandRegisterPage = () => {
+const EventRegisterPage = () => {
   const [step, setStep] = useState<number>(1);
-
-  const methods = useForm<BandFormValue>({
-    resolver: yupResolver(bandSchema),
+  const methods = useForm<EventFormValue>({
+    resolver: yupResolver(eventSchema),
+    defaultValues: {
+      isTicket: false,
+      alcoholPermission: false,
+      songRequest: false,
+    },
   });
-
   const onNextStep = async () => {
     switch (step) {
       case 1:
-        const result = await methods.trigger(["name", "first_song"]);
-
-        if (!result) return;
+        let result1 = await methods.trigger(["eventDate"]);
+        console.log("re", result1);
+        if (!result1) return;
 
         setStep((prev) => prev + 1);
-
         break;
       case 2:
+        const result2 = await methods.trigger("ticketPrice");
+        console.log("re", result2);
+        if (!result2) return;
+        setStep((prev) => prev + 1);
+        break;
+      case 3:
+        const result3 = await methods.trigger("beacons");
+        if (!result3) return;
         setStep((prev) => prev + 1);
         break;
       default:
         return;
     }
   };
-
   const onSubmit = methods.handleSubmit((data, e) => {
     console.log(data);
   });
@@ -47,50 +60,39 @@ const BandRegisterPage = () => {
         return <FormStep2 />;
       case 3:
         return <FormStep3 />;
+      case 4:
+        return <FormStep4 />;
       default:
         return;
     }
   };
-
   return (
     <PictureContextProvider>
       <FormProvider {...methods}>
-        <form style={{ width: "100%" }} onSubmit={onSubmit}>
-          <Flex
+        <VStack
+          sx={{
+            w: "100%",
+            alignItems: "center",
+            pt: 9,
+            px: { base: 6 },
+          }}
+        >
+          <Text
             sx={{
-              w: "full",
-              flexDirection: "column",
-              alignItems: "center",
-              pt: 9,
-              px: { base: 6 },
+              fontSize: { base: "24px", md: "40px" },
+              fontWeight: "bold",
+              color: "white",
+              mb: { base: 2, xl: 4 },
             }}
           >
-            <Text
-              sx={{
-                color: "white",
-                textAlign: "center",
-                fontSize: { base: "24px", md: "32px", xl: "56px" },
-                fontWeight: { base: 600, xl: 700 },
-                mb: { base: 2, xl: 4 },
-              }}
-            >
-              Band Information
-            </Text>
-            <Step currentStep={step} totalStep={3} />
-            <Box
-              sx={{
-                w: { base: "full", lg: "900px" },
-                p: { base: 4, xl: 6 },
-                mt: { base: 6, xl: 8 },
-                borderRadius: "10px",
-                bgColor: "#FDFCFB",
-                boxShadow:
-                  "0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06)",
-              }}
-            >
-              {renderForm()}
-            </Box>
-
+            Event Information
+          </Text>
+          <Step currentStep={step} totalStep={4} />
+          <form
+            style={{ width: "100%", display: "contents" }}
+            onSubmit={onSubmit}
+          >
+            <Box layerStyle="formContainer">{renderForm()}</Box>
             <Flex
               sx={{
                 w: { base: "full", lg: "900px" },
@@ -114,7 +116,7 @@ const BandRegisterPage = () => {
                   Back
                 </Button>
               )}
-              {step === 3 && (
+              {step === 4 && (
                 <Button
                   type="submit"
                   sx={{
@@ -125,7 +127,7 @@ const BandRegisterPage = () => {
                   Submit
                 </Button>
               )}
-              {step !== 3 && (
+              {step !== 4 && (
                 <Button
                   sx={{
                     w: "155px",
@@ -138,11 +140,11 @@ const BandRegisterPage = () => {
                 </Button>
               )}
             </Flex>
-          </Flex>
-        </form>
+          </form>
+        </VStack>
       </FormProvider>
     </PictureContextProvider>
   );
 };
 
-export default BandRegisterPage;
+export default EventRegisterPage;

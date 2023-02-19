@@ -1,6 +1,14 @@
 import {Event} from "../api/dto/event";
 
-export const enterEventTemplate = (event: Event) => ({
+export const enterEventTemplate = ({
+  event,
+  interested,
+  userId,
+}: {
+  event: Event;
+  interested?: boolean;
+  userId?: string;
+}) => ({
   type: "flex",
   altText: event.eventName,
   contents: {
@@ -21,18 +29,18 @@ export const enterEventTemplate = (event: Event) => ({
       layout: "vertical",
       contents: [
         ...[
-          event.ticketType.free ?
-            {
-              type: "text",
-              text: "Free Event",
-              color: "#F83333",
-              size: "xs",
-            } :
-            {
-              type: "text",
-              text: `${event.ticketType?.price} ฿`,
-              size: "xs",
-            },
+          event.ticketType.free
+            ? {
+                type: "text",
+                text: "Free Event",
+                color: "#F83333",
+                size: "xs",
+              }
+            : {
+                type: "text",
+                text: `${event.ticketType?.price} ฿`,
+                size: "xs",
+              },
         ],
         {
           type: "box",
@@ -136,29 +144,33 @@ export const enterEventTemplate = (event: Event) => ({
       type: "box",
       layout: "vertical",
       contents: [
-        ...(event.eventLocation?.googleMapLink ?
-          [
-            {
-              type: "button",
-              action: {
-                type: "uri",
-                label: "เปิดแผนที่",
-                uri: event.eventLocation?.googleMapLink,
+        ...(event.eventLocation?.googleMapLink
+          ? [
+              {
+                type: "button",
+                action: {
+                  type: "uri",
+                  label: "เปิดแผนที่",
+                  uri: event.eventLocation?.googleMapLink,
+                },
+                style: "link",
+                height: "sm",
               },
-              style: "link",
-              height: "sm",
-            },
-          ] :
-          []),
-        {
-          type: "button",
-          action: {
-            type: "message",
-            label: "ติดตามอีเว้นท์นี้",
-            text: `ฉันอยากติดตาม ${event.eventName}`,
-          },
-          height: "sm",
-        },
+            ]
+          : []),
+        ...(interested || event.interestedPerson.includes(userId ?? "")
+          ? []
+          : [
+              {
+                type: "button",
+                action: {
+                  type: "message",
+                  label: "ติดตามอีเว้นท์นี้",
+                  text: `ฉันอยากติดตาม ${event.eventName}`,
+                },
+                height: "sm",
+              },
+            ]),
         {
           type: "button",
           action: {
