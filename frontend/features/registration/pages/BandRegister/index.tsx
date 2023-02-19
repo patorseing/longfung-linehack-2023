@@ -4,10 +4,9 @@ import { Box, Button, Flex, Icon, Text } from "@chakra-ui/react";
 import { MdArrowForward, MdArrowBack } from "react-icons/md";
 import { yupResolver } from "@hookform/resolvers/yup";
 
+import { Step } from "@/components/Step";
 import { BandFormValue } from "../../types";
 import { bandSchema } from "../../schema";
-
-import { Step } from "@/components/Step";
 import { PictureContextProvider } from "../../context/previewImage";
 import { FormStep1, FormStep2, FormStep3 } from "../../components/band";
 
