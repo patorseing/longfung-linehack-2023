@@ -1,4 +1,4 @@
-// import * as functions from "firebase-functions";
+import * as functions from "firebase-functions";
 import {Profile} from "@line/bot-sdk";
 
 import {reply} from "../util";
@@ -20,12 +20,6 @@ export const enterEvent = async (
   let enterEventTemp;
 
   if (eventName) {
-    eventMessage = {
-      type: "text",
-      text: `สวัสดีครับ ${profile.displayName}
-      น้องโลมายินดีต้อนรับสู่งาน ${eventName} 🎶`,
-    };
-
     const eventRef = firestore.collection("Event").doc(eventName);
     const event = await eventRef.get();
     const eventData = event.data();
@@ -33,12 +27,21 @@ export const enterEvent = async (
     if (eventData) {
       enterEventTemp = enterEventTemplate(eventData as Event);
     }
+
+    eventMessage = [
+      {
+        type: "text",
+        text: `สวัสดีครับ ${profile.displayName}
+        น้องโลมายินดีต้อนรับสู่งาน ${eventName} 🎶`,
+      },
+      ...(enterEventTemp ? [enterEventTemp] : []),
+    ];
+
+    functions.logger.debug("FLEX", enterEventTemp);
   }
 
   if (eventMessage) {
-    await reply(replyToken, [
-      ...(eventMessage ? [eventMessage] : []),
-      ...(enterEventTemp ? [enterEventTemp] : []),
-    ]);
+    functions.logger.debug("MESSAGE", eventMessage);
+    await reply(replyToken, eventMessage);
   }
 };

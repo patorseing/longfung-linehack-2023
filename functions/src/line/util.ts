@@ -33,7 +33,7 @@ export const reply = async (token: string, payload: any) => {
     await client.replyMessage(token, payload);
     return true;
   } catch (error) {
-    functions.logger.error("Utils-reply", (error as Error).message);
+    functions.logger.error("Utils-reply", error);
     return false;
   }
 };

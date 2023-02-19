@@ -6,23 +6,15 @@ export const enterEventTemplate = (event: Event) => ({
   contents: {
     type: "bubble",
     size: "mega",
-    direction: "ltr",
     hero: {
       type: "image",
       url:
         event?.eventImage ??
         "https://firebasestorage.googleapis.com/v0/b/loma-nkaf.appspot.com/o/undefine.png?alt=media&token=c37fea4d-c6a9-4344-991d-d8a01fef142d",
       size: "full",
-      margin: "none",
-      position: "relative",
-      align: "start",
-      gravity: "top",
       aspectMode: "cover",
       animated: false,
-      offsetTop: "none",
-      offsetBottom: "none",
-      offsetStart: "none",
-      aspectRatio: "1.25:1",
+      aspectRatio: "20:13",
     },
     body: {
       type: "box",
@@ -34,15 +26,11 @@ export const enterEventTemplate = (event: Event) => ({
               type: "text",
               text: "Free Event",
               color: "#F83333",
-              weight: "regular",
-              decoration: "none",
               size: "xs",
             } :
             {
               type: "text",
               text: `${event.ticketType?.price} ฿`,
-              weight: "regular",
-              decoration: "none",
               size: "xs",
             },
         ],
@@ -68,21 +56,16 @@ export const enterEventTemplate = (event: Event) => ({
                     {
                       type: "text",
                       text: "วันจัดแสดง",
-                      position: "relative",
                       flex: 3,
                       color: "#929292",
-                      size: "md",
                     },
                     {
                       type: "text",
                       text: event.eventDate,
                       flex: 5,
                       color: "#929292",
-                      size: "md",
                     },
                   ],
-                  offsetTop: "none",
-                  spacing: "none",
                 },
                 {
                   type: "box",
@@ -91,20 +74,16 @@ export const enterEventTemplate = (event: Event) => ({
                     {
                       type: "text",
                       text: "เวลา",
-                      position: "relative",
                       flex: 3,
                       color: "#929292",
-                      size: "md",
                     },
                     {
                       type: "text",
                       text: `${event.eventStartTime} - ${event.eventEndTime}`,
                       flex: 5,
                       color: "#929292",
-                      size: "md",
                     },
                   ],
-                  offsetTop: "none",
                 },
                 {
                   type: "box",
@@ -113,10 +92,8 @@ export const enterEventTemplate = (event: Event) => ({
                     {
                       type: "text",
                       text: "สถานที่",
-                      position: "relative",
                       flex: 3,
                       color: "#929292",
-                      size: "md",
                     },
                     {
                       type: "text",
@@ -124,10 +101,8 @@ export const enterEventTemplate = (event: Event) => ({
                       flex: 5,
                       color: "#929292",
                       wrap: true,
-                      size: "md",
                     },
                   ],
-                  offsetTop: "none",
                 },
                 {
                   type: "box",
@@ -136,21 +111,17 @@ export const enterEventTemplate = (event: Event) => ({
                     {
                       type: "text",
                       text: "ผู้ติดตาม",
-                      position: "relative",
                       flex: 3,
                       color: "#929292",
-                      size: "md",
                     },
                     {
                       type: "text",
-                      text: event.interestedPerson.length,
+                      text: `${event.interestedPerson.length}`,
                       flex: 5,
                       color: "#929292",
                       wrap: true,
-                      size: "md",
                     },
                   ],
-                  offsetTop: "none",
                 },
               ],
               spacing: "md",
@@ -191,19 +162,14 @@ export const enterEventTemplate = (event: Event) => ({
         {
           type: "button",
           action: {
-            type: "uri",
+            type: "message",
             label: "รายละเอียดเพิ่มเติม",
-            uri: `line://app/<liffID>?event=${event.eventName}`,
+            text: `ขอรายละเอียดเพิ่มเติมของงาน ${event.eventName} นี้หน่อย`,
           },
           height: "sm",
         },
       ],
       paddingAll: "none",
-    },
-    styles: {
-      hero: {
-        separator: false,
-      },
     },
   },
 });
