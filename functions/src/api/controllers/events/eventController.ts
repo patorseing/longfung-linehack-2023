@@ -38,17 +38,21 @@ export const createEvent = async (req: Request, res: Response) => {
   try {
     const event: Event = {
       eventName: req.body.eventName,
-      eventImage: req.body.eventImage || null,
-      ticketType: req.body.ticketType || {},
-      available_seat: req.body.available_seat || null,
-      age_limitation: req.body.age_limitation || null,
       eventDate: req.body.eventDate,
       eventStartTime: req.body.eventStartTime,
       eventEndTime: req.body.eventEndTime,
-      eventLocation: req.body.eventLocation || {},
-      interestedPerson: req.body.interestedPerson || [],
       socialMedia: req.body.socialMedia || {},
+      eventLocation: req.body.eventLocation,
+      available_seat: req.body.available_seat || null,
+      age_limitation: req.body.age_limitation || null,
+      ticketType: req.body.ticketType,
+      alcohol_free: req.body.alcohol_free,
+      song_requested: req.body.song_requested || false,
+      eventDescription: req.body.eventDescription || null,
+      eventImage: req.body.eventImage || null,
       lineBeacon: req.body.lineBeacon || [],
+      lineUp: req.body.lineUp || [],
+      interestedPerson: req.body.interestedPerson || [],
     };
 
     const bucketName = functions.config().uploader.bucket_name;

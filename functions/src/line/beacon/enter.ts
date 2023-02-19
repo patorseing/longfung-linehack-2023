@@ -3,7 +3,7 @@ import {Profile} from "@line/bot-sdk";
 
 import {reply, validateLineMsg} from "../util";
 import {enterEventTemplate} from "../templete";
-import {Event} from "../../api/controllers/events/types";
+import {Event} from "../../api/dto/event";
 
 import {firestore} from "../../firebase";
 

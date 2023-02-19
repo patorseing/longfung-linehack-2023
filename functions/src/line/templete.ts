@@ -1,4 +1,4 @@
-import {Event} from "../api/controllers/events/types";
+import {Event} from "../api/dto/event";
 
 export const enterEventTemplate = (event: Event) => ({
   type: "flex",

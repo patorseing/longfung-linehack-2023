@@ -29,25 +29,25 @@ export interface interested {
 
 export interface Event {
   eventName: string;
-  eventImage?: string;
-  eventDescription?: string
-  ticketType: {
-    free: boolean;
-    price?: number;
-  };
   eventDate: string;
   eventStartTime: string;
   eventEndTime: string;
-  available_seat: number;
-  age_limitation: number
-  alcohol_free?: boolean;
-  song_requested?: boolean
+  socialMedia?: SocialMedia;
   eventLocation: {
     address: string;
     googleMapLink?: string;
   };
-  interestedPerson: Array<string>;
+  available_seat?: number;
+  age_limitation?: number
+  ticketType: {
+    free: boolean;
+    price?: number;
+  };
+  alcohol_free: boolean;
+  song_requested: boolean
+  eventDescription?: string
+  eventImage?: string;
   lineBeacon?: lineBeacon[];
   lineUp?: lineUp[];
-  socialMedia?: SocialMedia;
+  interestedPerson: Array<string>;
 }
