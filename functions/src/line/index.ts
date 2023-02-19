@@ -84,7 +84,7 @@ export const remindEventForUserPubSub = async () => {
   for (const event of events.docs) {
     const eventData = event.data() as Event;
     const temp = enterEventTemplate(eventData);
-    const payload = [enterEventTemplate(eventData)];
+    const payload = [temp];
     functions.logger.debug(temp);
     const isValidMsg = await validateLineMsg("push", payload);
     functions.logger.debug(isValidMsg);
