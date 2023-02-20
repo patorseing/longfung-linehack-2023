@@ -1,6 +1,4 @@
 import * as functions from "firebase-functions";
-import {format} from "date-fns-tz";
-import {add} from "date-fns";
 
 import {beaconEvent} from "./beacon";
 import {
@@ -10,10 +8,9 @@ import {
   validateLineMsg,
   pushMessage,
 } from "./util";
-
+import {find7DaysEvent} from "../firebase/db/event";
 import {Event} from "../api/dto/event";
-import {enterEventTemplate} from "../line/templete";
-import {firestore} from "../firebase";
+import {eventTemplate} from "../line/templete";
 
 export const webhook = async (
     req: functions.https.Request,
@@ -56,34 +53,11 @@ export const webhook = async (
 };
 
 export const remindEventForUserPubSub = async () => {
-  const start = format(new Date(), "dd/MM/yyyy", {
-    timeZone: "Asia/Bangkok",
-  });
-  const end = format(add(new Date(), {days: 7}), "dd/MM/yyyy", {
-    timeZone: "Asia/Bangkok",
-  });
-
-  functions.logger.debug("ALERT EVENT", start, end);
-  const eventRef = firestore
-      .collection("Event")
-      .where(
-          "eventDate",
-          ">=",
-          format(new Date(), "dd/MM/yyyy", {timeZone: "Asia/Bangkok"})
-      )
-      .where(
-          "eventDate",
-          "<",
-          format(add(new Date(), {days: 7}), "dd/MM/yyyy", {
-            timeZone: "Asia/Bangkok",
-          })
-      );
-
-  const events = await eventRef.get();
+  const events = await find7DaysEvent({});
 
   for (const event of events.docs) {
     const eventData = event.data() as Event;
-    const temp = enterEventTemplate({event: eventData, interested: true});
+    const temp = eventTemplate({event: eventData, interested: true});
     const payload = [temp];
     functions.logger.debug(temp);
     const isValidMsg = await validateLineMsg("push", payload);

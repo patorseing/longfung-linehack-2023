@@ -2,7 +2,7 @@ import * as functions from "firebase-functions";
 import {Profile} from "@line/bot-sdk";
 
 import {reply, validateLineMsg} from "../util";
-import {enterEventTemplate} from "../templete";
+import {eventTemplate} from "../templete";
 import {Event} from "../../api/dto/event";
 
 import {firestore} from "../../firebase";
@@ -25,7 +25,7 @@ export const enterEvent = async (
 
     let enterEventTemp;
     if (eventData) {
-      enterEventTemp = enterEventTemplate({
+      enterEventTemp = eventTemplate({
         event: eventData as Event,
         userId: profile.userId,
       });
