@@ -183,7 +183,7 @@ export const checkUpdatedHardwareId = async (
         const oldHardwareIds = await getOldHardwareIds(bandName);
 
         const diffErrors = compactedDuplicated.filter(
-            (item) => !oldHardwareIds.includes(item)
+            (item) => !oldHardwareIds.includes(item as string)
         );
 
         if (diffErrors.length > 0) {
