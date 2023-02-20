@@ -6,8 +6,8 @@ import breakpoints from "./breakpoints";
 import components from "./components";
 
 const fonts = {
-  body: "Poppins",
-  heading: "Poppins",
+  body: "Poppins, Kanit",
+  heading: "Poppins, Kanit",
 };
 
 const fontWeight = {
