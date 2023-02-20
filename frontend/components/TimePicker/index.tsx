@@ -111,13 +111,15 @@ export const TimePicker = ({
   return (
     <FormControl isInvalid={!!errorMessage}>
       <VStack sx={{ alignItems: "baseline" }} id="time-picker">
-        {label && (
-          <FormLabel sx={{ fontSize: { base: "14px", md: `${fontSize}px` } }}>
-            {label}
-          </FormLabel>
-        )}
         <TimePickerContainer>
           <Popover placement="bottom-start">
+            {label && (
+              <FormLabel
+                sx={{ fontSize: { base: "14px", md: `${fontSize}px` } }}
+              >
+                {label}
+              </FormLabel>
+            )}
             <PopoverTrigger>
               <Button
                 sx={{
