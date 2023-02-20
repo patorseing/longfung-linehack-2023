@@ -5,16 +5,16 @@ export const getBandSchema = Joi.object({
 });
 
 export const socialMediaSchema = Joi.object({
-  facebook: Joi.string().optional(),
-  instagram: Joi.string().optional(),
-  tiktok: Joi.string().optional(),
-  website: Joi.string().optional(),
+  facebook: Joi.string().allow(null, ''),
+  instagram: Joi.string().allow(null, ''),
+  tiktok: Joi.string().allow(null, ''),
+  website: Joi.string().allow(null, ''),
 });
 
 export const streamingPlatformSchema = Joi.object({
-  spotify: Joi.string().optional(),
-  youtube: Joi.string().optional(),
-  appleMusic: Joi.string().optional(),
+  spotify: Joi.string().allow(null, ''),
+  youtube: Joi.string().allow(null, ''),
+  appleMusic: Joi.string().allow(null, ''),
 });
 
 export const lineBeaconSchema = Joi.object({
@@ -24,35 +24,35 @@ export const lineBeaconSchema = Joi.object({
 
 export const createBandSchema = Joi.object({
   bandName: Joi.string().required(),
-  firePromotedSong: Joi.string().optional(),
-  secondPromotedSong: Joi.string().optional(),
+  firstPromotedSong: Joi.string().allow(null, ''),
+  secondPromotedSong: Joi.string().allow(null, ''),
   userId: Joi.string().required(),
 
   socialMedia: socialMediaSchema,
   streamingPlatform: streamingPlatformSchema,
 
-  lineMelody: Joi.string().optional(),
-  songRequest: Joi.boolean().optional().default(false),
-  description: Joi.string().optional(),
+  lineMelody: Joi.string().allow(null, ''),
+  songRequest: Joi.boolean().allow(null, '').default(false),
+  description: Joi.string().allow(null, ''),
 
   lineBeacon: Joi.array().items(lineBeaconSchema),
-  bandImage: Joi.string().optional(),
-  qrImage: Joi.string().optional(),
+  bandImage: Joi.string().allow(null, ''),
+  qrImage: Joi.string().allow(null, ''),
 });
 
 export const updateBandSchema = Joi.object({
   bandName: Joi.string().required(),
-  firePromotedSong: Joi.string().optional(),
-  secondPromotedSong: Joi.string().optional(),
+  firePromotedSong: Joi.string().allow(null, ''),
+  secondPromotedSong: Joi.string().allow(null, ''),
 
   socialMedia: socialMediaSchema,
   streamingPlatform: streamingPlatformSchema,
 
-  lineMelody: Joi.string().optional(),
-  songRequest: Joi.boolean().optional(),
-  description: Joi.string().optional(),
+  lineMelody: Joi.string().allow(null, ''),
+  songRequest: Joi.boolean().allow(null, ''),
+  description: Joi.string().allow(null, ''),
 
   lineBeacon: Joi.array().items(lineBeaconSchema),
-  bandImage: Joi.string().optional(),
-  qrImage: Joi.string().optional(),
+  bandImage: Joi.string().allow(null, ''),
+  qrImage: Joi.string().allow(null, ''),
 });
