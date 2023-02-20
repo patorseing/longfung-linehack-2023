@@ -13,6 +13,43 @@ import {
   defaultTicketType,
 } from "../../constants";
 
+export const getEvent = async (req: Request, res: Response) => {
+  const eventName = req.body.eventName;
+
+  if (eventName === undefined) {
+    return res.status(400).json({error: "eventName cannot be blank"});
+  }
+
+  const event = await firestore.collection("Event").doc(eventName).get();
+
+  if (!event.exists) {
+    return res.status(404).json({error: "event not found"});
+  }
+
+  const eventData = event.data()
+
+  const finalLineUp: any = []
+
+  await Promise.all(
+    eventData?.lineUp.map(async (el: { bandName: string, startTime: string, endTime: string, bandImage: string | null }) => {
+      const bandName = el.bandName;
+
+      const band = await firestore.collection("Band").doc(bandName).get()
+
+      finalLineUp.push({
+        bandName: bandName,
+        startTime: el.startTime,
+        endTime: el.endTime,
+        bandImage: band.data()?.bandImage
+      })
+    })
+  )
+
+  const response = { ...eventData, lineUp: finalLineUp }
+
+  return res.status(200).json({data: response});
+};
+
 export const getEvents = async (req: Request, res: Response) => {
   const {error} = getEventSchema.validate(req.body);
 
