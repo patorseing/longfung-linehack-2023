@@ -1,31 +1,31 @@
-import Head from "next/head"
-import { useEffect } from "react"
-import { Avatar, Box, Flex, HStack, Image, Text } from "@chakra-ui/react"
+import Head from "next/head";
+import { useEffect } from "react";
+import { Avatar, Box, Flex, HStack, Image, Text } from "@chakra-ui/react";
 
-import { useProfileContext } from "@/context/profile"
+import { useProfileContext } from "@/context/profile";
 
 export type PlatformLayoutProps = {
-  mobileBg: string
-  desktopBg: string
-  headTitle?: string
-}
+  mobileBg: string;
+  desktopBg: string;
+  headTitle?: string;
+};
 
 export const PlatformLayout = (
   props: React.PropsWithChildren<PlatformLayoutProps>
 ) => {
-  const { children, mobileBg, desktopBg, headTitle = "LungFung" } = props
-  const { profile, setProfile } = useProfileContext()
+  const { children, mobileBg, desktopBg, headTitle = "LungFung" } = props;
+  const { profile, setProfile } = useProfileContext();
 
   useEffect(() => {
     async function liffProfile() {
-      const liff = (await import("@line/liff")).default
-      await liff.ready
-      const profile = await liff.getProfile()
-      setProfile(profile)
+      const liff = (await import("@line/liff")).default;
+      await liff.ready;
+      const profile = await liff.getProfile();
+      setProfile(profile);
     }
 
-    liffProfile()
-  }, [profile?.userId])
+    liffProfile();
+  }, [profile?.userId]);
 
   return (
     <>
@@ -64,5 +64,5 @@ export const PlatformLayout = (
         </Box>
       </Box>
     </>
-  )
-}
+  );
+};

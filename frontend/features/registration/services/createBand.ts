@@ -1,47 +1,52 @@
-import { AxiosError } from "axios"
-import { FileWithPath } from "react-dropzone"
-import { useMutation } from "@tanstack/react-query"
+import { AxiosError } from "axios";
+import { FileWithPath } from "react-dropzone";
+import { useMutation } from "@tanstack/react-query";
+import { useToast } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
-import { BandFormValue } from "../types"
-import { useProfileContext } from "@/context/profile"
-import { _axios, useDefaultAxiosHeader } from "@/lib/hooks/axios"
+import { BandFormValue } from "../types";
+import { useProfileContext } from "@/context/profile";
+import { _axios, useDefaultAxiosHeader } from "@/lib/hooks/axios";
 
 type Payload = {
-  data: BandFormValue
-}
+  data: BandFormValue;
+};
 
 export const useCreateBand = () => {
-  const headers = useDefaultAxiosHeader()
-  const { profile } = useProfileContext()
+  const toast = useToast();
+  const { push } = useRouter();
+  const headers = useDefaultAxiosHeader();
+  const { profile } = useProfileContext();
 
   return useMutation<void, AxiosError, Payload>({
     mutationFn: async function ({ data }) {
-      const formData = new FormData()
+      const formData = new FormData();
 
       const socialMedia = JSON.stringify({
         facebook: data.facebook_url,
         instagram: data.instagram_account,
         tiktok: data.tiktok_url,
         website: data.website_url,
-      })
+      });
 
       const streamingPlatform = JSON.stringify({
         spotify: data.spotify_url,
         youtube: data.youtube_url,
-        apple_music: data.apple_music_url,
-      })
+        appleMusic: data.apple_music_url,
+      });
 
-      formData.append("userId", profile?.userId as string)
-      formData.append("bandName", data.name)
-      formData.append("firstPromotedSong", data.first_song)
-      formData.append("secondPromotedSong", data.second_song)
-      formData.append("socialMedia", socialMedia)
-      formData.append("streamingPlatform", streamingPlatform)
-      formData.append("lineMelody", data.line_melody_url)
-      formData.append("songRequest", JSON.stringify(data.song_request))
-      formData.append("description", data.description)
-      formData.append("bandImage", data.band_image as FileWithPath)
-      formData.append("qrImage", data.qr_image as FileWithPath)
+      formData.append("userId", profile?.userId as string);
+      formData.append("bandName", data.name);
+      formData.append("firstPromotedSong", data.first_song);
+      formData.append("secondPromotedSong", data.second_song);
+      formData.append("socialMedia", socialMedia);
+      formData.append("streamingPlatform", streamingPlatform);
+      formData.append("lineMelody", data.line_melody_url);
+      formData.append("songRequest", JSON.stringify(data.song_request));
+      formData.append("description", data.description);
+      formData.append("lineBeacon", JSON.stringify(data.beacons));
+      formData.append("bandImage", data.band_image as FileWithPath);
+      formData.append("qrImage", data.qr_image as FileWithPath);
 
       await _axios({
         method: "post",
@@ -51,7 +56,20 @@ export const useCreateBand = () => {
           ...headers,
           "Content-Type": "multipart/form-data",
         },
-      })
+      });
     },
-  })
-}
+    onSuccess() {
+      toast({
+        title: "Success",
+        description: "Create Band Successful",
+        status: "success",
+        position: "top-right",
+        duration: 5000,
+      });
+
+      setTimeout(() => {
+        push("information");
+      }, 5000);
+    },
+  });
+};
