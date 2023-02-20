@@ -2,7 +2,7 @@ import { Button, Grid, HStack, Stack, Text, VStack } from "@chakra-ui/react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 import { EventFormValue } from "../../types";
-import { LineupCard } from "@/components";
+import { LineupCard } from "./LineupCard";
 
 export const FormStep4 = () => {
   const {
@@ -50,8 +50,7 @@ export const FormStep4 = () => {
                 onDelete={() => {
                   remove(idx);
                 }}
-                startTimeRegister={register(`lineup.${idx}.startTime`)}
-                endTimeRegister={register(`lineup.${idx}.endTime`)}
+                idx={idx}
                 bandRegister={register(`lineup.${idx}.bandName`)}
                 startTimeError={errors.lineup?.[idx]?.startTime?.message}
                 endTimeError={errors.lineup?.[idx]?.endTime?.message}

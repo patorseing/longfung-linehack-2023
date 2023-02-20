@@ -14,6 +14,7 @@ const layerStyles = {
     gridTemplateColumns: { base: "1fr", md: "repeat(2, 1fr)" },
     gap: { base: 4, md: 6 },
     alignItems: "end",
+    pb: "8px",
   },
   songLayout: {
     borderRight: { base: "none", md: "1px solid" },
