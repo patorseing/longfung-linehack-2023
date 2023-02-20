@@ -1,6 +1,10 @@
 import * as express from "express";
 
-import {createEvent, getEvents} from "../controllers/events/eventController";
+import {
+  createEvent,
+  getEvent,
+  getEvents,
+} from "../controllers/events/eventController";
 import {checkDuplicatedHardwareId} from "../middlewares/bandMiddleware";
 import {
   checkDuplicatedEventName,
@@ -10,6 +14,7 @@ import {
 /* eslint new-cap: "warn"*/
 const router = express.Router();
 
+router.get("/", getEvent);
 router.get("/", getEvents);
 
 router.post(
