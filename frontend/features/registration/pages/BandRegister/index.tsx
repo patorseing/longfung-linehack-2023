@@ -4,14 +4,17 @@ import { Box, Button, Flex, Icon, Text } from "@chakra-ui/react";
 import { MdArrowForward, MdArrowBack } from "react-icons/md";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { Step } from "@/components/Step";
-import { BandFormValue } from "../../types";
-import { bandSchema } from "../../schema";
-import { PictureContextProvider } from "../../context/previewImage";
-import { FormStep1, FormStep2, FormStep3 } from "../../components/band";
+import { BandFormValue } from "../../types"
+import { bandSchema } from "../../schema"
+import { useCreateBand } from "../../services"
+
+import { Step } from "@/components/Step"
+import { PictureContextProvider } from "../../context/previewImage"
+import { FormStep1, FormStep2, FormStep3 } from "../../components/band"
 
 const BandRegisterPage = () => {
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(1)
+  const { mutate, isLoading } = useCreateBand()
 
   const methods = useForm<BandFormValue>({
     resolver: yupResolver(bandSchema),
@@ -35,9 +38,9 @@ const BandRegisterPage = () => {
     }
   };
 
-  const onSubmit = methods.handleSubmit((data, e) => {
-    console.log(data);
-  });
+  const onSubmit = methods.handleSubmit((data) => {
+    mutate({ data })
+  })
 
   const renderForm = () => {
     switch (step) {
@@ -101,7 +104,7 @@ const BandRegisterPage = () => {
                 <Button
                   variant="outline"
                   sx={{
-                    w: "155px",
+                    w: { base: "100px", sm: "130px", md: "155px" },
                     _hover: {
                       bg: "white",
                     },
@@ -116,9 +119,10 @@ const BandRegisterPage = () => {
               )}
               {step === 3 && (
                 <Button
+                  isLoading={isLoading}
                   type="submit"
                   sx={{
-                    w: "155px",
+                    w: { base: "100px", sm: "130px", md: "155px" },
                     ml: "auto",
                   }}
                 >
@@ -128,7 +132,7 @@ const BandRegisterPage = () => {
               {step !== 3 && (
                 <Button
                   sx={{
-                    w: "155px",
+                    w: { base: "100px", sm: "130px", md: "155px" },
                     ml: "auto",
                   }}
                   rightIcon={<Icon as={MdArrowForward} fontSize="20px" />}
@@ -145,4 +149,8 @@ const BandRegisterPage = () => {
   );
 };
 
-export default BandRegisterPage;
+BandRegisterPage.LayoutProps = {
+  headTitle: "Registration | LongFung",
+}
+
+export default BandRegisterPage

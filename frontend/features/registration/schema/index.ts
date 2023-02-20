@@ -6,7 +6,7 @@ export const bandSchema = yup.object({
   song_request: yup.boolean(),
   beacons: yup.array().of(
     yup.object({
-      hardware_id: yup.string().required("Hardware ID is required"),
+      hardwareId: yup.string().required("Hardware ID is required"),
       passcode: yup.string().required("Passcode is required"),
     })
   ),

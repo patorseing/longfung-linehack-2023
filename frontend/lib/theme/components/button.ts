@@ -7,6 +7,12 @@ const variantSolid: SystemStyleFunction = () => {
     _hover: {
       bg: "primary.500",
     },
+    _loading: {
+      opacity: 1,
+      _hover: {
+        bg: "primary.500",
+      },
+    },
   }
 }
 
