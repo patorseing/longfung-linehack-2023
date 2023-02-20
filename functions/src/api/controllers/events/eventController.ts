@@ -12,6 +12,14 @@ import {
   defaultSocialMedia,
   defaultTicketType,
 } from "../../constants";
+import {FormErrors, FormFields, FormFiles} from "../../types";
+
+type LineUp = {
+  bandName: string;
+  startTime: string;
+  endTime: string;
+  bandImage: string | undefined;
+};
 
 export const getEvent = async (req: Request, res: Response) => {
   const eventName = req.body.eventName;
@@ -28,7 +36,7 @@ export const getEvent = async (req: Request, res: Response) => {
 
   const eventData = event.data();
 
-  const finalLineUp: any = [];
+  const finalLineUp: LineUp[] = [];
 
   await Promise.all(
       eventData?.lineUp.map(
@@ -85,51 +93,54 @@ export const createEvent = async (req: Request, res: Response) => {
   /* eslint new-cap: "warn"*/
   const form = formidable.IncomingForm({multiples: true});
   try {
-    form.parse(req, async (err: any, fields: any, files: any) => {
-      const payload = transformEventPayload(fields);
+    form.parse(
+        req,
+        async (_: FormErrors, fields: FormFields, files: FormFiles) => {
+          const payload = transformEventPayload(fields);
 
-      const event: Event = {
-        eventName: payload.eventName || "",
-        userId: payload.userId || "",
-        eventDate: payload.eventDate || "",
-        eventStartTime: payload.eventStartTime || "",
-        eventEndTime: payload.eventEndTime || "",
-        socialMedia: {...defaultSocialMedia, ...payload.socialMedia},
-        eventLocation: {...defaultEventLocation, ...payload.eventLocation},
-        availableSeat: payload.availableSeat,
-        ageLimitation: payload.ageLimitation,
-        ticketType: {...defaultTicketType, ...payload.ticketType},
-        alcoholFree: payload.alcoholFree,
-        songRequested: payload.songRequested,
-        eventDescription: payload.eventDescription,
-        lineBeacon: payload.lineBeacon,
-        lineUp: payload.lineUp,
-        interestedPerson: [],
-      };
+          const event: Event = {
+            eventName: payload.eventName || "",
+            userId: payload.userId || "",
+            eventDate: payload.eventDate || "",
+            eventStartTime: payload.eventStartTime || "",
+            eventEndTime: payload.eventEndTime || "",
+            socialMedia: {...defaultSocialMedia, ...payload.socialMedia},
+            eventLocation: {...defaultEventLocation, ...payload.eventLocation},
+            availableSeat: payload.availableSeat,
+            ageLimitation: payload.ageLimitation,
+            ticketType: {...defaultTicketType, ...payload.ticketType},
+            alcoholFree: payload.alcoholFree,
+            songRequested: payload.songRequested,
+            eventDescription: payload.eventDescription,
+            lineBeacon: payload.lineBeacon,
+            lineUp: payload.lineUp,
+            interestedPerson: [],
+          };
 
-      const bucketName = functions.config().uploader.bucket_name;
+          const bucketName = functions.config().uploader.bucket_name;
 
-      const eventImage = files.eventImage;
-      if (eventImage !== undefined) {
-        const imageUrl = await fileUploader(bucketName, eventImage.path);
+          const eventImage = files.eventImage;
+          if (eventImage !== undefined) {
+            const imageUrl = await fileUploader(bucketName, eventImage.path);
 
-        event.eventImage = imageUrl;
-      }
+            event.eventImage = imageUrl;
+          }
 
-      event.lineBeacon?.forEach(async (el) => {
-        await firestore.collection("LineBeacon").doc(el.hardwareId).set({
-          hardwareId: el.hardwareId,
-          eventName: event.eventName,
-        });
-      });
+          event.lineBeacon?.forEach(async (el) => {
+            await firestore.collection("LineBeacon").doc(el.hardwareId).set({
+              hardwareId: el.hardwareId,
+              eventName: event.eventName,
+            });
+          });
 
-      const newEvent = await firestore
-          .collection("Event")
-          .doc(event.eventName)
-          .set(event);
+          const newEvent = await firestore
+              .collection("Event")
+              .doc(event.eventName)
+              .set(event);
 
-      return res.status(201).send({data: newEvent});
-    });
+          return res.status(201).send({data: newEvent});
+        }
+    );
     return;
   } catch (err) {
     return res.status(500).send(err);
