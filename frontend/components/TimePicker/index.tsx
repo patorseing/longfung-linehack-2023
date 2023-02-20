@@ -146,13 +146,27 @@ export const TimePicker = ({
                     overflow: "auto",
                   }}
                 >
-                  <VStack id="time" sx={{ h: "180px", overflow: "auto" }}>
+                  <VStack
+                    id="time"
+                    sx={{
+                      h: "180px",
+                      overflow: "auto",
+                      scrollBehavior: "smooth",
+                    }}
+                  >
                     {hour.map((_v, index) => {
                       return RenderTimeItem(index, "hour");
                     })}
                   </VStack>
 
-                  <VStack id="time" sx={{ h: "180px", overflow: "auto" }}>
+                  <VStack
+                    id="time"
+                    sx={{
+                      h: "180px",
+                      overflow: "auto",
+                      scrollBehavior: "smooth",
+                    }}
+                  >
                     {min.map((_v, index) => {
                       return RenderTimeItem(index, "min");
                     })}
