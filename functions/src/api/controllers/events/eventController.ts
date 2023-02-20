@@ -26,26 +26,33 @@ export const getEvent = async (req: Request, res: Response) => {
     return res.status(404).json({error: "event not found"});
   }
 
-  const eventData = event.data()
+  const eventData = event.data();
 
-  const finalLineUp: any = []
+  const finalLineUp: any = [];
 
   await Promise.all(
-    eventData?.lineUp.map(async (el: { bandName: string, startTime: string, endTime: string, bandImage: string | null }) => {
-      const bandName = el.bandName;
+      eventData?.lineUp.map(
+          async (el: {
+        bandName: string;
+        startTime: string;
+        endTime: string;
+        bandImage: string | null;
+      }) => {
+            const bandName = el.bandName;
 
-      const band = await firestore.collection("Band").doc(bandName).get()
+            const band = await firestore.collection("Band").doc(bandName).get();
 
-      finalLineUp.push({
-        bandName: bandName,
-        startTime: el.startTime,
-        endTime: el.endTime,
-        bandImage: band.data()?.bandImage
-      })
-    })
-  )
+            finalLineUp.push({
+              bandName: bandName,
+              startTime: el.startTime,
+              endTime: el.endTime,
+              bandImage: band.data()?.bandImage,
+            });
+          }
+      )
+  );
 
-  const response = { ...eventData, lineUp: finalLineUp }
+  const response = {...eventData, lineUp: finalLineUp};
 
   return res.status(200).json({data: response});
 };
