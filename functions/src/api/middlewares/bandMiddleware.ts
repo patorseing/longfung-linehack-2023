@@ -29,7 +29,7 @@ export const validateCreateBandSchema = async (
       streamingPlatform,
       songRequest,
       lineBeacon,
-    });
+    }, {abortEarly: false});
 
     if (error !== undefined) {
       return res.status(400).json({error: error.details});

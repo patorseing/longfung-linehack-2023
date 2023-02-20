@@ -28,6 +28,7 @@ export interface interested {
 
 export interface Event {
   eventName: string;
+  userId: string;
   eventDate: string;
   eventStartTime: string;
   eventEndTime: string;
@@ -36,15 +37,15 @@ export interface Event {
     address: string;
     googleMapLink?: string;
   };
-  available_seat?: number;
-  age_limitation?: number;
+  availableSeat?: number;
+  ageLimitation?: number;
   ticketType: {
     free: boolean;
     price?: number;
   };
-  alcohol_free: boolean;
-  song_requested: boolean;
-  eventDescription?: string;
+  alcoholFree: boolean;
+  songRequested: boolean;
+  eventDescription?: string | null;
   eventImage?: string;
   lineBeacon?: lineBeacon[];
   lineUp?: lineUp[];

@@ -2,7 +2,6 @@ import {Request, Response} from "express";
 import * as functions from "firebase-functions";
 import * as formidable from "formidable-serverless";
 
-import {compact} from "../../utils/payload";
 import {firestore} from "../../../firebase";
 import {createBandDTO, updateBandDTO} from "../../dto/band";
 import {fileUploader} from "../../utils/fileUploader";
@@ -87,7 +86,7 @@ export const createBand = async (req: Request, res: Response) => {
       const newBand = await firestore
           .collection("Band")
           .doc(band.bandName)
-          .set(compact(band));
+          .set(band);
 
       return res.status(201).send({data: newBand});
     });

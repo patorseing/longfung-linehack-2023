@@ -13,6 +13,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest(dialogflow);
 import * as express from "express";
 
 import bandsRouter from "./api/routes/bandRoutes";
+import eventsRouter from "./api/routes/eventRoutes";
 import healthCheckRouter from "./api/routes/healthcheck";
 
 import * as bodyParser from "body-parser";
@@ -26,6 +27,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors());
 
 app.use("/bands", tokenVerification, bandsRouter);
+app.use("/events", tokenVerification, eventsRouter);
 app.use("/healthcheck", tokenVerification, healthCheckRouter);
 
 exports.api = functions.https.onRequest(app);
