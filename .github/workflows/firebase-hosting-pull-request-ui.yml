@@ -1,12 +1,10 @@
 name: Deploy to Firebase Hosting on PR
 
-on:
-  pull_request:
-    types: [ labeled ]
+'on': pull_request
 
 jobs:
   build_and_preview:
-    if: ${{ github.event.label.name == 'UI' }}
+    if: ${{ startsWith( github.event.pull_request.title, 'FE:') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -26,6 +24,8 @@ jobs:
           envkey_NEXT_PUBLIC_BASE_URL: ${{secrets.NEXT_PUBLIC_BASE_URL}}
           file_name: .env
           directory: ./frontend
+      - run: npm i
+        working-directory: frontend
       - run: npm ci && npm run build
         working-directory: frontend
       - name: Deploy to Firebase Hosting

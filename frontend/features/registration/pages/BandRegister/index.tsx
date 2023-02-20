@@ -1,8 +1,8 @@
-import { useState } from "react"
-import { FormProvider, useForm } from "react-hook-form"
-import { Box, Button, Flex, Icon, Text } from "@chakra-ui/react"
-import { MdArrowForward, MdArrowBack } from "react-icons/md"
-import { yupResolver } from "@hookform/resolvers/yup"
+import { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { Box, Button, Flex, Icon, Text } from "@chakra-ui/react";
+import { MdArrowForward, MdArrowBack } from "react-icons/md";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import { BandFormValue } from "../../types"
 import { bandSchema } from "../../schema"
@@ -18,25 +18,25 @@ const BandRegisterPage = () => {
 
   const methods = useForm<BandFormValue>({
     resolver: yupResolver(bandSchema),
-  })
+  });
 
   const onNextStep = async () => {
     switch (step) {
       case 1:
-        const result = await methods.trigger(["name", "first_song"])
+        const result = await methods.trigger(["name", "first_song"]);
 
-        if (!result) return
+        if (!result) return;
 
-        setStep((prev) => prev + 1)
+        setStep((prev) => prev + 1);
 
-        break
+        break;
       case 2:
-        setStep((prev) => prev + 1)
-        break
+        setStep((prev) => prev + 1);
+        break;
       default:
-        return
+        return;
     }
-  }
+  };
 
   const onSubmit = methods.handleSubmit((data) => {
     mutate({ data })
@@ -45,15 +45,15 @@ const BandRegisterPage = () => {
   const renderForm = () => {
     switch (step) {
       case 1:
-        return <FormStep1 />
+        return <FormStep1 />;
       case 2:
-        return <FormStep2 />
+        return <FormStep2 />;
       case 3:
-        return <FormStep3 />
+        return <FormStep3 />;
       default:
-        return
+        return;
     }
-  }
+  };
 
   return (
     <PictureContextProvider>
@@ -111,7 +111,7 @@ const BandRegisterPage = () => {
                   }}
                   leftIcon={<Icon as={MdArrowBack} fontSize="20px" />}
                   onClick={() => {
-                    setStep((prev) => prev - 1)
+                    setStep((prev) => prev - 1);
                   }}
                 >
                   Back
@@ -146,8 +146,8 @@ const BandRegisterPage = () => {
         </form>
       </FormProvider>
     </PictureContextProvider>
-  )
-}
+  );
+};
 
 BandRegisterPage.LayoutProps = {
   headTitle: "Registration | LongFung",

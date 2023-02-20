@@ -32,7 +32,7 @@ export const FormStep3 = () => {
         {fields.map((beacon, idx) => (
           <BeaconCard
             key={beacon.id}
-            name={`Device${idx + 1}`}
+            name={`Device ${idx + 1}`}
             onAdd={() => {
               append({ hardwareId: "", passcode: "" });
             }}

@@ -6,22 +6,22 @@ import {
   HStack,
   Text,
   useBreakpointValue,
-} from "@chakra-ui/react"
-import { MdAdd } from "react-icons/md"
-import { IoTrashOutline } from "react-icons/io5"
-import { UseFormRegisterReturn } from "react-hook-form"
+} from "@chakra-ui/react";
+import { MdAdd } from "react-icons/md";
+import { IoTrashOutline } from "react-icons/io5";
+import { UseFormRegisterReturn } from "react-hook-form";
 
-import { FormInput } from "./FormInput"
+import { FormInput } from "./FormInput";
 
 type BeaconCardProps = {
-  name: string
-  onAdd: () => void
-  onDelete: () => void
-  hardwareRegister?: UseFormRegisterReturn
-  passcodeRegister?: UseFormRegisterReturn
-  hardwareError?: string
-  passcodeError?: string
-}
+  name?: string;
+  onAdd: () => void;
+  onDelete: () => void;
+  hardwareRegister?: UseFormRegisterReturn;
+  passcodeRegister?: UseFormRegisterReturn;
+  hardwareError?: string;
+  passcodeError?: string;
+};
 
 export const BeaconCard = (props: BeaconCardProps) => {
   const {
@@ -32,11 +32,11 @@ export const BeaconCard = (props: BeaconCardProps) => {
     passcodeRegister,
     hardwareError,
     passcodeError,
-  } = props
+  } = props;
   const isMobile = useBreakpointValue({
     base: true,
     md: false,
-  })
+  });
 
   if (isMobile) {
     return (
@@ -47,10 +47,12 @@ export const BeaconCard = (props: BeaconCardProps) => {
           boxShadow:
             "0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06)",
           borderRadius: "8px",
+          gap: 3,
+          pb: 5,
         }}
       >
         <Flex sx={{ alignItems: "center", justifyContent: "space-between" }}>
-          <Text py="2">{name}</Text>
+          <Text sx={{ fontSize: "14px", py: "2" }}>{name}</Text>
           <HStack spacing={3}>
             <IconButton
               size="sm"
@@ -94,12 +96,12 @@ export const BeaconCard = (props: BeaconCardProps) => {
           errorMessage={passcodeError}
         />
       </Stack>
-    )
+    );
   }
 
   return (
     <Stack>
-      <Text>{name}</Text>
+      <Text sx={{ fontSize: "14px" }}>{name}</Text>
       <Grid gridTemplateColumns="repeat(2, 1fr) 80px" gap={4}>
         <FormInput
           placeholder="Hardware ID"
@@ -143,5 +145,5 @@ export const BeaconCard = (props: BeaconCardProps) => {
         </Flex>
       </Grid>
     </Stack>
-  )
-}
+  );
+};

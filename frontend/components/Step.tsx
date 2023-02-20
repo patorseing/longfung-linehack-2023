@@ -1,14 +1,14 @@
-import { Box, HStack } from "@chakra-ui/react"
+import { Box, HStack } from "@chakra-ui/react";
 
 type StepProps = {
-  totalStep: number
-  currentStep: number
-}
+  totalStep: number;
+  currentStep: number;
+};
 
 export const Step = (props: StepProps) => {
-  const { currentStep, totalStep } = props
+  const { currentStep, totalStep } = props;
 
-  const stepArray = Array.from({ length: totalStep }, (_, i) => i + 1)
+  const stepArray = Array.from({ length: totalStep }, (_, i) => i + 1);
 
   return (
     <HStack spacing={4}>
@@ -23,5 +23,5 @@ export const Step = (props: StepProps) => {
         />
       ))}
     </HStack>
-  )
-}
+  );
+};
