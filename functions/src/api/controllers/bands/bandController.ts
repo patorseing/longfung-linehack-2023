@@ -10,6 +10,22 @@ import {getOldHardwareIds} from "../../middlewares/bandMiddleware";
 import {getBandSchema} from "../../validators/bandValidators";
 import {FormErrors, FormFields, FormFiles} from "../../types";
 
+export const getBand = async (req: Request, res: Response) => {
+  const bandName = req.body.bandName;
+
+  if (bandName === undefined) {
+    return res.status(400).json({error: "bandName cannot be blank"});
+  }
+
+  const band = await firestore.collection("Band").doc(bandName).get();
+
+  if (!band.exists) {
+    return res.status(404).json({error: "band not found"});
+  }
+
+  return res.status(200).json({data: band.data()});
+};
+
 export const getBands = async (req: Request, res: Response) => {
   const {error} = getBandSchema.validate(req.body);
 

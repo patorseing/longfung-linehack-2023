@@ -2,6 +2,7 @@ import * as express from "express";
 
 import {
   createBand,
+  getBand,
   getBands,
   updateBand,
 } from "../controllers/bands/bandController";
@@ -17,6 +18,7 @@ import {
 /* eslint new-cap: "warn"*/
 const router = express.Router();
 
+router.get("/info", getBand);
 router.get("/", getBands);
 
 router.post(
