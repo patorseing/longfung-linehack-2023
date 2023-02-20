@@ -1,6 +1,6 @@
 import {Event} from "../api/dto/event";
 
-export const enterEventTemplate = ({
+export const eventTemplate = ({
   event,
   interested,
   userId,
@@ -185,3 +185,147 @@ export const enterEventTemplate = ({
     },
   },
 });
+
+export type EventTemp = {
+  type: "bubble";
+  size: "mega";
+  hero: {
+    type: "image";
+    url: string;
+    size: "full";
+    aspectMode: "cover";
+    animated: false;
+    aspectRatio: "20:13";
+  };
+  body: {
+    type: "box";
+    layout: "vertical";
+    contents: [
+      (
+        | {
+            type: "text";
+            text: "Free Event";
+            color: "#F83333";
+            size: "xs";
+          }
+        | {
+            type: "text";
+            text: string;
+            size: "xs";
+          }
+      ),
+      {
+        type: "box";
+        layout: "vertical";
+        contents: [
+          {
+            type: "text";
+            text: string;
+            weight: "bold";
+            wrap: true;
+            size: "xl";
+          },
+          {
+            type: "box";
+            layout: "vertical";
+            contents: [
+              {
+                type: "box";
+                layout: "horizontal";
+                contents: [
+                  {
+                    type: "text";
+                    text: "วันจัดแสดง";
+                    flex: 3;
+                    color: "#929292";
+                  },
+                  {
+                    type: "text";
+                    text: string;
+                    flex: 5;
+                    color: "#929292";
+                  }
+                ];
+              },
+              {
+                type: "box";
+                layout: "horizontal";
+                contents: [
+                  {
+                    type: "text";
+                    text: "เวลา";
+                    flex: 3;
+                    color: "#929292";
+                  },
+                  {
+                    type: "text";
+                    text: string;
+                    flex: 5;
+                    color: "#929292";
+                  }
+                ];
+              },
+              {
+                type: "box";
+                layout: "horizontal";
+                contents: [
+                  {
+                    type: "text";
+                    text: "สถานที่";
+                    flex: 3;
+                    color: "#929292";
+                  },
+                  {
+                    type: "text";
+                    text: string;
+                    flex: 5;
+                    color: "#929292";
+                    wrap: true;
+                  }
+                ];
+              },
+              {
+                type: "box";
+                layout: "horizontal";
+                contents: [
+                  {
+                    type: "text";
+                    text: "ผู้ติดตาม";
+                    flex: 3;
+                    color: "#929292";
+                  },
+                  {
+                    type: "text";
+                    text: string;
+                    flex: 5;
+                    color: "#929292";
+                    wrap: true;
+                  }
+                ];
+              }
+            ];
+            spacing: "md";
+          }
+        ];
+        spacing: "xxl";
+      }
+    ];
+    spacing: "md";
+  };
+  footer: {
+    type: "box";
+    layout: "vertical";
+    contents: Array<{
+      type: "button";
+      action: {
+        type: "message" | "uri";
+        label: string;
+        uri?: string;
+        text?: string;
+      };
+      style?: "link";
+      height?: "sm";
+    }>;
+    paddingAll: "none";
+  };
+};
