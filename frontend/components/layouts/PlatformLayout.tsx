@@ -36,6 +36,7 @@ export const PlatformLayout = (
           bg: { base: mobileBg, md: desktopBg },
           bgSize: { base: "cover", md: "cover" },
           bgRepeat: { base: "no-repeat", md: "no-repeat" },
+          bgAttachment: "fixed",
         }}
       >
         {children}
