@@ -3,6 +3,7 @@ import * as functions from "firebase-functions";
 import * as formidable from "formidable-serverless";
 
 import {compact, transformEventPayload} from "../../utils/payload";
+import {transformEventPayload} from "../../utils/payload";
 import {firestore} from "../../../firebase";
 import {Event} from "../../dto/event";
 import {fileUploader} from "../../utils/fileUploader";
@@ -12,6 +13,7 @@ import {
   defaultSocialMedia,
   defaultTicketType,
 } from "../../constants";
+
 
 export const getEvents = async (req: Request, res: Response) => {
   const {error} = getEventSchema.validate(req.body);
@@ -82,7 +84,7 @@ export const createEvent = async (req: Request, res: Response) => {
       const newEvent = await firestore
           .collection("Event")
           .doc(event.eventName)
-          .set(compact(event));
+          .set(event);
 
       return res.status(201).send({data: newEvent});
     });
