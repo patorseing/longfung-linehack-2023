@@ -1,1 +1,2 @@
-export * as router from "./routes/bandRoutes";
+export * as bandRouter from "./routes/bandRoutes";
+export * as eventRouter from "./routes/eventRoutes";

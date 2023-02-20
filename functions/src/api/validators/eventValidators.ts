@@ -1,39 +1,56 @@
-// import {body} from "express-validator";
+import * as JoiBase from "joi";
+import JoiDate from "@joi/date";
 
-// export const getEventsValidators = [body("userId").notEmpty()];
+import { DATE_FORMAT_REGEX } from "../constants";
 
-// export const createEventValidators = [
-//   body("eventName").notEmpty(),
-//   body("eventDate").notEmpty(),
-//   body("eventTime").notEmpty(),
+const Joi = JoiBase.extend(JoiDate);
 
-//   body("socialMedia").optional(),
-//   body("socialMedia.facebook").optional().isString(),
-//   body("socialMedia.instagram").optional().isString(),
-//   body("socialMedia.website").optional().isString(),
+const socialMediaSchema = Joi.object({
+  facebook: Joi.string().allow(null, ""),
+  instagram: Joi.string().allow(null, ""),
+  tiktok: Joi.string().allow(null, ""),
+  website: Joi.string().allow(null, ""),
+});
 
-//   body("location").isString().notEmpty(),
-//   body("googleMapUrl").optional().isString(),
+const eventLocationSchema = Joi.object({
+  address: Joi.string().required(),
+  googleMapLink: Joi.string().allow(null, ""),
+});
 
-//   body("availableSeat").isInteger().notEmpty(),
-//   body("ageLimit").isInteger().optional(),
+const ticketTypeSchema = Joi.object({
+  free: Joi.boolean(),
+  price: Joi.number().allow(null),
+});
 
-//   body("ticketType").notEmpty(),
-//   body("ticketType.*.free").isBoolean().optional(),
-//   body("ticketType.*.price").isInteger().optional(),
-//   body("alcoholPermission").notEmpty(),
-//   body("alcoholPermission.*.alcohol").isBoolean().optional(),
-//   body("alcoholPermission.*.noAlcohol").isBoolean().optional(),
+const lineBeaconSchema = Joi.object({
+  hardwareId: Joi.string().required(),
+  passcode: Joi.string().required(),
+});
 
-//   body("songRequest").optional().isBoolean(),
-//   body("description").optional().isString(),
+const lineUpSchema = Joi.object({
+  startTime: Joi.string().regex(DATE_FORMAT_REGEX).required(),
+  endTime: Joi.string().regex(DATE_FORMAT_REGEX).required(),
+  bandName: Joi.string().required(),
+});
 
-//   body("eventImage").optional().notEmpty(),
-//   body("lineBeacon").optional(),
-//   body("lineBeacon.*.hardwareId").isString(),
-//   body("lineBeacon.*.passcode").isString(),
+export const getEventSchema = Joi.object({
+  userId: Joi.string().required(),
+});
 
-//   body("lineUpSchedule").notEmpty(),
-//   body("lineUpSchedule.*.time").notEmpty(),
-//   body("lineUpSchedule.*.band").notEmpty()
-// ];
+export const createEventSchema = Joi.object({
+  userId: Joi.string().required(),
+  eventName: Joi.string().required(),
+  eventDate: Joi.date().format(["DD/MM/YYYY"]),
+  eventStartTime: Joi.string().regex(DATE_FORMAT_REGEX),
+  eventEndTime: Joi.string().regex(DATE_FORMAT_REGEX),
+  socialMedia: socialMediaSchema,
+  eventLocation: eventLocationSchema,
+  availableSeat: Joi.number().allow(null),
+  ageLimitation: Joi.number().allow(null),
+  ticketType: ticketTypeSchema,
+  alcoholFree: Joi.boolean().allow(null).default(false),
+  songRequested: Joi.boolean().allow(null),
+  eventDescription: Joi.string().allow(null, ""),
+  lineBeacon: Joi.array().items(lineBeaconSchema),
+  lineUp: Joi.array().items(lineUpSchema),
+});

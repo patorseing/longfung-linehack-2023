@@ -1,24 +1,27 @@
 import {Request, Response} from "express";
-// import {validationResult} from "express-validator";
-import * as functions from 'firebase-functions'
+import * as functions from "firebase-functions";
+import * as formidable from "formidable-serverless";
 
-import {compact} from "../../utils/payload";
+import {compact, transformEventPayload} from "../../utils/payload";
 import {firestore} from "../../../firebase";
 import {Event} from "../../dto/event";
 import {fileUploader} from "../../utils/fileUploader";
-
+import {getEventSchema} from "../../validators/eventValidators";
 
 export const getEvents = async (req: Request, res: Response) => {
-  // const errors = validationResult(req);
-  // if (!errors.isEmpty()){
-  //   return res.status(400).json({errors: errors["errors"]});
-  // }
+  const {error} = getEventSchema.validate(req.body);
+
+  if (error !== undefined) {
+    return res.status(400).json({error: error.details});
+  }
 
   const eventList: FirebaseFirestore.DocumentData[] = [];
 
+  const {body: requestBody} = req;
+
   await firestore
       .collection("Event")
-      .where("userId", "==", req.body["userId"])
+      .where("userId", "==", requestBody["userId"])
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
@@ -30,54 +33,56 @@ export const getEvents = async (req: Request, res: Response) => {
 };
 
 export const createEvent = async (req: Request, res: Response) => {
-  // const errors = validationResult(req);
-  // if (!errors.isEmpty()) {
-  //   return res.status(400).json({errors: errors["errors"]});
-  // }
-
+  /* eslint new-cap: "warn"*/
+  const form = formidable.IncomingForm({multiples: true});
   try {
-    const event: Event = {
-      eventName: req.body.eventName,
-      eventDate: req.body.eventDate,
-      eventStartTime: req.body.eventStartTime,
-      eventEndTime: req.body.eventEndTime,
-      socialMedia: req.body.socialMedia || {},
-      eventLocation: req.body.eventLocation,
-      available_seat: req.body.available_seat || null,
-      age_limitation: req.body.age_limitation || null,
-      ticketType: req.body.ticketType,
-      alcohol_free: req.body.alcohol_free,
-      song_requested: req.body.song_requested || false,
-      eventDescription: req.body.eventDescription || null,
-      eventImage: req.body.eventImage || null,
-      lineBeacon: req.body.lineBeacon || [],
-      lineUp: req.body.lineUp || [],
-      interestedPerson: req.body.interestedPerson || [],
-    };
+    form.parse(req, async (err: any, fields: any, files: any) => {
+      const payload = transformEventPayload(fields);
 
-    const bucketName = functions.config().uploader.bucket_name;
+      const event: Event = {
+        eventName: payload.eventName,
+        userId: payload.userId,
+        eventDate: payload.eventDate,
+        eventStartTime: payload.eventStartTime,
+        eventEndTime: payload.eventEndTime,
+        socialMedia: payload.socialMedia,
+        eventLocation: payload.eventLocation,
+        availableSeat: payload.availableSeat,
+        ageLimitation: payload.ageLimitation,
+        ticketType: payload.ticketType,
+        alcoholFree: payload.alcoholFree,
+        songRequested: payload.songRequested,
+        eventDescription: payload.eventDescription,
+        lineBeacon: payload.lineBeacon,
+        lineUp: payload.lineUp,
+        interestedPerson: [],
+      };
 
+      const bucketName = functions.config().uploader.bucket_name;
 
-    if (!req.body.eventImage == undefined) {
-      const imageUrl = await fileUploader(bucketName, req.body.eventImage);
+      const eventImage = files.eventImage;
+      if (eventImage !== undefined) {
+        const imageUrl = await fileUploader(bucketName, eventImage.path);
 
-      event.eventImage = imageUrl;
-    }
+        event.eventImage = imageUrl;
+      }
 
-    event.lineBeacon?.forEach(async (el) => {
-      await firestore.collection("LineBeacon").doc(el.hardwareId).set({
-        hardwareId: el.hardwareId,
-        eventName: event.eventName,
+      event.lineBeacon?.forEach(async (el) => {
+        await firestore.collection("LineBeacon").doc(el.hardwareId).set({
+          hardwareId: el.hardwareId,
+          eventName: event.eventName,
+        });
       });
+
+      const newEvent = await firestore
+          .collection("Event")
+          .doc(event.eventName)
+          .set(compact(event));
+
+      return res.status(201).send({data: newEvent});
     });
-
-    const newEvent = await firestore
-        .collection("Event")
-        .doc(event.eventName)
-        .set(compact(event))
-
-    return res.status(201).send({data: newEvent});
-    } catch (err) {
-      return res.status(422).send(err);
+    return;
+  } catch (err) {
+    return res.status(500).send(err);
   }
 };
