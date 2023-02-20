@@ -7,6 +7,11 @@ import {firestore} from "../../../firebase";
 import {Event} from "../../dto/event";
 import {fileUploader} from "../../utils/fileUploader";
 import {getEventSchema} from "../../validators/eventValidators";
+import {
+  defaultEventLocation,
+  defaultSocialMedia,
+  defaultTicketType,
+} from "../../constants";
 
 export const getEvents = async (req: Request, res: Response) => {
   const {error} = getEventSchema.validate(req.body);
@@ -40,16 +45,16 @@ export const createEvent = async (req: Request, res: Response) => {
       const payload = transformEventPayload(fields);
 
       const event: Event = {
-        eventName: payload.eventName,
-        userId: payload.userId,
-        eventDate: payload.eventDate,
-        eventStartTime: payload.eventStartTime,
-        eventEndTime: payload.eventEndTime,
-        socialMedia: payload.socialMedia,
-        eventLocation: payload.eventLocation,
+        eventName: payload.eventName || "",
+        userId: payload.userId || "",
+        eventDate: payload.eventDate || "",
+        eventStartTime: payload.eventStartTime || "",
+        eventEndTime: payload.eventEndTime || "",
+        socialMedia: {...defaultSocialMedia, ...payload.socialMedia},
+        eventLocation: {...defaultEventLocation, ...payload.eventLocation},
         availableSeat: payload.availableSeat,
         ageLimitation: payload.ageLimitation,
-        ticketType: payload.ticketType,
+        ticketType: {...defaultTicketType, ...payload.ticketType},
         alcoholFree: payload.alcoholFree,
         songRequested: payload.songRequested,
         eventDescription: payload.eventDescription,

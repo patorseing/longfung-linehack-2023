@@ -1,5 +1,4 @@
 import {firestore} from "../../firebase";
-import {defaultEventLocation, defaultSocialMedia} from "../constants";
 
 interface ObjectWithValues {
   [key: string]: any;
@@ -41,31 +40,45 @@ export const checkDuplicatedHardwareIds = async (lineBeacons: LineBeacon[]) => {
   return results;
 };
 
-const transformNull = (value: string) => {
-  return value === "null" ? null : value;
+const transformStringValue = (value: string) => {
+  if (value == "") {
+    return null;
+  }
+  return value;
 };
 
-const transform = (object: string, defaultValue: string) => {
-  return JSON.parse(transformNull(object) || defaultValue);
-};
-
-const transformTicketType = (ticketType: string) => {
-  const parsedTicketType = transform(ticketType, "{}");
-
-  if (parsedTicketType.length > 0) {
-    return parsedTicketType;
+const transformValue = (value: string) => {
+  if (value == "") {
+    return null;
   }
 
-  return {
-    free:
-      parsedTicketType.free === undefined ?
-        true :
-        transform(parsedTicketType.free, "true"),
-    price:
-      parsedTicketType.price === undefined ?
-        null :
-        transform(parsedTicketType.price, "null"),
-  };
+  return JSON.parse(value);
+};
+
+const transformObject = (object: string) => {
+  const parsedObject = JSON.parse(object);
+
+  /* eslint guard-for-in: "warn"*/
+  for (const key in parsedObject) {
+    parsedObject[key] = parsedObject[key] === "" ? null : parsedObject[key];
+  }
+
+  return parsedObject;
+};
+
+const transformArrayOfObjects = (array: string) => {
+  const parsedArray = JSON.parse(array);
+
+  const result: any = [];
+  /* eslint guard-for-in: "warn"*/
+  parsedArray.forEach((object: any) => {
+    for (const key in object) {
+      object[key] = object[key] === "" ? null : object[key];
+    }
+    result.push(object);
+  });
+
+  return result;
 };
 
 type EventPayload = {
@@ -87,36 +100,21 @@ type EventPayload = {
 };
 
 export const transformEventPayload = (payload: EventPayload) => {
-  const socialMedia = {
-    ...defaultSocialMedia,
-    ...transform(payload.socialMedia, "{}"),
-  };
-  const eventLocation = {
-    ...defaultEventLocation,
-    ...transform(payload.eventLocation, "{}"),
-  };
-
-  const lineBeacon = transform(payload.lineBeacon, "[]");
-  const lineUp = transform(payload.lineUp, "[]");
-
-  const availableSeat = transform(payload.availableSeat, "null");
-  const ageLimitation = transform(payload.ageLimitation, "null");
-
-  const alcoholFree = transform(payload.alcoholFree, "false");
-  const songRequested = transform(payload.songRequested, "false");
-
-  const ticketType = transformTicketType(payload.ticketType);
-
   return {
-    ...payload,
-    socialMedia,
-    eventLocation,
-    lineBeacon,
-    lineUp,
-    availableSeat,
-    ageLimitation,
-    alcoholFree,
-    songRequested,
-    ticketType,
+    userId: transformStringValue(payload.userId),
+    eventName: transformStringValue(payload.eventName),
+    eventDate: transformStringValue(payload.eventDate),
+    eventStartTime: transformStringValue(payload.eventStartTime),
+    eventEndTime: transformStringValue(payload.eventEndTime),
+    socialMedia: transformObject(payload.socialMedia),
+    eventLocation: transformObject(payload.eventLocation),
+    availableSeat: transformValue(payload.availableSeat),
+    ageLimitation: transformValue(payload.ageLimitation),
+    ticketType: transformObject(payload.ticketType),
+    alcoholFree: transformValue(payload.alcoholFree),
+    songRequested: transformValue(payload.songRequested),
+    eventDescription: transformStringValue(payload.eventDescription),
+    lineBeacon: transformArrayOfObjects(payload.lineBeacon),
+    lineUp: transformArrayOfObjects(payload.lineUp),
   };
 };

@@ -45,7 +45,7 @@ export interface Event {
   };
   alcoholFree: boolean;
   songRequested: boolean;
-  eventDescription?: string;
+  eventDescription?: string | null;
   eventImage?: string;
   lineBeacon?: lineBeacon[];
   lineUp?: lineUp[];

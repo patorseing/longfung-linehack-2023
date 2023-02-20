@@ -4,7 +4,7 @@ import {createEvent, getEvents} from "../controllers/events/eventController";
 import {checkDuplicatedHardwareId} from "../middlewares/bandMiddleware";
 import {
   checkDuplicatedEventName,
-  validateCreateEventSchema,
+  validateCreateEventPayload,
 } from "../middlewares/eventMiddleware";
 
 /* eslint new-cap: "warn"*/
@@ -14,7 +14,7 @@ router.get("/", getEvents);
 
 router.post(
     "/",
-    validateCreateEventSchema,
+    validateCreateEventPayload,
     checkDuplicatedEventName,
     checkDuplicatedHardwareId,
     createEvent
