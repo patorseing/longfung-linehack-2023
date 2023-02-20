@@ -2,7 +2,6 @@ import {Request, Response} from "express";
 import * as functions from "firebase-functions";
 import * as formidable from "formidable-serverless";
 
-import {compact, transformEventPayload} from "../../utils/payload";
 import {transformEventPayload} from "../../utils/payload";
 import {firestore} from "../../../firebase";
 import {Event} from "../../dto/event";
@@ -13,7 +12,6 @@ import {
   defaultSocialMedia,
   defaultTicketType,
 } from "../../constants";
-
 
 export const getEvents = async (req: Request, res: Response) => {
   const {error} = getEventSchema.validate(req.body);
