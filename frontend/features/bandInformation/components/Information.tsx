@@ -1,18 +1,20 @@
 import colors from "@/lib/theme/color";
 import { HStack, VStack, Image, Grid, Text } from "@chakra-ui/react";
-import { EventInformationType } from "..";
+import { BandInformationType } from "..";
+
 type Props = {
-  data: EventInformationType;
+  data: BandInformationType;
 };
 type InfoItemType = {
   img: string;
   label: string;
-  value: string;
+  value?: string;
+  value2?: string;
   isLink?: boolean;
 };
 
 export const Information = ({ data }: Props) => {
-  const InfoItem = ({ img, label, value, isLink }: InfoItemType) => {
+  const InfoItem = ({ img, label, value, isLink, value2 }: InfoItemType) => {
     return (
       <Grid
         sx={{
@@ -28,7 +30,10 @@ export const Information = ({ data }: Props) => {
           <Text>{label}</Text>
         </HStack>
         {!isLink ? (
-          <Text>{value}</Text>
+          <VStack sx={{ alignItems: "baseline" }}>
+            <Text>{value}</Text>
+            {value2 && <Text>{value2}</Text>}
+          </VStack>
         ) : (
           <Text
             as="a"
@@ -49,7 +54,7 @@ export const Information = ({ data }: Props) => {
     );
   };
 
-  const SocialInfo = ({ img, link }: { img: string; link: string }) => {
+  const SocialInfo = ({ img, link }: { img: string; link?: string }) => {
     return (
       <HStack gap="8px" sx={{ fontSize: { base: "14px", md: "16px" } }}>
         <Image src={`/images/${img}.svg`} boxSize="20px" />
@@ -71,88 +76,53 @@ export const Information = ({ data }: Props) => {
     );
   };
 
-  const dateSection = [
-    {
-      img: "calendar-icon",
-      label: "วันจัดแสดง",
-      value: data.date,
-    },
-    {
-      img: "time-icon",
-      label: "เวลา",
-      value: `${data.startTime} - ${data.endTime}`,
-    },
-  ];
-
-  const locationSection = [
-    {
-      img: "location-icon",
-      label: "สถานที่",
-      value: data.location,
-    },
-    {
-      img: "map-icon",
-      value: data.location_url,
-      label: "Google Map URL",
-      isLink: true,
-    },
-  ];
-
   const InfoSection = [
     {
-      img: "ticket-icon",
-      label: "สถานที่",
-      value: data.location,
+      img: "band-icon",
+      label: "ชื่อวงดนตรี",
+      value: data.name,
     },
     {
-      img: "seat-icon",
-      label: "จำนวนที่นั่ง",
-      value: data.avaliable_seats ?? "ไม่ได้ระบุ",
-    },
-    {
-      img: "age-icon",
-      label: "จำกัดอายุ",
-      value: data.age_limit ?? "ไม่จำกัดอายุ",
-    },
-    {
-      img: "alcohol-icon",
-      label: "แอลกอฮอล์",
-      value: data.alcohol_free ? "ได้" : "ไม่อนุญาต",
-    },
-    {
-      img: "song-icon",
-      label: "การขอเพลง",
-      value: data.request_song ? "ได้" : "ไม่อนุญาต",
+      img: "promote-song",
+      label: "เพลงโปรโมต",
+      value: data.first_song,
+      value2: data.second_song,
     },
   ];
 
   const socilaSection = [
     {
-      img: "social/website",
-      link: data.socialmedia.website,
-    },
-    {
       img: "social/instagram",
-      link: data.socialmedia.instagram,
+      link: data.instagram_account,
     },
     {
       img: "social/facebook",
-      link: data.socialmedia.instagram,
+      link: data.facebook_url,
+    },
+    {
+      img: "social/tiktok",
+      link: data.tiktok_url,
+    },
+    {
+      img: "social/website",
+      link: data.website_url,
+    },
+    {
+      img: "social/youtube",
+      link: data.youtube_url,
+    },
+    {
+      img: "social/apple-music",
+      link: data.apple_music_url,
+    },
+    {
+      img: "social/line-melody",
+      link: undefined,
     },
   ];
   return (
     <VStack>
       <VStack layerStyle="infoItem" sx={{ pt: "0px" }}>
-        {dateSection.map((item, index) => (
-          <InfoItem key={index} {...item} />
-        ))}
-      </VStack>
-      <VStack layerStyle="infoItem">
-        {locationSection.map((item, index) => (
-          <InfoItem key={index} {...item} />
-        ))}
-      </VStack>
-      <VStack layerStyle="infoItem">
         {InfoSection.map((item, index) => (
           <InfoItem key={index} {...item} />
         ))}

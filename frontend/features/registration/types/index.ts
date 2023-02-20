@@ -29,6 +29,7 @@ export type LineUpType = {
   endTime: string;
   bandName: string;
 };
+
 export type EventFormValue = {
   eventName: string;
   eventDate: string;
