@@ -6,27 +6,30 @@ import {
   FormLabel,
   InputProps,
   FormControl,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { AiTwotoneCalendar } from "react-icons/ai";
 import dayjs from "dayjs";
+
 import colors from "@/lib/theme/color";
 import { DateRankContainer } from "./Calendat.styles";
+
 type Props = InputProps & {
-  date?: Date;
+  date?: string;
   label?: string;
   onChange?: (date: string) => void;
   register?: UseFormRegisterReturn;
   errorMessage?: string;
   fontSize?: number;
 };
+
 export const Calendar = ({
   date,
   label,
   onChange,
   errorMessage,
-
   fontSize = 16,
 }: Props) => {
   const [selectedDate, setSelectedDate] = useState<Date>();
@@ -56,7 +59,10 @@ export const Calendar = ({
 
   useEffect(() => {
     if (date) {
-      setSelectedDate(date);
+      const splitDate = date.split("/");
+      setSelectedDate(
+        new Date(`${splitDate[1]}/${splitDate[0]}/${splitDate[2]}`)
+      );
     }
   }, [date]);
 
@@ -71,12 +77,25 @@ export const Calendar = ({
         <DatePicker
           selected={selectedDate}
           onChange={(date: Date) => {
+            console.log("onChange", dayjs(date).format("DD/MM/YYYY"));
             onChange?.(dayjs(date).format("DD/MM/YYYY"));
             setSelectedDate(date);
           }}
+          dateFormat={"dd/MM/yyyy"}
           customInput={<CustomInput />}
         />
       </DateRankContainer>
+      {errorMessage && (
+        <FormErrorMessage
+          sx={{
+            fontSize: { base: "10px", md: "10px" },
+            mt: "4px",
+            position: "absolute",
+          }}
+        >
+          {errorMessage}
+        </FormErrorMessage>
+      )}
     </FormControl>
   );
 };

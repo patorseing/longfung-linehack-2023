@@ -10,16 +10,17 @@ import {
 } from "@chakra-ui/react";
 import { MdAdd } from "react-icons/md";
 import { IoTrashOutline } from "react-icons/io5";
-import { UseFormRegisterReturn } from "react-hook-form";
+import { useFormContext, UseFormRegisterReturn } from "react-hook-form";
 
-import { FormInput } from "./FormInput";
+import { FormInput } from "../../../../components/FormInput";
+import { EventFormValue } from "@/features/registration/types";
+import { TimePicker } from "../../../../components/TimePicker";
 
 type Props = {
   name?: string;
   onAdd: () => void;
   onDelete: () => void;
-  startTimeRegister?: UseFormRegisterReturn;
-  endTimeRegister?: UseFormRegisterReturn;
+  idx: number;
   bandRegister?: UseFormRegisterReturn;
   startTimeError?: string;
   endTimeError?: string;
@@ -31,8 +32,7 @@ export const LineupCard = (props: Props) => {
     name,
     onAdd,
     onDelete,
-    startTimeRegister,
-    endTimeRegister,
+    idx,
     bandRegister,
     startTimeError,
     endTimeError,
@@ -42,6 +42,11 @@ export const LineupCard = (props: Props) => {
     base: true,
     md: false,
   });
+  const {
+    getValues,
+    setValue,
+    formState: { errors },
+  } = useFormContext<EventFormValue>();
 
   if (isMobile) {
     return (
@@ -96,18 +101,20 @@ export const LineupCard = (props: Props) => {
         </HStack>
 
         <VStack sx={{ gap: 3, pb: 5 }}>
-          <FormInput
-            fontSize={14}
-            label="Start Time"
-            placeholder="HH:MM"
-            register={startTimeRegister}
+          <TimePicker
+            label="Start time"
+            time={getValues(`lineup.${idx}.startTime`)}
+            onChange={(value) => {
+              setValue(`lineup.${idx}.startTime`, value as string);
+            }}
             errorMessage={startTimeError}
           />
-          <FormInput
-            fontSize={14}
-            label="End Time"
-            placeholder="HH:MM"
-            register={endTimeRegister}
+          <TimePicker
+            label="End time"
+            time={getValues(`lineup.${idx}.endTime`)}
+            onChange={(value) => {
+              setValue(`lineup.${idx}.endTime`, value as string);
+            }}
             errorMessage={endTimeError}
           />
           <FormInput
@@ -127,19 +134,21 @@ export const LineupCard = (props: Props) => {
       <Grid
         gridTemplateColumns="repeat(2, 1fr) 80px"
         gap={4}
-        sx={{ alignItems: "end" }}
+        sx={{ alignItems: "end", pb: "3px" }}
       >
         <HStack sx={{ alignItems: "end" }}>
-          <FormInput
-            fontSize={14}
-            placeholder="HH:MM"
-            register={startTimeRegister}
+          <TimePicker
+            time={getValues(`lineup.${idx}.startTime`)}
+            onChange={(value) => {
+              setValue(`lineup.${idx}.startTime`, value as string);
+            }}
             errorMessage={startTimeError}
           />
-          <FormInput
-            fontSize={14}
-            placeholder="HH:MM"
-            register={endTimeRegister}
+          <TimePicker
+            time={getValues(`lineup.${idx}.endTime`)}
+            onChange={(value) => {
+              setValue(`lineup.${idx}.endTime`, value as string);
+            }}
             errorMessage={endTimeError}
           />
         </HStack>

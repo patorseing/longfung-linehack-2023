@@ -27,7 +27,13 @@ const EventRegisterPage = () => {
   const onNextStep = async () => {
     switch (step) {
       case 1:
-        let result1 = await methods.trigger(["eventDate"]);
+        let result1 = await methods.trigger([
+          "eventDate",
+          "location",
+          "eventName",
+          "startTime",
+          "endTime",
+        ]);
         console.log("re", result1);
         if (!result1) return;
 
