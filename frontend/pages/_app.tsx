@@ -32,16 +32,22 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     Component.LayoutProps?.mobileBg ?? "url(/images/bg/mobile-top.svg)";
 
   useEffect(() => {
+    if (!process.env.NEXT_PUBLIC_LIFF_ID) return;
+
     async function liffInit() {
       const liff = (await import("@line/liff")).default;
 
       try {
-        await liff.init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID as string });
+        await liff.init({
+          liffId: process.env.NEXT_PUBLIC_LIFF_ID as string,
+        });
       } catch (error) {
         console.error("liff init error");
       }
       if (!liff.isLoggedIn()) {
-        liff.login();
+        liff.login({
+          redirectUri: window.location.href,
+        });
       }
     }
 

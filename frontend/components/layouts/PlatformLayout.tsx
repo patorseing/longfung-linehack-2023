@@ -20,6 +20,8 @@ export const PlatformLayout = (
     async function liffProfile() {
       const liff = (await import("@line/liff")).default;
       await liff.ready;
+      if (!liff.isLoggedIn()) return;
+
       const profile = await liff.getProfile();
       setProfile(profile);
     }
