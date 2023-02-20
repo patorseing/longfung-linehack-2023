@@ -3,13 +3,14 @@ import { useFormContext } from "react-hook-form";
 
 import { EventFormValue } from "../../types";
 import { FormInput } from "@/components/FormInput";
-import { Calendar } from "@/components";
+import { Calendar, TimePicker } from "@/components";
 
 export const FormStep1 = () => {
   const {
     register,
     formState: { errors },
     setValue,
+    getValues,
   } = useFormContext<EventFormValue>();
 
   return (
@@ -25,21 +26,28 @@ export const FormStep1 = () => {
           label="Event Date"
           placeholder="DD:MM:YY"
           errorMessage={errors.eventDate?.message}
+          date={getValues("eventDate")}
           register={register("eventDate")}
           onChange={(value) => {
             setValue("eventDate", value as string);
+            console.log("form->", getValues("eventDate"));
           }}
         />
         <HStack sx={{ alignItems: "end" }}>
-          <FormInput
+          <TimePicker
             label="Event Time"
-            placeholder="HH:MM"
-            register={register("startTime")}
+            time={getValues("startTime")}
+            onChange={(value) => {
+              setValue("startTime", value as string);
+            }}
             errorMessage={errors.startTime?.message}
           />
-          <FormInput
-            placeholder="HH:MM"
-            register={register("endTime")}
+          <TimePicker
+            label="Event Time"
+            time={getValues("endTime")}
+            onChange={(value) => {
+              setValue("endTime", value as string);
+            }}
             errorMessage={errors.endTime?.message}
           />
         </HStack>
