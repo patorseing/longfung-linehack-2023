@@ -14,7 +14,7 @@ type Payload = {
 
 export const useCreateBand = () => {
   const toast = useToast();
-  const router = useRouter();
+  const { push } = useRouter();
   const headers = useDefaultAxiosHeader();
   const { profile } = useProfileContext();
 
@@ -63,10 +63,13 @@ export const useCreateBand = () => {
         title: "Success",
         description: "Create Band Successful",
         status: "success",
-        position: "top-right",
-        duration: 5000,
+        position: "top",
+        duration: 3000,
       });
-      setTimeout(() => {}, 5000);
+
+      setTimeout(() => {
+        push("/information");
+      }, 3000);
     },
   });
 };
