@@ -103,17 +103,17 @@ export const LineupCard = (props: Props) => {
         <VStack sx={{ gap: 3, pb: 5 }}>
           <TimePicker
             label="Start time"
-            time={getValues(`lineup.${idx}.startTime`)}
+            time={getValues(`lineUp.${idx}.startTime`)}
             onChange={(value) => {
-              setValue(`lineup.${idx}.startTime`, value as string);
+              setValue(`lineUp.${idx}.startTime`, value as string);
             }}
             errorMessage={startTimeError}
           />
           <TimePicker
             label="End time"
-            time={getValues(`lineup.${idx}.endTime`)}
+            time={getValues(`lineUp.${idx}.endTime`)}
             onChange={(value) => {
-              setValue(`lineup.${idx}.endTime`, value as string);
+              setValue(`lineUp.${idx}.endTime`, value as string);
             }}
             errorMessage={endTimeError}
           />
@@ -138,16 +138,16 @@ export const LineupCard = (props: Props) => {
       >
         <HStack sx={{ alignItems: "end" }}>
           <TimePicker
-            time={getValues(`lineup.${idx}.startTime`)}
+            time={getValues(`lineUp.${idx}.startTime`)}
             onChange={(value) => {
-              setValue(`lineup.${idx}.startTime`, value as string);
+              setValue(`lineUp.${idx}.startTime`, value as string);
             }}
             errorMessage={startTimeError}
           />
           <TimePicker
-            time={getValues(`lineup.${idx}.endTime`)}
+            time={getValues(`lineUp.${idx}.endTime`)}
             onChange={(value) => {
-              setValue(`lineup.${idx}.endTime`, value as string);
+              setValue(`lineUp.${idx}.endTime`, value as string);
             }}
             errorMessage={endTimeError}
           />
