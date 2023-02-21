@@ -55,7 +55,10 @@ export const EventCard = ({
     { label: "ผู้ติดตาม", value: follows.toLocaleString() },
   ];
   return (
-    <Link href={`/event-info`} sx={{ _hover: { textDecoration: "none" } }}>
+    <Link
+      href={`/event-info?event=${eventName}`}
+      sx={{ _hover: { textDecoration: "none" } }}
+    >
       <VStack
         sx={{
           w: { base: "290px", md: "280px", xl: "300px" },
