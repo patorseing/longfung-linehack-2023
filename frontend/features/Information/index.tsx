@@ -1,4 +1,6 @@
 import {
+  CircularProgress,
+  Flex,
   VStack,
   Text,
   Tabs,
@@ -8,46 +10,25 @@ import {
   TabPanel,
   SimpleGrid,
 } from "@chakra-ui/react";
+import { useMemo } from "react";
+
+import { TABS } from "./constants";
+import { useBands } from "./services";
+
 import { AddCard } from "./components/AddCard";
 import { CardInfo } from "./components/CardInfo";
 
-import { useBands } from "./services";
-
 const InformationPage = () => {
-  const TAB = ["Band", "Event"];
+  const { data: bands, isLoading: bandsLoading } = useBands();
 
-  const { data } = useBands();
+  const BandsData = useMemo(() => {
+    if (!bands) return [];
 
-  const MOCK_BAND = [
-    {
-      img: "",
-      name: "Paper Planes",
-    },
-    {
-      img: "",
-      name: "4EVE",
-    },
-    {
-      img: "",
-      name: "Three Man Down",
-    },
-    {
-      img: "",
-      name: "Lomosonic",
-    },
-    {
-      img: "",
-      name: "Potato",
-    },
-    {
-      img: "",
-      name: "Slot Machine",
-    },
-    {
-      img: "",
-      name: "Dept",
-    },
-  ];
+    return bands.map((band) => ({
+      img: band.bandImage,
+      name: band.bandName,
+    }));
+  }, [JSON.stringify(bands)]);
 
   const MOCK_EVENT = [
     {
@@ -70,8 +51,16 @@ const InformationPage = () => {
 
   const RenderContainer = (
     data: { img: string; name: string }[],
-    path: string
+    type: "band" | "event"
   ) => {
+    if (bandsLoading && type === "band") {
+      return (
+        <Flex justifyContent="center" mt="6">
+          <CircularProgress isIndeterminate color="primary.500" />
+        </Flex>
+      );
+    }
+
     return (
       <SimpleGrid
         columns={{ base: 1, md: 3, xl: 4 }}
@@ -80,12 +69,13 @@ const InformationPage = () => {
         sx={{ justifyItems: "center" }}
       >
         {data.map((item, index) => (
-          <CardInfo key={index} {...item} />
+          <CardInfo key={index} {...item} path={type} />
         ))}
-        <AddCard path={path} />
+        <AddCard path={type} />
       </SimpleGrid>
     );
   };
+
   return (
     <VStack sx={{ w: "100%", alignItems: "center", pt: 9, px: { base: 6 } }}>
       <Text
@@ -101,7 +91,7 @@ const InformationPage = () => {
       </Text>
       <Tabs size="lg" variant="enclosed">
         <TabList sx={{}}>
-          {TAB.map((item) => {
+          {TABS.map((item) => {
             return (
               <Tab
                 key={item}
@@ -136,7 +126,7 @@ const InformationPage = () => {
           }}
         >
           <TabPanel sx={{ p: "0" }}>
-            {RenderContainer(MOCK_BAND, "band")}
+            {RenderContainer(BandsData, "band")}
           </TabPanel>
           <TabPanel sx={{ p: "0" }}>
             {RenderContainer(MOCK_EVENT, "event")}

@@ -1,9 +1,18 @@
+import { useRouter } from "next/router";
 import { Box, Flex, Image, Text, VStack } from "@chakra-ui/react";
+
+import { DEFAULT_LONGFUNG } from "@/constants";
+
 type Props = {
   img: string;
   name: string;
+  path: "band" | "event";
 };
-export const CardInfo = ({ img, name }: Props) => {
+
+export const CardInfo = (props: Props) => {
+  const { img = DEFAULT_LONGFUNG, name, path } = props;
+  const { push } = useRouter();
+
   return (
     <VStack
       sx={{
@@ -16,6 +25,9 @@ export const CardInfo = ({ img, name }: Props) => {
         cursor: "pointer",
         alignItems: "center",
       }}
+      onClick={() => {
+        push({ pathname: `/${path}-info`, query: { [path]: name } });
+      }}
     >
       <Box
         sx={{
@@ -25,7 +37,7 @@ export const CardInfo = ({ img, name }: Props) => {
         }}
       >
         <Image
-          src="/images/event-info.png"
+          src={img}
           sx={{
             w: "inherit",
             borderTopRadius: "10px",
@@ -41,6 +53,7 @@ export const CardInfo = ({ img, name }: Props) => {
       >
         <Text
           sx={{
+            textAlign: "center",
             fontSize: { base: "16px", md: "20px" },
             fontWeight: "bold",
           }}
