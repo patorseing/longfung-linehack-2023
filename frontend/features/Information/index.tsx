@@ -74,9 +74,9 @@ const InformationPage = () => {
   ) => {
     return (
       <SimpleGrid
-        columns={{ base: 1, md: 3, xl: 5 }}
+        columns={{ base: 1, md: 3, xl: 4 }}
         row={{ base: 10, md: 4, xl: 2 }}
-        spacing={{ base: 5, md: 10 }}
+        spacing={{ base: 5, md: 6 }}
         sx={{ justifyItems: "center" }}
       >
         {data.map((item, index) => (
@@ -92,6 +92,7 @@ const InformationPage = () => {
         sx={{
           fontSize: { base: "24px", md: "40px" },
           fontWeight: "bold",
+          textAlign: "center",
           color: "white",
           mb: { base: 2, xl: 4 },
         }}
@@ -124,7 +125,7 @@ const InformationPage = () => {
         </TabList>
         <TabPanels
           sx={{
-            w: { base: "320px", md: "780px", xl: "1300px" },
+            w: { base: "full", sm: "300px", md: "740px", xl: "1100px" },
             minH: "580px",
             borderTop: "3px solid",
             borderColor: "primary.800",

@@ -11,7 +11,7 @@ export const useBands = () => {
       await _axios({
         method: "get",
         url: "/bands",
-        params: { userId: "Ly fdfdf" },
+        params: { userId: "Ly" },
         headers,
       });
     },

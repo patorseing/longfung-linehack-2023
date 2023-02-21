@@ -7,7 +7,7 @@ export const CardInfo = ({ img, name }: Props) => {
   return (
     <VStack
       sx={{
-        w: { base: "250px", md: "220px" },
+        w: { base: "full", sm: "250px", md: "220px" },
         h: "250px",
         bg: "white",
         borderRadius: "10px",
