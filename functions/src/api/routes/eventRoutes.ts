@@ -2,6 +2,7 @@ import * as express from "express";
 
 import {
   createEvent,
+  getAllEvents,
   getEvent,
   getEvents,
 } from "../controllers/events/eventController";
@@ -15,6 +16,7 @@ import {
 const router = express.Router();
 
 router.get("/info", getEvent);
+router.get("/all", getAllEvents);
 router.get("/", getEvents);
 
 router.post(
