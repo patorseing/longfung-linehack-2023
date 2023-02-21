@@ -118,3 +118,15 @@ export const transformEventPayload = (payload: EventPayload) => {
     lineUp: transformArrayOfObjects(payload.lineUp),
   };
 };
+
+export const getCurrentDateTime = (): string => {
+  const currentdate = new Date();
+  const datetime = currentdate.getDate() + "/" +
+                (currentdate.getMonth()+1) + "/" +
+                currentdate.getFullYear() + "T" +
+                currentdate.getHours() + ":" +
+                currentdate.getMinutes() + ":" +
+                currentdate.getSeconds();
+
+  return datetime;
+};
