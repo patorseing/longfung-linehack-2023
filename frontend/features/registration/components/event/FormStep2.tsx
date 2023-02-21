@@ -14,7 +14,7 @@ export const FormStep2 = () => {
     getValues,
     formState: { errors },
   } = useFormContext<EventFormValue>();
-  const watchTicket = watch(["isTicket", "ticketPrice"]);
+  const watchTicket = watch(["isFree", "ticketPrice"]);
   const ticketOptions = [
     {
       label: "Free",
@@ -34,14 +34,16 @@ export const FormStep2 = () => {
     <Stack spacing={6}>
       <Grid layerStyle="formTwoCol">
         <FormInput
+          type="number"
           label="Available Seat"
           placeholder="Avaliable seat(person)"
           register={register("availableSeat")}
         />
         <FormInput
+          type="number"
           label="Age Limit"
           placeholder="Age limit"
-          register={register("ageLimit")}
+          register={register("ageLimitation")}
         />
       </Grid>
       <Grid layerStyle="formTwoCol">
@@ -55,20 +57,18 @@ export const FormStep2 = () => {
           <GroupRadio
             label="Ticket Price"
             options={ticketOptions}
-            defaultValue={
-              getValues("isTicket") === true ? "ticket_fee" : "free"
-            }
+            defaultValue={getValues("isFree") === false ? "ticket_fee" : "free"}
             onChange={(value) => {
-              const isTicker = value === "free" ? false : true;
-              setValue("isTicket", isTicker);
-              if (!isTicker) setValue("ticketPrice", undefined);
+              const isTicker = value === "free" ? true : false;
+              setValue("isFree", isTicker);
+              if (isTicker) setValue("ticketPrice", undefined);
             }}
           />
           <FormInput
             type="number"
             placeholder="Price (THB)"
             register={register("ticketPrice")}
-            disable={!getValues("isTicket")}
+            disable={getValues("isFree")}
             errorMessage={errors.ticketPrice?.message}
           />
         </Grid>
@@ -95,12 +95,12 @@ export const FormStep2 = () => {
           </Text>
         </VStack>
 
-        <Switch size="lg" {...register("songRequest", { value: false })} />
+        <Switch size="lg" {...register("songRequested", { value: false })} />
       </HStack>
       <FormTextarea
         label="Description"
         placeholder="Enter your description"
-        register={register("description")}
+        register={register("eventDescription")}
       />
     </Stack>
   );
