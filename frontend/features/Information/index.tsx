@@ -11,8 +11,12 @@ import {
 import { AddCard } from "./components/AddCard";
 import { CardInfo } from "./components/CardInfo";
 
+import { useBands } from "./services";
+
 const InformationPage = () => {
   const TAB = ["Band", "Event"];
+
+  const { data } = useBands();
 
   const MOCK_BAND = [
     {
