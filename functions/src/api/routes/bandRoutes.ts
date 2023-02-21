@@ -6,6 +6,7 @@ import {
   getBands,
   updateBand,
 } from "../controllers/bands/bandController";
+import {submitDonation} from "../controllers/bands/donationController";
 import {
   checkBandExisting,
   checkDuplicatedBandName,
@@ -36,5 +37,7 @@ router.put(
     checkUpdatedHardwareId,
     updateBand
 );
+
+router.post("/submit-donation", submitDonation);
 
 export default router;
