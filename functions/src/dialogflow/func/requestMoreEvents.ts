@@ -21,7 +21,7 @@ export const requestMoreEvents = async (agent: WebhookClient) => {
             action: {
               type: "message",
               label: "ดูงานดนตรีเพิ่มเติม",
-              text: "hello",
+              text: "มีงานดนตรีมากกว่านี้อีกไหม",
             },
           },
         ],
@@ -51,24 +51,7 @@ export const requestMoreEvents = async (agent: WebhookClient) => {
       payloadJson.contents.contents.push(eventFlex.contents as EventTemp);
     }
 
-    payloadJson.contents.contents.push({
-      type: "bubble",
-      footer: {
-        type: "box",
-        layout: "vertical",
-        contents: [
-          {
-            type: "button",
-            action: {
-              type: "message",
-              label: "ดูงานดนตรีเพิ่มเติม",
-              text: "มีงานดนตรีมากกว่านี้อีกไหม",
-            },
-          },
-        ],
-        paddingAll: "none",
-      },
-    });
+    payloadJson.contents.contents.push(moreEvents);
 
     const isValidMsg = await validateLineMsg("push", [payloadJson]);
     functions.logger.debug(isValidMsg);

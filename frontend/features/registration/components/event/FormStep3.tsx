@@ -40,7 +40,7 @@ export const FormStep3 = () => {
           {!fields.length && (
             <Button
               onClick={() => {
-                append({ hardware_id: "", passcode: "" });
+                append({ hardwareId: "", passcode: "" });
               }}
             >
               Add new device
@@ -51,14 +51,14 @@ export const FormStep3 = () => {
               key={beacon.id}
               name={`Device ${idx + 1}`}
               onAdd={() => {
-                append({ hardware_id: "", passcode: "" });
+                append({ hardwareId: "", passcode: "" });
               }}
               onDelete={() => {
                 remove(idx);
               }}
-              hardwareRegister={register(`beacons.${idx}.hardware_id`)}
+              hardwareRegister={register(`beacons.${idx}.hardwareId`)}
               passcodeRegister={register(`beacons.${idx}.passcode`)}
-              hardwareError={errors.beacons?.[idx]?.hardware_id?.message}
+              hardwareError={errors.beacons?.[idx]?.hardwareId?.message}
               passcodeError={errors.beacons?.[idx]?.passcode?.message}
             />
           ))}
