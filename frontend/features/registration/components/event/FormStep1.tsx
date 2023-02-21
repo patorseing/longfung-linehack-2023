@@ -36,19 +36,18 @@ export const FormStep1 = () => {
         <HStack sx={{ alignItems: "end" }}>
           <TimePicker
             label="Event Time"
-            time={getValues("startTime")}
+            time={getValues("eventStartTime")}
             onChange={(value) => {
-              setValue("startTime", value as string);
+              setValue("eventStartTime", value as string);
             }}
-            errorMessage={errors.startTime?.message}
+            errorMessage={errors.eventStartTime?.message}
           />
           <TimePicker
-            label="Event Time"
-            time={getValues("endTime")}
+            time={getValues("eventEndTime")}
             onChange={(value) => {
-              setValue("endTime", value as string);
+              setValue("eventEndTime", value as string);
             }}
-            errorMessage={errors.endTime?.message}
+            errorMessage={errors.eventEndTime?.message}
           />
         </HStack>
       </Grid>
@@ -58,12 +57,12 @@ export const FormStep1 = () => {
           label="Social Media"
           filedLogo="/images/social/facebook.svg"
           placeholder="Facebook url (optional)"
-          register={register("socialMedia.facebookURL")}
+          register={register("socialMedia.facebook")}
         />
         <FormInput
           filedLogo="/images/social/instagram.svg"
           placeholder="Instagram account (optional)"
-          register={register("socialMedia.instagramURL")}
+          register={register("socialMedia.instagram")}
         />
 
         <FormInput
@@ -76,12 +75,13 @@ export const FormStep1 = () => {
         <FormInput
           label="Location"
           placeholder="Location"
-          errorMessage={errors.location?.message}
-          register={register("location")}
+          errorMessage={errors.eventLocation?.address?.message}
+          register={register("eventLocation.address")}
         />
         <FormInput
           label="Google Map URL"
           placeholder="Google Map URL (optional)"
+          register={register("eventLocation.googleMapLink")}
         />
       </Grid>
     </Stack>

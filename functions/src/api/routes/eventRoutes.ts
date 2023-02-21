@@ -2,6 +2,7 @@ import * as express from "express";
 
 import {
   createEvent,
+  getAllEvents,
   getEvent,
   getEvents,
 } from "../controllers/events/eventController";
@@ -14,7 +15,8 @@ import {
 /* eslint new-cap: "warn"*/
 const router = express.Router();
 
-router.get("/", getEvent);
+router.get("/info", getEvent);
+router.get("/all", getAllEvents);
 router.get("/", getEvents);
 
 router.post(

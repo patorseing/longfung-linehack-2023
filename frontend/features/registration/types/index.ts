@@ -33,23 +33,25 @@ export type LineUpType = {
 export type EventFormValue = {
   eventName: string;
   eventDate: string;
-  startTime: string;
-  endTime: string;
-  socialMedia: {
-    facebookURL: string;
-    instagramURL: string;
-    website: string;
+  eventStartTime: string;
+  eventEndTime: string;
+  socialMedia?: {
+    facebook?: string;
+    instagram?: string;
+    website?: string;
   };
-  location: string;
-  googleMapURL: string;
-  availableSeat: string;
-  ageLimit: string;
-  isTicket: boolean;
+  eventLocation: {
+    address: string;
+    googleMapLink?: string;
+  };
+  availableSeat?: number;
+  ageLimitation?: number;
+  isFree: boolean;
   ticketPrice?: number;
-  alcoholPermission: boolean;
-  songRequest: boolean;
-  description: string;
+  alcoholFree: boolean;
+  songRequested: boolean;
+  eventDescription: string;
   eventImage?: FileWithPath;
-  beacons: Beacon[];
-  lineup: LineUpType[];
+  lineBeacon: Beacon[];
+  lineUp: LineUpType[];
 };
