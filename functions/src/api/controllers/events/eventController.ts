@@ -13,12 +13,35 @@ import {
   defaultTicketType,
 } from "../../constants";
 import {FormErrors, FormFields, FormFiles} from "../../types";
+import {isEventActive} from "../../utils/event";
 
 type LineUp = {
   bandName: string;
   startTime: string;
   endTime: string;
   bandImage: string | undefined;
+};
+
+export const getAllEvents = async (_req: Request, res: Response) => {
+  const event: FirebaseFirestore.DocumentData[] = [];
+
+  await firestore
+      .collection("Event")
+      .get()
+      .then((QuerySnapshot) => {
+        QuerySnapshot.forEach((doc) => {
+          if (
+            isEventActive({
+              eventDate: doc.data().eventDate,
+              eventEndTime: doc.data().eventEndTime,
+            })
+          ) {
+            event.push(doc.data());
+          }
+        });
+      });
+
+  return res.status(200).json({data: event});
 };
 
 export const getEvent = async (req: Request, res: Response) => {
