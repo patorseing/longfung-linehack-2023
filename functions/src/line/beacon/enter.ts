@@ -2,10 +2,11 @@ import * as functions from "firebase-functions";
 import {Profile} from "@line/bot-sdk";
 
 import {reply, validateLineMsg} from "../util";
-import {eventTemplate} from "../templete";
+import {eventTemplate, bandTemplete} from "../templete";
 import {Event} from "../../api/dto/event";
 
 import {firestore} from "../../firebase";
+import {createBandDTO} from "../../api/dto/band";
 
 export const enterEvent = async (
     hardwareId: string,
@@ -15,6 +16,7 @@ export const enterEvent = async (
   const lineBeaconRef = firestore.collection("LineBeacon").doc(hardwareId);
   const uniqueLineBeacon = await lineBeaconRef.get();
   const eventName = uniqueLineBeacon.data()?.eventName;
+  const bandName = uniqueLineBeacon.data()?.bandName;
 
   let eventMessage: Array<any> = [];
 
@@ -43,10 +45,30 @@ export const enterEvent = async (
     functions.logger.debug("FLEX", enterEventTemp);
   }
 
-  const isValidMsg = await validateLineMsg("reply", eventMessage);
+  const isValiEventdMsg = await validateLineMsg("reply", eventMessage);
 
-  if (isValidMsg) {
+  if (isValiEventdMsg) {
     functions.logger.debug("MESSAGE", eventMessage);
     await reply(replyToken, eventMessage);
+  }
+
+  let bandMessage: Array<any> = [];
+
+  if (bandName) {
+    const bandRef = firestore.collection("Band").doc(bandName);
+    const band = await bandRef.get();
+    const bandData = band.data();
+
+    if (bandData) {
+      const enterBandTemp = bandTemplete(bandData as createBandDTO);
+      bandMessage = [enterBandTemp];
+    }
+  }
+
+  const isValiBandMsg = await validateLineMsg("reply", bandMessage);
+
+  if (isValiBandMsg) {
+    functions.logger.debug("MESSAGE", bandMessage);
+    await reply(replyToken, bandMessage);
   }
 };
