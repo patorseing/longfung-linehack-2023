@@ -15,7 +15,7 @@ const EventsPage = () => {
     },
     {
       eventName: "เทศกาลดนตรีในบ้าน",
-      eventDate: "02/01/2023",
+      eventDate: "02/10/2023",
       ticketType: { free: false, price: 100 },
       location: "สวนจัตุจักร",
       follows: 0,
@@ -24,7 +24,7 @@ const EventsPage = () => {
     },
     {
       eventName: "เทศกาลดนตรีในโรงเรียน",
-      eventDate: "02/01/2023",
+      eventDate: "10/03/2023",
       ticketType: { free: false, price: 100 },
       location: "สวนจัตุจักร",
       follows: 30,
@@ -33,7 +33,7 @@ const EventsPage = () => {
     },
     {
       eventName: "เทศกาลดนตรีในวัด",
-      eventDate: "02/01/2023",
+      eventDate: "30/07/2023",
       ticketType: { free: true },
       location: "สวนจัตุจักร",
       follows: 13,
@@ -51,7 +51,7 @@ const EventsPage = () => {
     },
     {
       eventName: "เทศกาลดนตรีในป่า",
-      eventDate: "02/01/2023",
+      eventDate: "02/12/2023",
       ticketType: { free: true },
       location: "สวนจัตุจักร",
       follows: 13,
@@ -77,7 +77,6 @@ const EventsPage = () => {
         spacing={{ base: 5, md: 8 }}
         sx={{
           justifyItems: "center",
-          //   bg: "rgba(253, 252, 251, 0.2)",
           borderRadius: "8px",
           p: "16px",
         }}
