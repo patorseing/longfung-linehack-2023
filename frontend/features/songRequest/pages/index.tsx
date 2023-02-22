@@ -1,8 +1,9 @@
-import { useState } from "react"
-import { useRouter } from "next/router"
-import { Flex, Stack, Text } from "@chakra-ui/react"
+import { useRouter } from "next/router";
+import { Flex, Stack, Text } from "@chakra-ui/react";
 
-import { BandCard, NotificationCard, SongRequestForm } from "../components"
+import { useCreateSongRequest } from "../services";
+
+import { BandCard, NotificationCard, SongRequestForm } from "../components";
 
 const Container = (props: React.PropsWithChildren) => {
   return (
@@ -17,27 +18,27 @@ const Container = (props: React.PropsWithChildren) => {
     >
       {props.children}
     </Flex>
-  )
-}
+  );
+};
 
 const SongRequest = () => {
-  const { query } = useRouter()
-  const [mockSuccess, setMockSuccess] = useState(false)
+  const { query } = useRouter();
+  const { mutate, isLoading, isSuccess } = useCreateSongRequest();
 
   if (query.mockTimeOut) {
     return (
       <Container>
         <NotificationCard type="timeout" />
       </Container>
-    )
+    );
   }
 
-  if (mockSuccess) {
+  if (isSuccess) {
     return (
       <Container>
         <NotificationCard type="thanks" />
       </Container>
-    )
+    );
   }
 
   return (
@@ -60,13 +61,14 @@ const SongRequest = () => {
       >
         <BandCard name="Paper planes" />
         <SongRequestForm
+          isLoading={isLoading}
           onSubmit={(data) => {
-            setMockSuccess(true)
+            mutate({ data });
           }}
         />
       </Stack>
     </Container>
-  )
-}
+  );
+};
 
-export default SongRequest
+export default SongRequest;
