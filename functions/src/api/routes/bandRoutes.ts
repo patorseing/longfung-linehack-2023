@@ -6,6 +6,13 @@ import {
   getBands,
   updateBand,
 } from "../controllers/bands/bandController";
+import {submitDonation} from "../controllers/bands/donationController";
+import {
+  clearAllSongRequest,
+  createSongRequest,
+  getSongRequests,
+  updateSongRequest,
+} from "../controllers/bands/songRequestController";
 import {
   checkBandExisting,
   checkDuplicatedBandName,
@@ -36,5 +43,12 @@ router.put(
     checkUpdatedHardwareId,
     updateBand
 );
+
+router.post("/submit-donation", submitDonation);
+
+router.post("/song-request", createSongRequest);
+router.get("/song-request", getSongRequests);
+router.put("/song-request", updateSongRequest);
+router.put("/song-request/clear", clearAllSongRequest);
 
 export default router;
