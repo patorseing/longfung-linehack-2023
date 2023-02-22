@@ -10,16 +10,17 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { BandInformationType } from "..";
+import { BandResponse } from "@/features/Information/types";
 
 import { DEFAULT_LONGFUNG } from "@/constants";
 import { Information } from "./Information";
 
 type Props = {
-  bandInfo: BandInformationType;
+  bandInfo: BandResponse;
 };
 export const BandInformation = ({ bandInfo }: Props) => {
   const TAB = ["รายละเอียด", "ช่องทางการสนับสนุน"];
+
   return (
     <Tabs size="md" variant="enclosed" w="full">
       <TabList>
@@ -66,7 +67,9 @@ export const BandInformation = ({ bandInfo }: Props) => {
               borderRadius: "16px",
             }}
           >
-            <Text sx={{ fontSize: "20px", fontWeight: 600 }}>Paper Planes</Text>
+            <Text sx={{ fontSize: "20px", fontWeight: 600 }}>
+              {bandInfo.bandName}
+            </Text>
             <Text
               sx={{ textAlign: "center", fontSize: "14px", fontWeight: 400 }}
             >
@@ -89,7 +92,11 @@ export const BandInformation = ({ bandInfo }: Props) => {
               </Text>
             </HStack>
 
-            <Image src={DEFAULT_LONGFUNG} w="full" maxW="370px" />
+            <Image
+              src={bandInfo.qrImage || DEFAULT_LONGFUNG}
+              w="full"
+              maxW="370px"
+            />
           </VStack>
         </TabPanel>
       </TabPanels>
