@@ -67,6 +67,7 @@ export const Information = ({ data }: Props) => {
             textDecoration: "underline",
             cursor: "pointer",
             fontSize: "inherit",
+            overflowWrap: "anywhere",
           }}
           rel="noreferrer"
         >

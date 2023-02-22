@@ -41,7 +41,9 @@ const BandInfoPage = () => {
       </Text>
       <Grid
         sx={{
-          gridTemplateColumns: { base: "1fr ", md: "1fr 2fr" },
+          justifyItems: "center",
+          w: { base: "full", md: "732px", xl: "1114px" },
+          gridTemplateColumns: { base: "1fr ", xl: "1fr 2fr" },
           gap: "16px",
         }}
       >
