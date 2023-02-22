@@ -15,12 +15,15 @@ export const enterEvent = async (
 ) => {
   const lineBeaconRef = firestore.collection("LineBeacon").doc(hardwareId);
   const uniqueLineBeacon = await lineBeaconRef.get();
-  const eventName = uniqueLineBeacon.data()?.eventName;
-  const bandName = uniqueLineBeacon.data()?.bandName;
+  const lineBeaconData = uniqueLineBeacon.data();
 
-  let eventMessage: Array<any> = [];
+  functions.logger.debug("LINE BEACON DATA", lineBeaconData);
+
+  const eventName = lineBeaconData?.eventName;
+  const bandName = lineBeaconData?.bandName;
 
   if (eventName) {
+    let eventMessage: Array<any> = [];
     const eventRef = firestore.collection("Event").doc(eventName);
     const event = await eventRef.get();
     const eventData = event.data();
@@ -42,33 +45,33 @@ export const enterEvent = async (
       ...(enterEventTemp ? [enterEventTemp] : []),
     ];
 
-    functions.logger.debug("FLEX", enterEventTemp);
+    functions.logger.debug("FLEX EVENT", enterEventTemp);
+
+    const isValiEventdMsg = await validateLineMsg("reply", eventMessage);
+
+    if (isValiEventdMsg) {
+      functions.logger.debug("MESSAGE EVENT", eventMessage);
+      await reply(replyToken, eventMessage);
+    }
   }
-
-  const isValiEventdMsg = await validateLineMsg("reply", eventMessage);
-
-  if (isValiEventdMsg) {
-    functions.logger.debug("MESSAGE", eventMessage);
-    await reply(replyToken, eventMessage);
-  }
-
-  let bandMessage: Array<any> = [];
-
+  functions.logger.debug("BAND NAME", bandName);
   if (bandName) {
     const bandRef = firestore.collection("Band").doc(bandName);
     const band = await bandRef.get();
     const bandData = band.data();
-
+    functions.logger.debug("BAND DATA", bandData);
+    let bandMessage: Array<any> = [];
     if (bandData) {
       const enterBandTemp = bandTemplete(bandData as createBandDTO);
+      functions.logger.debug("FLEX BAND", enterBandTemp);
       bandMessage = [enterBandTemp];
     }
-  }
 
-  const isValiBandMsg = await validateLineMsg("reply", bandMessage);
+    const isValiBandMsg = await validateLineMsg("reply", bandMessage);
 
-  if (isValiBandMsg) {
-    functions.logger.debug("MESSAGE", bandMessage);
-    await reply(replyToken, bandMessage);
+    if (isValiBandMsg) {
+      functions.logger.debug("MESSAGE BAND", bandMessage);
+      await reply(replyToken, bandMessage);
+    }
   }
 };
