@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { _axios, useDefaultAxiosHeader } from "@/lib/hooks/axios";
-import { EVENTS } from "@/features/Information/constants/queryKey";
 import { EventResponse, RawEventResponse } from "../types";
+import { EVENT } from "../constants";
 
 export const useGetEventInfo = (event: string) => {
   const headers = useDefaultAxiosHeader();
   return useQuery<EventResponse>({
-    queryKey: [EVENTS],
+    queryKey: [EVENT],
     queryFn: async function () {
       const { data } = await _axios<RawEventResponse>({
         method: "get",

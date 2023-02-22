@@ -30,7 +30,6 @@ export const FormStep1 = () => {
           register={register("eventDate")}
           onChange={(value) => {
             setValue("eventDate", value as string);
-            console.log("form->", getValues("eventDate"));
           }}
         />
         <HStack sx={{ alignItems: "end" }}>

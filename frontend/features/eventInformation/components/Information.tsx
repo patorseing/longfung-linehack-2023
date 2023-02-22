@@ -131,15 +131,15 @@ export const Information = ({ data }: Props) => {
   const socilaSection = [
     {
       img: "social/website",
-      link: data?.socialMedia.website,
+      link: data?.socialMedia?.website,
     },
     {
       img: "social/instagram",
-      link: data?.socialMedia.instagram,
+      link: data?.socialMedia?.instagram,
     },
     {
       img: "social/facebook",
-      link: data?.socialMedia.facebook,
+      link: data?.socialMedia?.facebook,
     },
   ];
 

@@ -22,11 +22,10 @@ const InformationPage = () => {
   const { data: bands, isLoading: bandsLoading } = useBands();
   const { data: events, isLoading: eventsLoading } = useEvents();
 
-  console.log("events", events);
   const BandsData = useMemo(() => {
     if (!bands) return [];
 
-    return bands.map((band) => ({
+    return bands?.map((band) => ({
       img: band.bandImage,
       name: band.bandName,
     }));
@@ -35,7 +34,7 @@ const InformationPage = () => {
   const EventsData = useMemo(() => {
     if (!events) return [];
 
-    return events.map((event) => ({
+    return events?.map((event) => ({
       img: event.eventImage,
       name: event.eventName,
     }));

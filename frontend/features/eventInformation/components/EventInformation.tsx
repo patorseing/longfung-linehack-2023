@@ -10,14 +10,14 @@ export const EventInformation = ({ eventInfo }: Props) => {
   const TAB = ["รายละเอียด", "ตารางเวลา"];
   return (
     <Box>
-      <Tabs size="md" variant="enclosed">
+      <Tabs size="lg" variant="enclosed">
         <TabList sx={{}}>
           {TAB.map((item) => {
             return (
               <Tab
                 key={item}
                 sx={{
-                  w: { base: "", md: "250px" },
+                  w: "full",
                   textTransform: "capitalize",
                   color: "textDescription",
                   bg: "white",

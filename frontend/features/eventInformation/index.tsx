@@ -13,7 +13,7 @@ import { useGetEventInfo } from "./services";
 const EventInfoPage = () => {
   const router = useRouter();
   const { data: event, isLoading } = useGetEventInfo(
-    JSON.stringify(router.query?.event)
+    router.query?.event as string
   );
 
   if (isLoading) {
@@ -31,6 +31,7 @@ const EventInfoPage = () => {
       </Flex>
     );
   }
+
   return (
     <VStack sx={{ w: "100%", alignItems: "center", pt: 9, px: { base: 6 } }}>
       <Text
