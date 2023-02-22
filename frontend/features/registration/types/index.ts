@@ -1,6 +1,6 @@
 import { FileWithPath } from "react-dropzone";
 
-type Beacon = {
+export type Beacon = {
   hardwareId: string;
   passcode: string;
 };

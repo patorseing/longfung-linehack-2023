@@ -1,4 +1,5 @@
 import {Event} from "../api/dto/event";
+import {createBandDTO} from "../api/dto/band";
 
 export const eventTemplate = ({
   event,
@@ -327,5 +328,129 @@ export type EventTemp = {
       height?: "sm";
     }>;
     paddingAll: "none";
+  };
+};
+
+export const bandTemplete = (band: createBandDTO) => {
+  return {
+    type: "flex",
+    altText: band.bandName,
+    contents: {
+      type: "bubble",
+      hero: {
+        type: "image",
+        url:
+          band?.bandImage ??
+          "https://firebasestorage.googleapis.com/v0/b/loma-nkaf.appspot.com/o/undefine.png?alt=media&token=c37fea4d-c6a9-4344-991d-d8a01fef142d",
+        size: "full",
+        aspectRatio: "20:13",
+        aspectMode: "cover",
+      },
+      body: {
+        type: "box",
+        layout: "vertical",
+        contents: [
+          {
+            type: "text",
+            text: band.bandName,
+            weight: "bold",
+            size: "xl",
+          },
+          ...(band?.firstPromotedSong || band?.secondPromotedSong ?
+            [
+              {
+                type: "text",
+                text: [band?.firstPromotedSong, band?.secondPromotedSong]
+                    .filter((song) => song)
+                    .join(", "),
+                color: "#929292",
+              },
+            ] :
+            []),
+          {
+            type: "box",
+            layout: "horizontal",
+            contents: [
+              ...(band?.streamingPlatform?.spotify ?
+                [
+                  {
+                    type: "image",
+                    url: "https://firebasestorage.googleapis.com/v0/b/loma-nkaf.appspot.com/o/social%2Fspotify.svg?alt=media&token=81115900-a641-450c-9ae3-b37abbdd4168",
+                    size: "40px",
+                    align: "end",
+                    offsetTop: "xs",
+                    action: {
+                      type: "uri",
+                      label: "action",
+                      uri: band?.streamingPlatform?.spotify,
+                    },
+                  },
+                ] :
+                []),
+              ...(band?.streamingPlatform?.appleMusic ?
+                [
+                  {
+                    type: "image",
+                    url: "https://firebasestorage.googleapis.com/v0/b/loma-nkaf.appspot.com/o/social%2Fapple-music.svg?alt=media&token=3072d292-c7c3-4d8c-ad65-4dccdc037778",
+                    size: "45px",
+                    align: "end",
+                    action: {
+                      type: "uri",
+                      label: "action",
+                      uri: band?.streamingPlatform?.appleMusic,
+                    },
+                  },
+                ] :
+                []),
+              ...(band?.streamingPlatform?.youtube ?
+                [
+                  {
+                    type: "image",
+                    url: "https://firebasestorage.googleapis.com/v0/b/loma-nkaf.appspot.com/o/social%2Fyoutube.svg?alt=media&token=c8fc7182-a955-4954-9b91-815a4e0480e6",
+                    size: "47px",
+                    action: {
+                      type: "uri",
+                      label: "action",
+                      uri: band?.streamingPlatform?.youtube,
+                    },
+                  },
+                ] :
+                []),
+            ],
+            spacing: "md",
+            width: "150px",
+          },
+        ],
+      },
+      footer: {
+        type: "box",
+        layout: "vertical",
+        spacing: "sm",
+        contents: [
+          {
+            type: "button",
+            style: "link",
+            height: "sm",
+            action: {
+              type: "message",
+              label: "ขอเพลง",
+              text: `ขอเพลงจากวง ${band.bandName} นี้ได้ไหม`,
+            },
+          },
+          {
+            type: "button",
+            style: "link",
+            height: "sm",
+            action: {
+              type: "message",
+              label: "ดูรายละเอียดเพิ่มเติม",
+              text: `ขอรายละเอียดของวง ${band.bandName} นี้เพิ่มเติม`,
+            },
+          },
+        ],
+        flex: 0,
+        paddingAll: "none",
+      },
+    },
   };
 };
