@@ -360,11 +360,9 @@ export const bandTemplete = (band: createBandDTO) => {
             [
               {
                 type: "text",
-                text: `${
-                    band?.firstPromotedSong ?
-                      band?.firstPromotedSong + ", " :
-                      ""
-                }${band?.secondPromotedSong ?? ""}`,
+                text: [band?.firstPromotedSong, band?.secondPromotedSong]
+                    .filter((song) => song)
+                    .join(", "),
                 color: "#929292",
               },
             ] :
