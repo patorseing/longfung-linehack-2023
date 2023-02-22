@@ -1,7 +1,7 @@
 import { Beacon, LineUpType } from "@/features/registration/types";
 
 export type LineUp = LineUpType & { bandImage: string };
-export type EventInfoResponse = {
+export type EventResponse = {
   ageLimitation: string;
   alcoholFree: false;
   availableSeat: string;
@@ -26,6 +26,6 @@ export type EventInfoResponse = {
   userId: string;
 };
 
-export type RawEventInfoResponse = {
-  data: EventInfoResponse;
+export type RawEventResponse = {
+  data: EventResponse;
 };

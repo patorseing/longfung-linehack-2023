@@ -13,14 +13,16 @@ import {
 import { useMemo } from "react";
 
 import { TABS } from "./constants";
-import { useBands } from "./services";
+import { useBands, useEvents } from "./services";
 
 import { AddCard } from "./components/AddCard";
 import { CardInfo } from "./components/CardInfo";
 
 const InformationPage = () => {
   const { data: bands, isLoading: bandsLoading } = useBands();
+  const { data: events, isLoading: eventsLoading } = useEvents();
 
+  console.log("events", events);
   const BandsData = useMemo(() => {
     if (!bands) return [];
 
@@ -30,30 +32,23 @@ const InformationPage = () => {
     }));
   }, [JSON.stringify(bands)]);
 
-  const MOCK_EVENT = [
-    {
-      img: "",
-      name: "ดนตรีเพื่อน้องหมาแมว",
-    },
-    {
-      img: "",
-      name: "งานดนตรีในสวน",
-    },
-    {
-      img: "",
-      name: "งานดนตรีชาวร็อค",
-    },
-    {
-      img: "",
-      name: "T-Pop Stage",
-    },
-  ];
+  const EventsData = useMemo(() => {
+    if (!events) return [];
+
+    return events.map((event) => ({
+      img: event.eventImage,
+      name: event.eventName,
+    }));
+  }, [JSON.stringify(events)]);
 
   const RenderContainer = (
     data: { img: string; name: string }[],
     type: "band" | "event"
   ) => {
-    if (bandsLoading && type === "band") {
+    if (
+      (bandsLoading && type === "band") ||
+      (eventsLoading && type === "event")
+    ) {
       return (
         <Flex justifyContent="center" mt="6">
           <CircularProgress isIndeterminate color="primary.500" />
@@ -129,7 +124,7 @@ const InformationPage = () => {
             {RenderContainer(BandsData, "band")}
           </TabPanel>
           <TabPanel sx={{ p: "0" }}>
-            {RenderContainer(MOCK_EVENT, "event")}
+            {RenderContainer(EventsData, "event")}
           </TabPanel>
         </TabPanels>
       </Tabs>
