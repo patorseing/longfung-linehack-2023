@@ -10,10 +10,12 @@ export const FormStep4 = () => {
     control,
     formState: { errors },
   } = useFormContext<EventFormValue>();
+
   const { fields, append, remove } = useFieldArray({
-    name: "lineup",
+    name: "lineUp",
     control,
   });
+
   return (
     <Stack spacing={6}>
       <VStack sx={{ alignItems: "baseline" }}>
@@ -51,10 +53,10 @@ export const FormStep4 = () => {
                   remove(idx);
                 }}
                 idx={idx}
-                bandRegister={register(`lineup.${idx}.bandName`)}
-                startTimeError={errors.lineup?.[idx]?.startTime?.message}
-                endTimeError={errors.lineup?.[idx]?.endTime?.message}
-                bandNameError={errors.lineup?.[idx]?.bandName?.message}
+                bandRegister={register(`lineUp.${idx}.bandName`)}
+                startTimeError={errors.lineUp?.[idx]?.startTime?.message}
+                endTimeError={errors.lineUp?.[idx]?.endTime?.message}
+                bandNameError={errors.lineUp?.[idx]?.bandName?.message}
               />
             ))}
           </Stack>
