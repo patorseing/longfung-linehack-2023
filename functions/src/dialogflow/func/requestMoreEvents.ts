@@ -58,11 +58,6 @@ export const requestMoreEvents = async (agent: WebhookClient) => {
     functions.logger.debug(payloadJson);
     if (isValidMsg) {
       pushMessage(lineUid, payloadJson);
-      const payload = new Payload(agent.LINE, payloadJson, {
-        sendAsMessage: true,
-      });
-
-      agent.add(payload);
     }
     agent.add("แล้วมาเจอน้องโลมาตามงานดนตรีได้แล้วนะครับ");
   } else {
