@@ -3,7 +3,9 @@ import {firestore} from "../../../firebase";
 import {getCurrentDateTime} from "../../utils/payload";
 
 export const getSongRequests = async (req: Request, res: Response) => {
-  const {bandName, userId} = req.query;
+  const {bandName, userId, active} = req.query;
+
+  const activeParams = active === undefined ? true : JSON.parse(active as string)
 
   if (bandName === undefined) {
     return res.status(400).json({error: "bandName cannot be blank"});
@@ -25,6 +27,7 @@ export const getSongRequests = async (req: Request, res: Response) => {
   await firestore
       .collection("SongRequest")
       .where("bandName", "==", bandName)
+      .where("active", "==", activeParams)
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
