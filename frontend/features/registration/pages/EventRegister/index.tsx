@@ -1,9 +1,10 @@
-import { Step } from "@/components";
+import { useState } from "react";
 import { Flex, VStack, Text, Box, Button, Icon } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
+
+import { Step } from "@/components";
 import {
   FormStep1,
   FormStep2,
@@ -12,41 +13,43 @@ import {
 } from "../../components/event";
 import { PictureContextProvider } from "../../context/previewImage";
 import { eventSchema } from "../../schema";
+import { useCreatEvent } from "../../services";
 import { EventFormValue } from "../../types";
 
 const EventRegisterPage = () => {
   const [step, setStep] = useState<number>(1);
+  const { mutate, isLoading } = useCreatEvent();
   const methods = useForm<EventFormValue>({
     resolver: yupResolver(eventSchema),
     defaultValues: {
-      isTicket: false,
-      alcoholPermission: false,
-      songRequest: false,
+      isFree: true,
+      alcoholFree: false,
+      songRequested: false,
     },
   });
+
   const onNextStep = async () => {
     switch (step) {
       case 1:
         let result1 = await methods.trigger([
           "eventDate",
-          "location",
+          "eventLocation.address",
           "eventName",
-          "startTime",
-          "endTime",
+          "eventStartTime",
+          "eventEndTime",
         ]);
-        console.log("re", result1);
         if (!result1) return;
 
         setStep((prev) => prev + 1);
         break;
       case 2:
         const result2 = await methods.trigger("ticketPrice");
-        console.log("re", result2);
+
         if (!result2) return;
         setStep((prev) => prev + 1);
         break;
       case 3:
-        const result3 = await methods.trigger("beacons");
+        const result3 = await methods.trigger("lineBeacon");
         if (!result3) return;
         setStep((prev) => prev + 1);
         break;
@@ -54,8 +57,9 @@ const EventRegisterPage = () => {
         return;
     }
   };
+
   const onSubmit = methods.handleSubmit((data, e) => {
-    console.log(data);
+    mutate({ data });
   });
 
   const renderForm = () => {
@@ -72,6 +76,7 @@ const EventRegisterPage = () => {
         return;
     }
   };
+
   return (
     <PictureContextProvider>
       <FormProvider {...methods}>
@@ -124,6 +129,7 @@ const EventRegisterPage = () => {
               )}
               {step === 4 && (
                 <Button
+                  isLoading={isLoading}
                   type="submit"
                   sx={{
                     w: "155px",

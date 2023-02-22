@@ -7,12 +7,15 @@ type Props = {
 };
 export const AddCard = ({ path }: Props) => {
   return (
-    <Link href={`/registration/${path}`}>
+    <Link
+      href={`/registration/${path}`}
+      sx={{ w: { base: "full", sm: "250px", md: "220px" } }}
+    >
       <IconButton
         aria-label={"add card"}
         icon={<RiAddCircleFill size="80" color={colors.primary[800]} />}
         sx={{
-          w: { base: "250px", md: "220px" },
+          w: { base: "full", sm: "250px", md: "220px" },
           h: "250px",
           bg: "primary.100",
           boxShadow:

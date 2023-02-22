@@ -13,11 +13,13 @@ export const FormStep3 = () => {
     control,
     formState: { errors },
   } = useFormContext<EventFormValue>();
+
   const { eventPreview, setEventPreview } = usePictureContext();
   const { fields, append, remove } = useFieldArray({
-    name: "beacons",
+    name: "lineBeacon",
     control,
   });
+
   return (
     <Stack spacing={6}>
       <Stack spacing={2}>
@@ -56,10 +58,10 @@ export const FormStep3 = () => {
               onDelete={() => {
                 remove(idx);
               }}
-              hardwareRegister={register(`beacons.${idx}.hardwareId`)}
-              passcodeRegister={register(`beacons.${idx}.passcode`)}
-              hardwareError={errors.beacons?.[idx]?.hardwareId?.message}
-              passcodeError={errors.beacons?.[idx]?.passcode?.message}
+              hardwareRegister={register(`lineBeacon.${idx}.hardwareId`)}
+              passcodeRegister={register(`lineBeacon.${idx}.passcode`)}
+              hardwareError={errors.lineBeacon?.[idx]?.hardwareId?.message}
+              passcodeError={errors.lineBeacon?.[idx]?.passcode?.message}
             />
           ))}
         </Stack>

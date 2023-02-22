@@ -1,4 +1,6 @@
 import {
+  CircularProgress,
+  Flex,
   VStack,
   Text,
   Tabs,
@@ -8,42 +10,25 @@ import {
   TabPanel,
   SimpleGrid,
 } from "@chakra-ui/react";
+import { useMemo } from "react";
+
+import { TABS } from "./constants";
+import { useBands } from "./services";
+
 import { AddCard } from "./components/AddCard";
 import { CardInfo } from "./components/CardInfo";
 
 const InformationPage = () => {
-  const TAB = ["Band", "Event"];
+  const { data: bands, isLoading: bandsLoading } = useBands();
 
-  const MOCK_BAND = [
-    {
-      img: "",
-      name: "Paper Planes",
-    },
-    {
-      img: "",
-      name: "4EVE",
-    },
-    {
-      img: "",
-      name: "Three Man Down",
-    },
-    {
-      img: "",
-      name: "Lomosonic",
-    },
-    {
-      img: "",
-      name: "Potato",
-    },
-    {
-      img: "",
-      name: "Slot Machine",
-    },
-    {
-      img: "",
-      name: "Dept",
-    },
-  ];
+  const BandsData = useMemo(() => {
+    if (!bands) return [];
+
+    return bands.map((band) => ({
+      img: band.bandImage,
+      name: band.bandName,
+    }));
+  }, [JSON.stringify(bands)]);
 
   const MOCK_EVENT = [
     {
@@ -66,28 +51,38 @@ const InformationPage = () => {
 
   const RenderContainer = (
     data: { img: string; name: string }[],
-    path: string
+    type: "band" | "event"
   ) => {
+    if (bandsLoading && type === "band") {
+      return (
+        <Flex justifyContent="center" mt="6">
+          <CircularProgress isIndeterminate color="primary.500" />
+        </Flex>
+      );
+    }
+
     return (
       <SimpleGrid
-        columns={{ base: 1, md: 3, xl: 5 }}
+        columns={{ base: 1, md: 3, xl: 4 }}
         row={{ base: 10, md: 4, xl: 2 }}
-        spacing={{ base: 5, md: 10 }}
+        spacing={{ base: 5, md: 6 }}
         sx={{ justifyItems: "center" }}
       >
         {data.map((item, index) => (
-          <CardInfo key={index} {...item} />
+          <CardInfo key={index} {...item} path={type} />
         ))}
-        <AddCard path={path} />
+        <AddCard path={type} />
       </SimpleGrid>
     );
   };
+
   return (
     <VStack sx={{ w: "100%", alignItems: "center", pt: 9, px: { base: 6 } }}>
       <Text
         sx={{
           fontSize: { base: "24px", md: "40px" },
           fontWeight: "bold",
+          textAlign: "center",
           color: "white",
           mb: { base: 2, xl: 4 },
         }}
@@ -96,7 +91,7 @@ const InformationPage = () => {
       </Text>
       <Tabs size="lg" variant="enclosed">
         <TabList sx={{}}>
-          {TAB.map((item) => {
+          {TABS.map((item) => {
             return (
               <Tab
                 key={item}
@@ -120,7 +115,7 @@ const InformationPage = () => {
         </TabList>
         <TabPanels
           sx={{
-            w: { base: "320px", md: "780px", xl: "1300px" },
+            w: { base: "full", sm: "300px", md: "740px", xl: "1100px" },
             minH: "580px",
             borderTop: "3px solid",
             borderColor: "primary.800",
@@ -131,7 +126,7 @@ const InformationPage = () => {
           }}
         >
           <TabPanel sx={{ p: "0" }}>
-            {RenderContainer(MOCK_BAND, "band")}
+            {RenderContainer(BandsData, "band")}
           </TabPanel>
           <TabPanel sx={{ p: "0" }}>
             {RenderContainer(MOCK_EVENT, "event")}

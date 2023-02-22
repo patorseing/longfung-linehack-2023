@@ -1,12 +1,14 @@
-import { Box, HStack, Image, Text } from "@chakra-ui/react"
+import { Box, HStack, Image, Text } from "@chakra-ui/react";
+
+import { DEFAULT_LONGFUNG } from "@/constants";
 
 type BandCardProps = {
-  name: string
-  picture?: string
-}
+  name: string;
+  picture?: string;
+};
 
 export const BandCard = (props: BandCardProps) => {
-  const { name, picture = "/images/default-band.svg" } = props
+  const { name, picture = DEFAULT_LONGFUNG } = props;
 
   return (
     <HStack
@@ -46,5 +48,5 @@ export const BandCard = (props: BandCardProps) => {
         </Text>
       </Box>
     </HStack>
-  )
-}
+  );
+};

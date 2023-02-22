@@ -6,7 +6,6 @@ import {transformEventPayload} from "../../utils/payload";
 import {firestore} from "../../../firebase";
 import {Event} from "../../dto/event";
 import {fileUploader} from "../../utils/fileUploader";
-import {getEventSchema} from "../../validators/eventValidators";
 import {
   defaultEventLocation,
   defaultSocialMedia,
@@ -45,13 +44,16 @@ export const getAllEvents = async (_req: Request, res: Response) => {
 };
 
 export const getEvent = async (req: Request, res: Response) => {
-  const eventName = req.body.eventName;
+  const eventName = req.query.eventName;
 
   if (eventName === undefined) {
     return res.status(400).json({error: "eventName cannot be blank"});
   }
 
-  const event = await firestore.collection("Event").doc(eventName).get();
+  const event = await firestore
+      .collection("Event")
+      .doc(eventName as string)
+      .get();
 
   if (!event.exists) {
     return res.status(404).json({error: "event not found"});
@@ -89,19 +91,17 @@ export const getEvent = async (req: Request, res: Response) => {
 };
 
 export const getEvents = async (req: Request, res: Response) => {
-  const {error} = getEventSchema.validate(req.body);
-
-  if (error !== undefined) {
-    return res.status(400).json({error: error.details});
-  }
-
   const eventList: FirebaseFirestore.DocumentData[] = [];
 
-  const {body: requestBody} = req;
+  const userId = req.query.userId;
+
+  if (userId === undefined) {
+    return res.status(400).json({error: "userId cannot be blank"});
+  }
 
   await firestore
       .collection("Event")
-      .where("userId", "==", requestBody["userId"])
+      .where("userId", "==", userId)
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
