@@ -1,20 +1,13 @@
-import { Grid, VStack, Image, HStack, Text } from "@chakra-ui/react";
+import { Grid, VStack, Image, Text } from "@chakra-ui/react";
+import { LineUp } from "../types";
+
 type Props = {
-  data: {
-    img: string;
-    startTime: string;
-    endTime: string;
-    band: string;
-  }[];
+  data?: LineUp[];
 };
-type CardProps = {
-  img: string;
-  startTime: string;
-  endTime: string;
-  band: string;
-};
+type CardProps = LineUp;
+
 export const Lineup = ({ data }: Props) => {
-  const Card = ({ img, startTime, endTime, band }: CardProps) => {
+  const Card = ({ bandImage, startTime, endTime, bandName }: CardProps) => {
     return (
       <Grid
         sx={{
@@ -30,10 +23,11 @@ export const Lineup = ({ data }: Props) => {
         }}
       >
         <Image
-          src="/images/event-info.png"
+          src={`${bandImage ?? "/images/default-band.svg"}`}
           boxSize={{ base: "32px", md: "64px" }}
           sx={{ borderRadius: "4px" }}
         />
+
         <VStack sx={{ alignItems: "baseline", justifyContent: "center" }}>
           <Text
             sx={{ fontSize: { base: "10px", md: "14px" }, fontWeight: "light" }}
@@ -45,12 +39,13 @@ export const Lineup = ({ data }: Props) => {
               fontSize: { base: "14px", md: "16px" },
             }}
           >
-            {band}
+            {bandName}
           </Text>
         </VStack>
       </Grid>
     );
   };
+
   return (
     <VStack
       sx={{
@@ -61,7 +56,7 @@ export const Lineup = ({ data }: Props) => {
         p: "8px",
       }}
     >
-      {data.map((item, index) => {
+      {data?.map((item, index) => {
         return <Card key={index} {...item} />;
       })}
     </VStack>

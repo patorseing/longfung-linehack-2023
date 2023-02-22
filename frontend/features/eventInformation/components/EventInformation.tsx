@@ -1,10 +1,10 @@
 import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
-import { EventInformationType } from "..";
+import { EventInfoResponse } from "../types";
 import { Information } from "./Information";
 import { Lineup } from "./Lineup";
 
 type Props = {
-  eventInfo: EventInformationType;
+  eventInfo?: EventInfoResponse;
 };
 export const EventInformation = ({ eventInfo }: Props) => {
   const TAB = ["รายละเอียด", "ตารางเวลา"];
@@ -46,7 +46,7 @@ export const EventInformation = ({ eventInfo }: Props) => {
             <Information data={eventInfo} />
           </TabPanel>
           <TabPanel sx={{ p: { base: "8px", md: "16px" } }}>
-            <Lineup data={eventInfo.lineup} />
+            <Lineup data={eventInfo?.lineUp} />
           </TabPanel>
         </TabPanels>
       </Tabs>

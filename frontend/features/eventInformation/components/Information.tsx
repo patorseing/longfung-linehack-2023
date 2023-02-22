@@ -1,13 +1,13 @@
 import colors from "@/lib/theme/color";
 import { HStack, VStack, Image, Grid, Text } from "@chakra-ui/react";
-import { EventInformationType } from "..";
+import { EventInfoResponse } from "../types";
 type Props = {
-  data: EventInformationType;
+  data?: EventInfoResponse;
 };
 type InfoItemType = {
   img: string;
   label: string;
-  value: string;
+  value?: string;
   isLink?: boolean;
 };
 
@@ -49,7 +49,7 @@ export const Information = ({ data }: Props) => {
     );
   };
 
-  const SocialInfo = ({ img, link }: { img: string; link: string }) => {
+  const SocialInfo = ({ img, link }: { img: string; link?: string }) => {
     return (
       <HStack gap="8px" sx={{ fontSize: { base: "14px", md: "16px" } }}>
         <Image src={`/images/${img}.svg`} boxSize="20px" />
@@ -75,12 +75,12 @@ export const Information = ({ data }: Props) => {
     {
       img: "calendar-icon",
       label: "วันจัดแสดง",
-      value: data.date,
+      value: data?.eventDate,
     },
     {
       img: "time-icon",
       label: "เวลา",
-      value: `${data.startTime} - ${data.endTime}`,
+      value: `${data?.eventStartTime} - ${data?.eventEndTime}`,
     },
   ];
 
@@ -88,11 +88,11 @@ export const Information = ({ data }: Props) => {
     {
       img: "location-icon",
       label: "สถานที่",
-      value: data.location,
+      value: data?.eventLocation.address,
     },
     {
       img: "map-icon",
-      value: data.location_url,
+      value: data?.eventLocation.googleMapLink,
       label: "Google Map URL",
       isLink: true,
     },
@@ -101,45 +101,48 @@ export const Information = ({ data }: Props) => {
   const InfoSection = [
     {
       img: "ticket-icon",
-      label: "สถานที่",
-      value: data.location,
+      label: "ค่าเข้างาน",
+      value: data?.ticketType.free
+        ? "ไม่มีค่าใช้จ่าย"
+        : `${data?.ticketType.price} บาท`,
     },
     {
       img: "seat-icon",
       label: "จำนวนที่นั่ง",
-      value: data.avaliable_seats ?? "ไม่ได้ระบุ",
+      value: data?.availableSeat ?? "ไม่ได้ระบุ",
     },
     {
       img: "age-icon",
       label: "จำกัดอายุ",
-      value: data.age_limit ?? "ไม่จำกัดอายุ",
+      value: data?.ageLimitation ?? "ไม่จำกัดอายุ",
     },
     {
       img: "alcohol-icon",
       label: "แอลกอฮอล์",
-      value: data.alcohol_free ? "ได้" : "ไม่อนุญาต",
+      value: data?.alcoholFree ? "ได้" : "ไม่อนุญาต",
     },
     {
       img: "song-icon",
       label: "การขอเพลง",
-      value: data.request_song ? "ได้" : "ไม่อนุญาต",
+      value: data?.songRequested ? "ได้" : "ไม่อนุญาต",
     },
   ];
 
   const socilaSection = [
     {
       img: "social/website",
-      link: data.socialmedia.website,
+      link: data?.socialMedia.website,
     },
     {
       img: "social/instagram",
-      link: data.socialmedia.instagram,
+      link: data?.socialMedia.instagram,
     },
     {
       img: "social/facebook",
-      link: data.socialmedia.instagram,
+      link: data?.socialMedia.facebook,
     },
   ];
+
   return (
     <VStack>
       <VStack layerStyle="infoItem" sx={{ pt: "0px" }}>
@@ -157,19 +160,21 @@ export const Information = ({ data }: Props) => {
           <InfoItem key={index} {...item} />
         ))}
       </VStack>
-      <VStack layerStyle="infoItem" sx={{ alignItems: "baseline" }}>
-        {socilaSection
-          .filter((social) => social.link)
-          .map((item, index) => (
-            <SocialInfo key={index} {...item} />
-          ))}
-      </VStack>
-      <VStack sx={{ alignItems: "baseline" }}>
+      {!socilaSection.every((item) => !item.link) && (
+        <VStack layerStyle="infoItem" sx={{ alignItems: "baseline" }}>
+          {socilaSection
+            .filter((social) => social.link)
+            .map((item, index) => (
+              <SocialInfo key={index} {...item} />
+            ))}
+        </VStack>
+      )}
+      <VStack sx={{ alignItems: "baseline", w: "100%" }}>
         <Text sx={{ fontSize: { base: "14px", md: "16px" } }}>
           รายละเอียดเพิ่มเติม
         </Text>
         <Text sx={{ fontSize: { base: "14px", md: "14px" } }}>
-          {data.description}
+          {data?.eventDescription}
         </Text>
       </VStack>
     </VStack>
