@@ -5,7 +5,8 @@ import {getCurrentDateTime} from "../../utils/payload";
 export const getSongRequests = async (req: Request, res: Response) => {
   const {bandName, userId, active} = req.query;
 
-  const activeParams = active === undefined ? true : JSON.parse(active as string)
+  const activeParams =
+    active === undefined ? true : JSON.parse(active as string);
 
   if (bandName === undefined) {
     return res.status(400).json({error: "bandName cannot be blank"});
