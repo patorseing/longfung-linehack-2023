@@ -447,6 +447,16 @@ export const bandTemplete = (band: createBandDTO) => {
               text: `ขอรายละเอียดของวง ${band.bandName} นี้เพิ่มเติม`,
             },
           },
+          {
+            type: "button",
+            style: "link",
+            height: "sm",
+            action: {
+              type: "message",
+              label: "สนับสนุนวงดนตรีนี้",
+              text: `ขอช่องทางสนับสนุนของ ${band.bandName}`,
+            },
+          },
         ],
         flex: 0,
         paddingAll: "none",
