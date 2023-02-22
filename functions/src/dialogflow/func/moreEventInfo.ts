@@ -11,8 +11,11 @@ export const moreEventInfo = async (agent: WebhookClient) => {
 
   if (eventData) {
     agent.add(
-        /* eslint max-len: ["error", { "code": 83 }]*/
-        `https://liff.line.me/1657898632-vkQB6aYy/event-info?event=${eventName}`
+        /* eslint max-len: ["error", { "code": 100 }]*/
+        `https://liff.line.me/1657898632-vkQB6aYy/event-info?event=${eventName.replace(
+            " ",
+            "+"
+        )}`
     );
   } else {
     agent.add("น้องโลมาหางานดนตรีที่คุณอยากทราบไม่เจอครับ โปรดลองใหม่อีกครั้ง");
