@@ -82,14 +82,14 @@ export const createBand = async (req: Request, res: Response) => {
           const bucketName = functions.config().uploader.bucket_name;
 
           const bandImage = files.bandImage;
-          if (bandImage.size !== 0) {
+          if (bandImage !== undefined) {
             const imageUrl = await fileUploader(bucketName, bandImage.path);
 
             band.bandImage = imageUrl;
           }
 
           const qrImage = files.qrImage;
-          if (qrImage.size !== 0) {
+          if (qrImage !== undefined) {
             const imageUrl = await fileUploader(bucketName, qrImage.path);
 
             band.qrImage = imageUrl;
