@@ -12,8 +12,6 @@ import {FormErrors, FormFields, FormFiles} from "../../types";
 export const getBand = async (req: Request, res: Response) => {
   const bandName = req.query.bandName;
 
-  console.log(req.query);
-
   if (bandName === undefined) {
     return res.status(400).json({error: "bandName cannot be blank"});
   }
@@ -91,7 +89,6 @@ export const createBand = async (req: Request, res: Response) => {
           }
 
           const qrImage = files.qrImage;
-          console.log(qrImage);
           if (qrImage.size !== 0) {
             const imageUrl = await fileUploader(bucketName, qrImage.path);
 

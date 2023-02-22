@@ -11,7 +11,7 @@ import {
 import {find7DaysEvent} from "../firebase/db/event";
 import {Event} from "../api/dto/event";
 import {eventTemplate} from "../line/templete";
-import { requestDonation } from "./func/donation";
+import {requestDonation} from "./func/donation";
 
 export const webhook = async (
     req: functions.https.Request,
@@ -41,8 +41,7 @@ export const webhook = async (
                 });
               } else if (event.message.text.includes("ขอช่องทางสนับสนุนของ")) {
                 await requestDonation(req);
-              }
-              else {
+              } else {
                 await postToDialogflow(req);
               }
             }
