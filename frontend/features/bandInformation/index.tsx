@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { CircularProgress, VStack, Text, Grid, Image } from "@chakra-ui/react";
 
+import { DEFAULT_LONGFUNG } from "@/constants";
 import { BandFormValue } from "../registration/types";
 import { BandInformation } from "./components/BandInformation";
 import { useBand } from "./services";
@@ -20,9 +21,13 @@ const Container = (props: React.PropsWithChildren) => {
 
 const BandInfoPage = () => {
   const { query } = useRouter();
-  const { data: band, isLoading } = useBand({ bandName: query.band as string });
+  const {
+    data: band,
+    isLoading,
+    isFetching,
+  } = useBand({ bandName: query.band as string });
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return (
       <Container>
         <CircularProgress isIndeterminate color="primary.500" />
@@ -60,7 +65,7 @@ const BandInfoPage = () => {
         }}
       >
         <Image
-          src="/images/event-info.png"
+          src={band.bandImage || DEFAULT_LONGFUNG}
           boxSize={{ base: "350px", md: "360px" }}
           sx={{ borderRadius: "8px" }}
         />

@@ -71,5 +71,13 @@ export const useCreateBand = () => {
         push("/information");
       }, 3000);
     },
+    onError(error) {
+      toast({
+        title: "Error",
+        description: error.message,
+        status: "error",
+        position: "top",
+      });
+    },
   });
 };
