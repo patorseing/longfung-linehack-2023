@@ -27,8 +27,8 @@ export interface createBandDTO {
   songRequest: boolean;
   description?: string;
   lineBeacon?: LineBeaconItem[];
-  bandImage?: string;
-  qrImage?: string;
+  bandImage?: string | null;
+  qrImage?: string | null;
 }
 
 export interface updateBandDTO {

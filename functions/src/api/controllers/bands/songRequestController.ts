@@ -103,8 +103,6 @@ export const updateSongRequest = async (req: Request, res: Response) => {
     return res.status(400).json({error: "status cannot be blank"});
   }
 
-  console.log(status);
-
   if (!["pending", "accept", "reject"].includes(status)) {
     return res.status(400).json({error: "status is invalid"});
   }
