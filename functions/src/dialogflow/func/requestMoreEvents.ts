@@ -1,5 +1,5 @@
 import * as functions from "firebase-functions";
-import {WebhookClient, Payload} from "dialogflow-fulfillment";
+import {WebhookClient} from "dialogflow-fulfillment";
 
 import {Event} from "../../api/dto/event";
 import {find7DaysEvent} from "../../firebase/db/event";
