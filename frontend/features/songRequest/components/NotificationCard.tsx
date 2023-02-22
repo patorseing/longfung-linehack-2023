@@ -1,39 +1,39 @@
-import { useMemo } from "react"
-import { Button, Image, VStack, Text } from "@chakra-ui/react"
+import { useMemo } from "react";
+import { Button, Image, VStack, Text } from "@chakra-ui/react";
 
 type NotificationCardProps = {
-  type: "thanks" | "timeout"
-}
+  type: "thanks" | "timeout";
+};
 
 export const NotificationCard = (props: NotificationCardProps) => {
-  const { type } = props
+  const { type } = props;
 
   const picture = useMemo(() => {
     switch (type) {
       case "thanks":
-        return "/images/thankyou-icon.svg"
+        return "/images/thankyou-icon.svg";
       default:
-        return "/images/sorry-icon.svg"
+        return "/images/sorry-icon.svg";
     }
-  }, [type])
+  }, [type]);
 
   const title = useMemo(() => {
     switch (type) {
       case "thanks":
-        return "Thank you!"
+        return "Thank you!";
       default:
-        return "Opps! Request time is end"
+        return "Opps! Band not found";
     }
-  }, [type])
+  }, [type]);
 
   const description = useMemo(() => {
     switch (type) {
       case "thanks":
-        return "We’ve received your requested song! Please wait until your queue is coming."
+        return "We’ve received your requested song! Please wait until your queue is coming.";
       default:
-        return "The song request time is end. We are really sorry. You can request next time."
+        return "";
     }
-  }, [type])
+  }, [type]);
 
   return (
     <VStack
@@ -61,5 +61,5 @@ export const NotificationCard = (props: NotificationCardProps) => {
         Back to main menu
       </Button>
     </VStack>
-  )
-}
+  );
+};

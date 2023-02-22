@@ -1,7 +1,8 @@
 import { useRouter } from "next/router";
-import { Flex, Stack, Text } from "@chakra-ui/react";
+import { CircularProgress, Flex, Stack, Text } from "@chakra-ui/react";
 
 import { useCreateSongRequest } from "../services";
+import { useBand } from "@/features/bandInformation/services";
 
 import { BandCard, NotificationCard, SongRequestForm } from "../components";
 
@@ -23,9 +24,20 @@ const Container = (props: React.PropsWithChildren) => {
 
 const SongRequest = () => {
   const { query } = useRouter();
+  const { data: band, isLoading: bandLoading } = useBand({
+    bandName: query.band as string,
+  });
   const { mutate, isLoading, isSuccess } = useCreateSongRequest();
 
-  if (query.mockTimeOut) {
+  if (bandLoading) {
+    return (
+      <Container>
+        <CircularProgress isIndeterminate color="primary.500" />
+      </Container>
+    );
+  }
+
+  if (!band) {
     return (
       <Container>
         <NotificationCard type="timeout" />
@@ -59,7 +71,7 @@ const SongRequest = () => {
           mt: { base: 2, md: 4, xl: 8 },
         }}
       >
-        <BandCard name="Paper planes" />
+        <BandCard data={band} />
         <SongRequestForm
           isLoading={isLoading}
           onSubmit={(data) => {
