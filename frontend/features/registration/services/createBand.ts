@@ -63,13 +63,13 @@ export const useCreateBand = () => {
         title: "Success",
         description: "Create Band Successful",
         status: "success",
-        position: "top-right",
-        duration: 5000,
+        position: "top",
+        duration: 3000,
       });
 
       setTimeout(() => {
-        push("information");
-      }, 5000);
+        push("/information");
+      }, 3000);
     },
   });
 };
