@@ -5,7 +5,9 @@ import {Event} from "../../api/dto/event";
 import {find7DaysEvent} from "../../firebase/db/event";
 import {eventTemplate, EventTemp} from "../../line/templete";
 import {validateLineMsg, pushMessage} from "../../line/util";
+
 export const requestMoreEvents = async (agent: WebhookClient) => {
+  await agent.add("รอแป๊บนึงน้าาา ขอน้องโลมาหาก่อน");
   const lineUid = agent.originalRequest.payload.data.source.userId;
   const events = await find7DaysEvent({limit: true});
 
@@ -42,7 +44,8 @@ export const requestMoreEvents = async (agent: WebhookClient) => {
         contents: [],
       },
     };
-    for (const event of events.docs) {
+
+    for (const event of events.docs.slice(0, 3)) {
       const eventData = event.data() as Event;
       const eventFlex = eventTemplate({event: eventData});
 
@@ -51,7 +54,9 @@ export const requestMoreEvents = async (agent: WebhookClient) => {
       payloadJson.contents.contents.push(eventFlex.contents as EventTemp);
     }
 
-    payloadJson.contents.contents.push(moreEvents);
+    if (events.docs.length === 4) {
+      payloadJson.contents.contents.push(moreEvents);
+    }
 
     const isValidMsg = await validateLineMsg("push", [payloadJson]);
     functions.logger.debug(isValidMsg);

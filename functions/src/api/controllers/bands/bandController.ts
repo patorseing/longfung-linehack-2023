@@ -16,7 +16,10 @@ export const getBand = async (req: Request, res: Response) => {
     return res.status(400).json({error: "bandName cannot be blank"});
   }
 
-  const band = await firestore.collection("Band").doc(bandName as string).get();
+  const band = await firestore
+      .collection("Band")
+      .doc(bandName as string)
+      .get();
 
   if (!band.exists) {
     return res.status(404).json({error: "band not found"});
@@ -192,7 +195,7 @@ export const updateBand = async (req: Request, res: Response) => {
           const updatedBand = await firestore
               .collection("Band")
               .doc(fields.bandName)
-              .update(band);
+              .update(band as Record<string, any>);
 
           return res.status(201).send({data: updatedBand});
         }
