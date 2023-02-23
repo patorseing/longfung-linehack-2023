@@ -26,7 +26,7 @@ export const CardInfo = (props: Props) => {
         alignItems: "center",
       }}
       onClick={() => {
-        push({ pathname: `/${path}-info`, query: { [path]: name } });
+        push({ pathname: `/${path}-info/${name}` });
       }}
     >
       <Box
