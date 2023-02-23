@@ -9,15 +9,18 @@ import {
 } from "@chakra-ui/react";
 import { IoMdClose } from "react-icons/io";
 import { FiCheck } from "react-icons/fi";
-import { SongListType } from "..";
+
+import { SongRequest } from "../types";
+import { useUpdateSongRequest } from "../services";
 
 type Props = {
-  data: SongListType;
-  action?: boolean;
+  data: SongRequest;
+  isRequestTab?: boolean;
 };
-export const SongCard = ({ data, action = true }: Props) => {
-  const onReject = (id: string) => {};
-  const onAccept = (id: string) => {};
+
+export const SongCard = ({ data, isRequestTab = true }: Props) => {
+  const { mutate, isLoading } = useUpdateSongRequest();
+
   return (
     <Grid
       sx={{
@@ -28,13 +31,13 @@ export const SongCard = ({ data, action = true }: Props) => {
         borderRadius: "8px",
         gridTemplateColumns: {
           base: "repeat(3,1fr)",
-          md: action ? "repeat(4,1fr)" : "1fr 1fr 1fr 2fr",
+          md: isRequestTab ? "repeat(4,1fr)" : "1fr 1fr 1fr 2fr",
         },
       }}
     >
       <VStack layerStyle="songLayout" sx={{ alignItems: "baseline" }}>
         <Text layerStyle="textDescription">Song Name</Text>
-        <Text layerStyle="textValue">{data.song_name}</Text>
+        <Text layerStyle="textValue">{data.songName}</Text>
 
         <Text
           layerStyle="textDescription"
@@ -71,21 +74,20 @@ export const SongCard = ({ data, action = true }: Props) => {
         <Text layerStyle="textDescription">Request by</Text>
         <Text
           sx={{
-            color: `${
-              data.request_by === "Anonymous" ? "placeholder" : "black"
-            }`,
+            color: `${data.userId === null ? "placeholder" : "black"}`,
           }}
           layerStyle="textValue"
         >
-          {data.request_by}
+          {data.userId || "Anonymous"}
         </Text>
       </VStack>
-      {action ? (
+      {isRequestTab ? (
         <HStack
           sx={{ pl: { base: "10px", md: "16px" }, justifyContent: "end" }}
         >
           <Flex sx={{ display: { base: "flex", md: "none" }, gap: "8px" }}>
             <IconButton
+              isLoading={isLoading}
               aria-label="reject"
               icon={<IoMdClose color="white" size="26px" />}
               sx={{
@@ -94,9 +96,12 @@ export const SongCard = ({ data, action = true }: Props) => {
                 h: "32px",
                 _hover: { bg: "errorHover" },
               }}
-              onClick={() => onReject(data.id)}
+              onClick={() => {
+                mutate({ data: { id: data.id, status: "reject" } });
+              }}
             />
             <IconButton
+              isLoading={isLoading}
               aria-label="accept "
               icon={<FiCheck color="white" size="26px" />}
               sx={{
@@ -105,13 +110,18 @@ export const SongCard = ({ data, action = true }: Props) => {
                 h: "32px",
                 _hover: { bg: "successHover" },
               }}
-              onClick={() => onAccept(data.id)}
+              onClick={() => {
+                mutate({ data: { id: data.id, status: "accept" } });
+              }}
             />
           </Flex>
 
           <Flex sx={{ display: { base: "none", md: "flex" }, gap: "16px" }}>
             <Button
-              onClick={() => onReject(data.id)}
+              isLoading={isLoading}
+              onClick={() => {
+                mutate({ data: { id: data.id, status: "reject" } });
+              }}
               leftIcon={<IoMdClose />}
               sx={{
                 bg: "error",
@@ -123,7 +133,10 @@ export const SongCard = ({ data, action = true }: Props) => {
               Reject
             </Button>
             <Button
-              onClick={() => onAccept(data.id)}
+              isLoading={isLoading}
+              onClick={() => {
+                mutate({ data: { id: data.id, status: "accept" } });
+              }}
               leftIcon={<FiCheck />}
               sx={{
                 bg: "success",

@@ -1,4 +1,5 @@
 import {
+  CircularProgress,
   Text,
   VStack,
   Tabs,
@@ -9,68 +10,61 @@ import {
   Button,
   Flex,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { useMemo, useState } from "react";
+
+import { useSongRequestList, useClearSongRequest } from "./services";
 
 import { SongList } from "./components/SongList";
 import { History } from "./components/History";
-export type SongListType = {
-  id: string;
-  song_name: string;
-  note: string;
-  request_by: string;
-  status: "active" | "accept" | "reject";
-};
+
 const SongRequestListPage = () => {
   const TAB = ["Request List", "History"];
-  const MOCK: SongListType[] = [
-    {
-      id: "1",
-      song_name: "ทรงอย่างแบ้ด",
-      note: "ขอแบบพี่เสก",
-      request_by: "ly เด็กเลี้ยงเเมว",
-      status: "active",
-    },
-    {
-      id: "2",
-      song_name: "ทรงอย่างแบ้ด",
-      note: "ขอแบบพี่เสก",
-      request_by: "ly เด็กเลี้ยงเเมว",
-      status: "active",
-    },
-    {
-      id: "3",
-      song_name: "ทรงอย่างแบ้ด",
-      note: "ขอแบบพี่เสก",
-      request_by: "Anonymous",
-      status: "active",
-    },
-    {
-      id: "4",
-      song_name: "B Type",
-      note: "ขอแบบพี่เสก",
-      request_by: "ly เด็กเลี้ยงเเมว",
-      status: "reject",
-    },
-    {
-      id: "5",
-      song_name: "B Type",
-      note: "ขอแบบพี่เสก",
-      request_by: "ly เด็กเลี้ยงเเมว",
-      status: "accept",
-    },
-    {
-      id: "6",
-      song_name: "B Type",
-      note: "ขอแบบพี่เสก",
-      request_by: "Anonymous",
-      status: "accept",
-    },
-  ];
-  const onClickClear = (key: "history" | "song") => {};
+  const { query } = useRouter();
 
-  const ClearButton = (key: "history" | "song") => {
+  const [isRequestTab, setIsRequestTab] = useState(true);
+  const { mutate, isLoading: clearLoading } = useClearSongRequest();
+  const { data, isLoading, isFetching } = useSongRequestList({
+    bandName: query.band as string,
+    isRequestTab,
+  });
+
+  const onClickTab = (value: string) => {
+    switch (value) {
+      case "History":
+        setIsRequestTab(false);
+        break;
+      default:
+        setIsRequestTab(true);
+        break;
+    }
+  };
+
+  const songList = useMemo(() => {
+    if (!data) return [];
+
+    return data.filter((song) => song.status === "pending");
+  }, [JSON.stringify(data)]);
+
+  const historyList = useMemo(() => {
+    if (!data) return [];
+
+    return data.filter((history) => !history.active);
+  }, [JSON.stringify(data)]);
+
+  const LoadingComponent = () => {
+    return (
+      <Flex sx={{ w: "full", justifyContent: "center", py: 12 }}>
+        <CircularProgress isIndeterminate color="primary.500" />
+      </Flex>
+    );
+  };
+
+  const ClearButton = () => {
     return (
       <Flex sx={{ justifyContent: "end" }}>
         <Button
+          isLoading={clearLoading}
           variant="outline"
           sx={{
             borderColor: "primary.500",
@@ -79,13 +73,16 @@ const SongRequestListPage = () => {
             mb: "16px",
             fontSize: { base: "14px", md: "16px" },
           }}
-          onClick={() => onClickClear(key)}
+          onClick={() => {
+            mutate({ bandName: query.band as string });
+          }}
         >
           Clear All Request
         </Button>
       </Flex>
     );
   };
+
   return (
     <VStack sx={{ w: "100%", alignItems: "center", pt: 9, px: { base: 6 } }}>
       <Text
@@ -98,13 +95,16 @@ const SongRequestListPage = () => {
         Song Request List
       </Text>
       <Tabs size="lg" variant="enclosed">
-        <TabList sx={{}}>
+        <TabList>
           {TAB.map((item) => {
             return (
               <Tab
+                onClick={() => {
+                  onClickTab(item);
+                }}
                 key={item}
                 sx={{
-                  w: { base: "", md: "250px" },
+                  w: { base: "full", md: "250px" },
                   textTransform: "capitalize",
                   border: "1px solid",
                   borderColor: "primary.500",
@@ -123,23 +123,29 @@ const SongRequestListPage = () => {
         </TabList>
         <TabPanels
           sx={{
-            w: { base: "", md: "1280px" },
+            w: { base: "320px", md: "1280px" },
             bg: "secondary.500",
-            borderRadius: "10px",
+            borderBottomRadius: "10px",
+            borderTopRightRadius: { base: "0px", md: "10px" },
             borderTopLeftRadius: "0px",
           }}
         >
           <TabPanel>
-            {ClearButton("song")}
-            <SongList
-              songList={MOCK.filter((item) => item.status === "active")}
-            />
+            {isLoading || isFetching ? (
+              <LoadingComponent />
+            ) : (
+              <>
+                <ClearButton />
+                <SongList songList={songList} />
+              </>
+            )}
           </TabPanel>
           <TabPanel>
-            {ClearButton("history")}
-            <History
-              historyList={MOCK.filter((item) => item.status !== "active")}
-            />
+            {isLoading || isFetching ? (
+              <LoadingComponent />
+            ) : (
+              <History historyList={historyList} />
+            )}
           </TabPanel>
         </TabPanels>
       </Tabs>
