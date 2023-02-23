@@ -13,7 +13,7 @@ export const requstSong = async (agent: WebhookClient) => {
     agent.add(
         /* eslint max-len: ["error", { "code": 100 }]*/
         `https://liff.line.me/1657898632-vkQB6aYy/song-request?band=${bandName.replace(
-            "",
+            " ",
             "+"
         )}`
     );

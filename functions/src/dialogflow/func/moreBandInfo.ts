@@ -13,7 +13,7 @@ export const requstMoreBandInfo = async (agent: WebhookClient) => {
     agent.add(
         /* eslint max-len: ["error", { "code": 100 }]*/
         `https://liff.line.me/1657898632-vkQB6aYy/band-info?band=${bandName.replace(
-            "",
+            " ",
             "+"
         )}`
     );
