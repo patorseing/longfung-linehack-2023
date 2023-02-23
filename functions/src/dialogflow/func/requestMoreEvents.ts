@@ -7,6 +7,7 @@ import {eventTemplate, EventTemp} from "../../line/templete";
 import {validateLineMsg, pushMessage} from "../../line/util";
 
 export const requestMoreEvents = async (agent: WebhookClient) => {
+  await agent.add("รอแป๊บนึงน้าาา ขอน้องโลมาหาก่อน");
   const lineUid = agent.originalRequest.payload.data.source.userId;
   const events = await find7DaysEvent({limit: true});
 
