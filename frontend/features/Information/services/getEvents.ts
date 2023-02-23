@@ -15,7 +15,7 @@ export const useEvents = () => {
       const { data } = await _axios<{ data: EventResponse[] }>({
         method: "get",
         url: "/events",
-        params: { userId: profile?.userId ?? "123" },
+        params: { userId: profile?.userId },
         headers,
       });
 
