@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { Button, Image, VStack, Text } from "@chakra-ui/react";
 
 type NotificationCardProps = {
-  type: "thanks" | "timeout";
+  type: "thanks" | "timeout" | "donation";
 };
 
 export const NotificationCard = (props: NotificationCardProps) => {
@@ -11,6 +11,7 @@ export const NotificationCard = (props: NotificationCardProps) => {
   const picture = useMemo(() => {
     switch (type) {
       case "thanks":
+      case "donation":
         return "/images/thankyou-icon.svg";
       default:
         return "/images/sorry-icon.svg";
@@ -20,6 +21,7 @@ export const NotificationCard = (props: NotificationCardProps) => {
   const title = useMemo(() => {
     switch (type) {
       case "thanks":
+      case "donation":
         return "Thank you!";
       default:
         return "Opps! Band not found";
@@ -30,6 +32,8 @@ export const NotificationCard = (props: NotificationCardProps) => {
     switch (type) {
       case "thanks":
         return "We’ve received your requested song! Please wait until your queue is coming.";
+      case "donation":
+        return "We’ve received your slip! We’ll tell the band as soon as possible.";
       default:
         return "";
     }
