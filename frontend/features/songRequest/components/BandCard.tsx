@@ -1,14 +1,14 @@
 import { Box, HStack, Image, Text } from "@chakra-ui/react";
 
+import { BandResponse } from "@/features/Information/types";
 import { DEFAULT_LONGFUNG } from "@/constants";
 
 type BandCardProps = {
-  name: string;
-  picture?: string;
+  data: BandResponse;
 };
 
 export const BandCard = (props: BandCardProps) => {
-  const { name, picture = DEFAULT_LONGFUNG } = props;
+  const { data } = props;
 
   return (
     <HStack
@@ -21,7 +21,7 @@ export const BandCard = (props: BandCardProps) => {
       }}
     >
       <Image
-        src={picture}
+        src={data.bandImage || DEFAULT_LONGFUNG}
         sx={{
           boxSize: { base: "48px", md: "70px" },
           objectFit: "cover",
@@ -44,7 +44,7 @@ export const BandCard = (props: BandCardProps) => {
             },
           }}
         >
-          {name}
+          {data.bandName}
         </Text>
       </Box>
     </HStack>

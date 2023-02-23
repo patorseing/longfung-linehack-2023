@@ -1,20 +1,20 @@
-import { useState } from "react"
-import { MdAddPhotoAlternate } from "react-icons/md"
-import { Button, Flex, Icon, Image, Stack, Text } from "@chakra-ui/react"
-import { useDropzone, FileWithPath } from "react-dropzone"
+import { useState } from "react";
+import { MdAddPhotoAlternate } from "react-icons/md";
+import { Button, Flex, Icon, Image, Stack, Text } from "@chakra-ui/react";
+import { useDropzone, FileWithPath } from "react-dropzone";
 
 type UploadPictureProps = {
-  fileSrc: string
-  onDropFile: (files: FileWithPath[]) => void
-  onDeleteFile: () => void
-}
+  fileSrc: string;
+  onDropFile: (files: FileWithPath[]) => void;
+  onDeleteFile: () => void;
+};
 
 export const UploadPicture = (props: UploadPictureProps) => {
-  const { fileSrc, onDeleteFile, onDropFile } = props
+  const { fileSrc, onDeleteFile, onDropFile } = props;
 
   const onDrop = (files: FileWithPath[]) => {
-    onDropFile(files)
-  }
+    onDropFile(files);
+  };
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/avif": [".avif"],
@@ -22,12 +22,11 @@ export const UploadPicture = (props: UploadPictureProps) => {
       "image/vnd.microsoft.icon": [".ico"],
       "image/jpeg": [".jpeg", ".jpg"],
       "image/png": [".png"],
-      "image/svg+xml": [".svg"],
       "image/tiff": [".tif", ".tiff"],
       "image/webp": [".webp"],
     },
     onDrop,
-  })
+  });
 
   if (fileSrc) {
     return (
@@ -50,13 +49,13 @@ export const UploadPicture = (props: UploadPictureProps) => {
             _hover: { bg: "red.300" },
           }}
           onClick={() => {
-            onDeleteFile()
+            onDeleteFile();
           }}
         >
           Remove
         </Button>
       </Stack>
-    )
+    );
   }
 
   return (
@@ -82,5 +81,5 @@ export const UploadPicture = (props: UploadPictureProps) => {
         Browse to choose a file
       </Text>
     </Flex>
-  )
-}
+  );
+};

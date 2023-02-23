@@ -1,31 +1,32 @@
-import { Button, Stack, Switch, HStack, Text } from "@chakra-ui/react"
-import { useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
+import { Button, Stack, Switch, HStack, Text } from "@chakra-ui/react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
-import { SongRequestValue } from "../types"
-import { songRequestSchema } from "../schema"
+import { SongRequestValue } from "../types";
+import { songRequestSchema } from "../schema";
 
-import { FormInput } from "@/components/FormInput"
-import { FormTextarea } from "@/components/FormTextarea"
+import { FormInput } from "@/components/FormInput";
+import { FormTextarea } from "@/components/FormTextarea";
 
 type SongRequestFromProps = {
-  onSubmit: (data: SongRequestValue) => void
-}
+  isLoading: boolean;
+  onSubmit: (data: SongRequestValue) => void;
+};
 
 export const SongRequestForm = (props: SongRequestFromProps) => {
-  const { onSubmit } = props
+  const { isLoading, onSubmit } = props;
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<SongRequestValue>({
     resolver: yupResolver(songRequestSchema),
-  })
+  });
 
   return (
     <form
       onSubmit={handleSubmit((data) => {
-        onSubmit(data)
+        onSubmit(data);
       })}
     >
       <Stack
@@ -66,10 +67,14 @@ export const SongRequestForm = (props: SongRequestFromProps) => {
           <Switch size="lg" {...register("anonymous", { value: false })} />
         </HStack>
 
-        <Button type="submit" sx={{ mt: "24px !important" }}>
+        <Button
+          isLoading={isLoading}
+          type="submit"
+          sx={{ mt: "24px !important" }}
+        >
           Submit
         </Button>
       </Stack>
     </form>
-  )
-}
+  );
+};

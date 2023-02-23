@@ -1,10 +1,13 @@
+import { useMemo } from "react";
+
 import colors from "@/lib/theme/color";
 import { HStack, VStack, Image, Grid, Text } from "@chakra-ui/react";
-import { BandInformationType } from "..";
+import { BandResponse } from "@/features/Information/types";
 
 type Props = {
-  data: BandInformationType;
+  data: BandResponse;
 };
+
 type InfoItemType = {
   img: string;
   label: string;
@@ -67,6 +70,7 @@ export const Information = ({ data }: Props) => {
             textDecoration: "underline",
             cursor: "pointer",
             fontSize: "inherit",
+            overflowWrap: "anywhere",
           }}
           rel="noreferrer"
         >
@@ -80,46 +84,51 @@ export const Information = ({ data }: Props) => {
     {
       img: "band-icon",
       label: "ชื่อวงดนตรี",
-      value: data.name,
+      value: data.bandName,
     },
     {
       img: "promote-song",
       label: "เพลงโปรโมต",
-      value: data.first_song,
-      value2: data.second_song,
+      value: data.firstPromotedSong,
+      value2: data.secondPromotedSong,
     },
   ];
 
   const socilaSection = [
     {
       img: "social/instagram",
-      link: data.instagram_account,
+      link: data.socialMedia.instagram,
     },
     {
       img: "social/facebook",
-      link: data.facebook_url,
+      link: data.socialMedia.facebook,
     },
     {
       img: "social/tiktok",
-      link: data.tiktok_url,
+      link: data.socialMedia.tiktok,
     },
     {
       img: "social/website",
-      link: data.website_url,
+      link: data.socialMedia.website,
     },
     {
       img: "social/youtube",
-      link: data.youtube_url,
+      link: data.streamingPlatform.youtube,
     },
     {
       img: "social/apple-music",
-      link: data.apple_music_url,
+      link: data.streamingPlatform.appleMusic,
     },
     {
       img: "social/line-melody",
-      link: undefined,
+      link: data.lineMelody,
     },
   ];
+
+  const socialLinkNumber = useMemo(() => {
+    return socilaSection.filter((value) => value.link).length;
+  }, [JSON.stringify(socilaSection)]);
+
   return (
     <VStack>
       <VStack layerStyle="infoItem" sx={{ pt: "0px" }}>
@@ -127,14 +136,17 @@ export const Information = ({ data }: Props) => {
           <InfoItem key={index} {...item} />
         ))}
       </VStack>
-      <VStack layerStyle="infoItem" sx={{ alignItems: "baseline" }}>
+      <VStack
+        layerStyle={socialLinkNumber ? "infoItem" : ""}
+        sx={{ alignItems: "baseline" }}
+      >
         {socilaSection
           .filter((social) => social.link)
           .map((item, index) => (
             <SocialInfo key={index} {...item} />
           ))}
       </VStack>
-      <VStack sx={{ alignItems: "baseline" }}>
+      <VStack sx={{ alignItems: "baseline", w: "full" }}>
         <Text sx={{ fontSize: { base: "14px", md: "16px" } }}>
           รายละเอียดเพิ่มเติม
         </Text>

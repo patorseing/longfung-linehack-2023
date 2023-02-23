@@ -21,6 +21,6 @@ export const useBands = () => {
 
       return data.data;
     },
-    enabled: !!headers["X-Firebase-AppCheck"],
+    enabled: !!headers["X-Firebase-AppCheck"] && !!profile?.userId,
   });
 };
