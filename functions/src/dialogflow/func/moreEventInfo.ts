@@ -1,5 +1,5 @@
 import {WebhookClient} from "dialogflow-fulfillment";
-import queryString from "query-string";
+import {URLSearchParams} from "url";
 
 import {firestore} from "../../firebase";
 
@@ -11,10 +11,11 @@ export const moreEventInfo = async (agent: WebhookClient) => {
   const eventData = event.data();
 
   if (eventData) {
-    const stringified = queryString.stringify({event: eventName});
+    const params = new URLSearchParams();
+    params.append("event", eventName);
     agent.add(
         /* eslint max-len: ["error", { "code": 100 }]*/
-        `https://liff.line.me/1657898632-vkQB6aYy/event-info?${stringified}`
+        `https://liff.line.me/1657898632-vkQB6aYy/event-info?${params.toString()}`
     );
   } else {
     agent.add("น้องโลมาหางานดนตรีที่คุณอยากทราบไม่เจอครับ โปรดลองใหม่อีกครั้ง");
