@@ -1,1 +1,1 @@
-export * from "./getEventInfo";
+export * from "./getAllEvents";

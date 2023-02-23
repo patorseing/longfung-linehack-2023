@@ -1,8 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { _axios, useDefaultAxiosHeader } from "@/lib/hooks/axios";
-
 import { ALL_EVENT } from "../constants";
+import { _axios, useDefaultAxiosHeader } from "@/lib/hooks/axios";
 import { EventResponse } from "@/features/eventInformation/types";
 
 export const useGetAllEvents = () => {

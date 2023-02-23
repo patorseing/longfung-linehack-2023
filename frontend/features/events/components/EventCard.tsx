@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { EventResponse } from "@/features/eventInformation/types";
+import { useState } from "react";
 import {
   Box,
   Grid,
@@ -11,6 +10,8 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { BsHeartFill, BsHeart } from "react-icons/bs";
+
+import { EventResponse } from "@/features/eventInformation/types";
 import { MONTH } from "../constants";
 
 type Props = { data: EventResponse };
@@ -19,7 +20,6 @@ export const EventCard = ({ data }: Props) => {
   const formatDate = data.eventDate.split("/");
   const date = formatDate[0];
   const month = formatDate[1];
-  const year = formatDate[2];
 
   const InfoItem = ({ value, label }: { value?: string; label: string }) => {
     return (
@@ -130,7 +130,7 @@ export const EventCard = ({ data }: Props) => {
                   fontWeight: "bold",
                 }}
               >
-                แค่เธอไปเดินเตะทะเลด้วยกัน ทุกเช้าทุกเย็น
+                {data.eventName}
               </Text>
               <Box sx={{ mt: "4px" }}>
                 {info.map((item, index) => (
@@ -160,7 +160,6 @@ export const EventCard = ({ data }: Props) => {
               aria-label={""}
               onClick={(e) => {
                 e.preventDefault();
-
                 setInterested(() => {
                   if (interested.find((item) => item === data.userId)) {
                     return interested.filter((item) => item !== data.userId);
