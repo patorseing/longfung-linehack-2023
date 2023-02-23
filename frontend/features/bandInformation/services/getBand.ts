@@ -25,6 +25,6 @@ export const useBand = (props: Props) => {
 
       return data.data;
     },
-    enabled: !!headers["X-Firebase-AppCheck"],
+    enabled: !!headers["X-Firebase-AppCheck"] && !!bandName,
   });
 };
