@@ -1,15 +1,17 @@
 import { VStack } from "@chakra-ui/react";
-import { SongListType } from "..";
+
+import { SongRequest } from "../types";
+
 import { SongCard } from "./SongCard";
 
 type Props = {
-  historyList: SongListType[];
+  historyList: SongRequest[];
 };
 export const History = ({ historyList }: Props) => {
   return (
     <VStack sx={{ w: "100%", gap: "10px" }}>
       {historyList.map((item, index) => (
-        <SongCard data={item} key={index} action={false}></SongCard>
+        <SongCard data={item} key={index} isRequestTab={false}></SongCard>
       ))}
     </VStack>
   );
