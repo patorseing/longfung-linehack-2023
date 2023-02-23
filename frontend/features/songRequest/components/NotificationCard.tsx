@@ -57,8 +57,14 @@ export const NotificationCard = (props: NotificationCardProps) => {
         {title}
       </Text>
       <Text sx={{ fontSize: { base: "14px", md: "16px" } }}>{description}</Text>
-      <Button sx={{ w: "full", mt: "24px !important" }}>
-        Back to main menu
+      <Button
+        onClick={async () => {
+          const liff = (await import("@line/liff")).default;
+          liff.closeWindow();
+        }}
+        sx={{ w: "full", mt: "24px !important" }}
+      >
+        Back to Chat
       </Button>
     </VStack>
   );
