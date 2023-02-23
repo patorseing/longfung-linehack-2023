@@ -21,7 +21,21 @@
   ],
   "hosting": {
     "public": "frontend/out",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "/band-info/**",
+        "destination": "/band-info/[band]/index.html"
+      },
+      {
+        "source": "/event-info/**",
+        "destination": "/event-info/[event]/index.html"
+      },
+      {
+        "source": "/song-request/**",
+        "destination": "/song-request/[band]/index.html"
+      }
+    ]
   },
   "storage": {
     "rules": "storage.rules"

@@ -30,7 +30,7 @@ export const find7DaysEvent = ({limit = false}: { limit?: boolean }) => {
       );
 
   if (limit) {
-    eventRef = eventRef.limit(3);
+    eventRef = eventRef.limit(4);
   }
 
   return eventRef.get();

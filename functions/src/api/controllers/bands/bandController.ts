@@ -12,13 +12,14 @@ import {FormErrors, FormFields, FormFiles} from "../../types";
 export const getBand = async (req: Request, res: Response) => {
   const bandName = req.query.bandName;
 
-  console.log(req.query);
-
   if (bandName === undefined) {
     return res.status(400).json({error: "bandName cannot be blank"});
   }
 
-  const band = await firestore.collection("Band").doc(bandName as string).get();
+  const band = await firestore
+      .collection("Band")
+      .doc(bandName as string)
+      .get();
 
   if (!band.exists) {
     return res.status(404).json({error: "band not found"});
@@ -82,6 +83,7 @@ export const createBand = async (req: Request, res: Response) => {
           const bucketName = functions.config().uploader.bucket_name;
 
           const bandImage = files.bandImage;
+
           if (bandImage !== undefined) {
             const imageUrl = await fileUploader(bucketName, bandImage.path);
 
@@ -189,7 +191,7 @@ export const updateBand = async (req: Request, res: Response) => {
           const updatedBand = await firestore
               .collection("Band")
               .doc(fields.bandName)
-              .update(band);
+              .update(band as Record<string, any>);
 
           return res.status(201).send({data: updatedBand});
         }
