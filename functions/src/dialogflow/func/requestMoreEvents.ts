@@ -1,5 +1,5 @@
 import * as functions from "firebase-functions";
-import {WebhookClient, Payload} from "dialogflow-fulfillment";
+import {WebhookClient} from "dialogflow-fulfillment";
 
 import {Event} from "../../api/dto/event";
 import {find7DaysEvent} from "../../firebase/db/event";
@@ -58,11 +58,6 @@ export const requestMoreEvents = async (agent: WebhookClient) => {
     functions.logger.debug(payloadJson);
     if (isValidMsg) {
       pushMessage(lineUid, payloadJson);
-      const payload = new Payload(agent.LINE, payloadJson, {
-        sendAsMessage: true,
-      });
-
-      agent.add(payload);
     }
     agent.add("แล้วมาเจอน้องโลมาตามงานดนตรีได้แล้วนะครับ");
   } else {
