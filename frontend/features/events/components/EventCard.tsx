@@ -11,12 +11,15 @@ import {
 } from "@chakra-ui/react";
 import { BsHeartFill, BsHeart } from "react-icons/bs";
 
+import { useProfileContext } from "@/context/profile";
+import { DEFAULT_LONGFUNG } from "@/constants";
 import { EventResponse } from "@/features/eventInformation/types";
 import { MONTH } from "../constants";
 
 type Props = { data: EventResponse };
 export const EventCard = ({ data }: Props) => {
   const [interested, setInterested] = useState<string[]>(data.interestedPerson);
+  const { profile } = useProfileContext();
   const formatDate = data.eventDate.split("/");
   const date = formatDate[0];
   const month = formatDate[1];
@@ -35,7 +38,15 @@ export const EventCard = ({ data }: Props) => {
         <HStack gap="8px">
           <Text>{label}</Text>
         </HStack>
-        <Text>{value ?? "-"}</Text>
+        <Text
+          sx={{
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {value ?? "-"}
+        </Text>
       </Grid>
     );
   };
@@ -48,13 +59,13 @@ export const EventCard = ({ data }: Props) => {
     { label: "สถานที่", value: data.eventLocation.address },
     {
       label: "ผู้ติดตาม",
-      value: data.interestedPerson.length.toLocaleString(),
+      value: interested.length.toLocaleString(),
     },
   ];
 
   return (
     <Link
-      href={`/event-info?event=${data.eventName}`}
+      href={`/event-info/${data.eventName}`}
       sx={{ _hover: { textDecoration: "none" } }}
     >
       <VStack
@@ -77,70 +88,58 @@ export const EventCard = ({ data }: Props) => {
           }}
         >
           <Image
-            src={`${data?.eventImage ?? "/images/default-band.svg"}`}
+            src={`${data?.eventImage ?? DEFAULT_LONGFUNG}`}
             sx={{
               w: "inherit",
               borderTopRadius: "10px",
             }}
           />
         </Box>
-        <VStack
+        <Grid
           sx={{
-            w: "100%",
+            w: { base: "290px", md: "280px", xl: "300px" },
             p: "8px 10px",
+            gap: "8px",
             alignItems: "baseline",
             mt: "0 !important",
+            gridTemplateColumns: {
+              base: "40px calc(290px - 70px)",
+              md: "40px calc(280px - 70px)",
+              xl: "40px calc(300px - 70px)",
+            },
           }}
         >
-          <HStack sx={{ gap: "8px", alignItems: "baseline" }}>
-            <Box sx={{ w: "40px", textAlign: "center", h: "100%" }}>
-              <Text sx={{ color: "primary.800", fontWeight: "bold" }}>
-                {MONTH[Number(month) - 1]}
-              </Text>
-              <Text>{Number(date)}</Text>
+          <VStack sx={{ w: "40px", textAlign: "center", h: "100%" }}>
+            <Text sx={{ color: "primary.800", fontWeight: "bold" }}>
+              {MONTH[Number(month) - 1]}
+            </Text>
+            <Text>{Number(date)}</Text>
 
-              {data.ticketType.free && (
-                <Box
-                  sx={{
-                    position: "absolute",
-                    bg: "white",
-                    px: "6px",
-                    borderRadius: "8px",
-                    top: 2,
-                    textTransform: "uppercase",
-                  }}
-                >
-                  <Text
-                    sx={{
-                      fontSize: { base: "10px", md: "12px" },
-                      color: "red",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Free
-                  </Text>
-                </Box>
-              )}
-            </Box>
-            <Box>
-              <Text
+            {data.ticketType.free && (
+              <Box
                 sx={{
-                  fontSize: { base: "16px", md: "18px" },
-                  mt: "0 !important",
-                  fontWeight: "bold",
+                  position: "absolute",
+                  bg: "white",
+                  px: "6px",
+                  borderRadius: "8px",
+                  top: 2,
+                  textTransform: "uppercase",
                 }}
               >
-                {data.eventName}
-              </Text>
-              <Box sx={{ mt: "4px" }}>
-                {info.map((item, index) => (
-                  <InfoItem key={index} {...item} />
-                ))}
+                <Text
+                  sx={{
+                    fontSize: { base: "10px", md: "12px" },
+                    color: "red",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Free
+                </Text>
               </Box>
-            </Box>
+            )}
             <IconButton
               icon={
-                interested.find((item) => item === data.userId) ? (
+                interested.find((item) => item === profile?.userId) ? (
                   <BsHeartFill color="red" size={12} />
                 ) : (
                   <BsHeart color="black" size={12} />
@@ -150,7 +149,6 @@ export const EventCard = ({ data }: Props) => {
               sx={{
                 borderRadius: "50%",
                 bg: "formBg",
-                position: "absolute",
                 bottom: 1,
                 left: 0,
                 _hover: {
@@ -160,16 +158,39 @@ export const EventCard = ({ data }: Props) => {
               aria-label={""}
               onClick={(e) => {
                 e.preventDefault();
-                setInterested(() => {
-                  if (interested.find((item) => item === data.userId)) {
-                    return interested.filter((item) => item !== data.userId);
+                setInterested((value) => {
+                  if (interested.find((item) => item === profile?.userId)) {
+                    return interested.filter(
+                      (item) => item !== profile?.userId
+                    );
                   }
-                  return data.interestedPerson.concat(data.userId);
+                  return profile
+                    ? data.interestedPerson.concat(profile.userId)
+                    : value;
                 });
               }}
             />
-          </HStack>
-        </VStack>
+          </VStack>
+          <Box>
+            <Text
+              sx={{
+                fontSize: { base: "16px", md: "18px" },
+                mt: "0 !important",
+                fontWeight: "bold",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {data.eventName}
+            </Text>
+            <Box sx={{ mt: "4px" }}>
+              {info.map((item, index) => (
+                <InfoItem key={index} {...item} />
+              ))}
+            </Box>
+          </Box>
+        </Grid>
       </VStack>
     </Link>
   );
