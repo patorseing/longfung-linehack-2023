@@ -1,4 +1,5 @@
-import { EventInfoType } from "@/lib/type";
+import { useEffect, useState } from "react";
+import { EventResponse } from "@/features/eventInformation/types";
 import {
   Box,
   Grid,
@@ -12,26 +13,19 @@ import {
 import { BsHeartFill, BsHeart } from "react-icons/bs";
 import { MONTH } from "../constants";
 
-type Props = EventInfoType;
-export const EventCard = ({
-  eventImage = "/images/default-band.svg",
-  eventName,
-  eventDate,
-  ticketType,
-  location,
-  follows,
-  eventStartTime,
-  eventEndTime,
-}: Props) => {
-  const formatDate = eventDate.split("/");
+type Props = { data: EventResponse };
+export const EventCard = ({ data }: Props) => {
+  const [interested, setInterested] = useState<string[]>(data.interestedPerson);
+  const formatDate = data.eventDate.split("/");
   const date = formatDate[0];
   const month = formatDate[1];
   const year = formatDate[2];
-  const InfoItem = ({ value, label }: { value: string; label: string }) => {
+
+  const InfoItem = ({ value, label }: { value?: string; label: string }) => {
     return (
       <Grid
         sx={{
-          gridTemplateColumns: { base: "1fr 1fr", md: "1fr 1fr" },
+          gridTemplateColumns: { base: "1fr 1fr", md: "70px auto" },
           w: "100%",
           fontSize: { base: "12px", md: "14px" },
           wordBreak: "break-word",
@@ -41,7 +35,7 @@ export const EventCard = ({
         <HStack gap="8px">
           <Text>{label}</Text>
         </HStack>
-        <Text>{value}</Text>
+        <Text>{value ?? "-"}</Text>
       </Grid>
     );
   };
@@ -49,20 +43,23 @@ export const EventCard = ({
   const info = [
     {
       label: "เวลา",
-      value: `${eventStartTime} - ${eventEndTime}`,
+      value: `${data.eventStartTime} - ${data.eventEndTime}`,
     },
-    { label: "สถานที่", value: location },
-    { label: "ผู้ติดตาม", value: follows.toLocaleString() },
+    { label: "สถานที่", value: data.eventLocation.address },
+    {
+      label: "ผู้ติดตาม",
+      value: data.interestedPerson.length.toLocaleString(),
+    },
   ];
+
   return (
     <Link
-      href={`/event-info?event=${eventName}`}
+      href={`/event-info?event=${data.eventName}`}
       sx={{ _hover: { textDecoration: "none" } }}
     >
       <VStack
         sx={{
           w: { base: "290px", md: "280px", xl: "300px" },
-          h: "340px",
           bg: "white",
           borderRadius: "10px",
           boxShadow:
@@ -80,7 +77,7 @@ export const EventCard = ({
           }}
         >
           <Image
-            src={eventImage}
+            src={`${data?.eventImage ?? "/images/default-band.svg"}`}
             sx={{
               w: "inherit",
               borderTopRadius: "10px",
@@ -92,22 +89,17 @@ export const EventCard = ({
             w: "100%",
             p: "8px 10px",
             alignItems: "baseline",
-            h: {
-              base: `calc(250px - 180px)`,
-              md: `calc(250px - 180px)`,
-              xl: `calc(250px - 180px)`,
-            },
             mt: "0 !important",
           }}
         >
-          <HStack sx={{ gap: "10px", alignItems: "baseline" }}>
-            <Box sx={{ w: "50px", textAlign: "center", h: "100%" }}>
+          <HStack sx={{ gap: "8px", alignItems: "baseline" }}>
+            <Box sx={{ w: "40px", textAlign: "center", h: "100%" }}>
               <Text sx={{ color: "primary.800", fontWeight: "bold" }}>
                 {MONTH[Number(month) - 1]}
               </Text>
               <Text>{Number(date)}</Text>
 
-              {ticketType.free && (
+              {data.ticketType.free && (
                 <Box
                   sx={{
                     position: "absolute",
@@ -138,7 +130,7 @@ export const EventCard = ({
                   fontWeight: "bold",
                 }}
               >
-                {eventName}
+                แค่เธอไปเดินเตะทะเลด้วยกัน ทุกเช้าทุกเย็น
               </Text>
               <Box sx={{ mt: "4px" }}>
                 {info.map((item, index) => (
@@ -148,10 +140,10 @@ export const EventCard = ({
             </Box>
             <IconButton
               icon={
-                ticketType.free ? (
-                  <BsHeart color="black" size={12} />
-                ) : (
+                interested.find((item) => item === data.userId) ? (
                   <BsHeartFill color="red" size={12} />
+                ) : (
+                  <BsHeart color="black" size={12} />
                 )
               }
               size="sm"
@@ -159,14 +151,24 @@ export const EventCard = ({
                 borderRadius: "50%",
                 bg: "formBg",
                 position: "absolute",
-                bottom: 2,
-                right: 2,
+                bottom: 1,
+                left: 0,
                 _hover: {
                   bg: "rgba(255, 152, 1, 0.2)",
                 },
               }}
               aria-label={""}
-            ></IconButton>
+              onClick={(e) => {
+                e.preventDefault();
+
+                setInterested(() => {
+                  if (interested.find((item) => item === data.userId)) {
+                    return interested.filter((item) => item !== data.userId);
+                  }
+                  return data.interestedPerson.concat(data.userId);
+                });
+              }}
+            />
           </HStack>
         </VStack>
       </VStack>

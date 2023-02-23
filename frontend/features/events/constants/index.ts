@@ -12,3 +12,5 @@ export const MONTH = [
   "Nov",
   "Dec",
 ];
+
+export const ALL_EVENT = "allEvent";
