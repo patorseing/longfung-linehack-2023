@@ -26,7 +26,7 @@ export const requestDonation = async (req: functions.https.Request) => {
   const bandData = band.data();
   const qrImage = bandData?.qrImage;
 
-  if (qrImage === null) {
+  if (!qrImage) {
     reply(replyToken, {
       type: "text",
       text: "ดูเหมือนว่าศิลปินจะยังไม่ได้เปิดให้แฟนๆ สนับสนุนผ่านน้องโลมาน้า",
