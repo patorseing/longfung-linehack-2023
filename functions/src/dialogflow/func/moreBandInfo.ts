@@ -1,4 +1,5 @@
 import {WebhookClient} from "dialogflow-fulfillment";
+import queryString from "query-string";
 
 import {firestore} from "../../firebase";
 
@@ -10,12 +11,10 @@ export const requstMoreBandInfo = async (agent: WebhookClient) => {
   const bandData = band.data();
 
   if (bandData) {
+    const stringified = queryString.stringify({band: bandName});
     agent.add(
         /* eslint max-len: ["error", { "code": 100 }]*/
-        `https://liff.line.me/1657898632-vkQB6aYy/band-info?band=${bandName.replace(
-            " ",
-            "+"
-        )}`
+        `https://liff.line.me/1657898632-vkQB6aYy/band-info?band=${stringified}`
     );
   } else {
     agent.add("น้องโลมาหาวงดนตรีที่คุณคนหาไม่เจอครับ โปรดลองใหม่อีกครั้ง");
