@@ -77,7 +77,6 @@ export const Calendar = ({
         <DatePicker
           selected={selectedDate}
           onChange={(date: Date) => {
-            console.log("onChange", dayjs(date).format("DD/MM/YYYY"));
             onChange?.(dayjs(date).format("DD/MM/YYYY"));
             setSelectedDate(date);
           }}

@@ -1,8 +1,8 @@
 import colors from "@/lib/theme/color";
 import { HStack, VStack, Image, Grid, Text } from "@chakra-ui/react";
-import { EventInfoResponse } from "../types";
+import { EventResponse } from "../types";
 type Props = {
-  data?: EventInfoResponse;
+  data?: EventResponse;
 };
 type InfoItemType = {
   img: string;
@@ -27,8 +27,8 @@ export const Information = ({ data }: Props) => {
           <Image src={`/images/${img}.svg`} boxSize="20px" />
           <Text>{label}</Text>
         </HStack>
-        {!isLink ? (
-          <Text>{value}</Text>
+        {!isLink || !value ? (
+          <Text>{value ?? "-"}</Text>
         ) : (
           <Text
             as="a"
@@ -88,11 +88,11 @@ export const Information = ({ data }: Props) => {
     {
       img: "location-icon",
       label: "สถานที่",
-      value: data?.eventLocation.address,
+      value: data?.eventLocation?.address,
     },
     {
       img: "map-icon",
-      value: data?.eventLocation.googleMapLink,
+      value: data?.eventLocation?.googleMapLink,
       label: "Google Map URL",
       isLink: true,
     },
@@ -102,9 +102,9 @@ export const Information = ({ data }: Props) => {
     {
       img: "ticket-icon",
       label: "ค่าเข้างาน",
-      value: data?.ticketType.free
+      value: data?.ticketType?.free
         ? "ไม่มีค่าใช้จ่าย"
-        : `${data?.ticketType.price} บาท`,
+        : `${data?.ticketType?.price ?? 0} บาท`,
     },
     {
       img: "seat-icon",
@@ -131,15 +131,15 @@ export const Information = ({ data }: Props) => {
   const socilaSection = [
     {
       img: "social/website",
-      link: data?.socialMedia.website,
+      link: data?.socialMedia?.website,
     },
     {
       img: "social/instagram",
-      link: data?.socialMedia.instagram,
+      link: data?.socialMedia?.instagram,
     },
     {
       img: "social/facebook",
-      link: data?.socialMedia.facebook,
+      link: data?.socialMedia?.facebook,
     },
   ];
 

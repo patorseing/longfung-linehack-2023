@@ -1,64 +1,32 @@
 import { EventInfoType } from "@/lib/type";
-import { VStack, Text, SimpleGrid } from "@chakra-ui/react";
+import {
+  VStack,
+  Text,
+  SimpleGrid,
+  CircularProgress,
+  Flex,
+} from "@chakra-ui/react";
 import { EventCard } from "./components/EventCard";
+import { useGetAllEvents } from "./services/getAllEvents";
 
 const EventsPage = () => {
-  const MOCK_EVENT: EventInfoType[] = [
-    {
-      eventName: "เทศกาลดนตรีในสวน",
-      eventDate: "02/01/2023",
-      ticketType: { free: false, price: 100 },
-      location: "สวนจัตุจักร",
-      follows: 10,
-      eventStartTime: "17:00",
-      eventEndTime: "18:00",
-    },
-    {
-      eventName: "เทศกาลดนตรีในบ้าน",
-      eventDate: "02/10/2023",
-      ticketType: { free: false, price: 100 },
-      location: "สวนจัตุจักร",
-      follows: 0,
-      eventStartTime: "17:00",
-      eventEndTime: "18:00",
-    },
-    {
-      eventName: "เทศกาลดนตรีในโรงเรียน",
-      eventDate: "10/03/2023",
-      ticketType: { free: false, price: 100 },
-      location: "สวนจัตุจักร",
-      follows: 30,
-      eventStartTime: "17:00",
-      eventEndTime: "18:00",
-    },
-    {
-      eventName: "เทศกาลดนตรีในวัด",
-      eventDate: "30/07/2023",
-      ticketType: { free: true },
-      location: "สวนจัตุจักร",
-      follows: 13,
-      eventStartTime: "17:00",
-      eventEndTime: "18:00",
-    },
-    {
-      eventName: "เทศกาลดนตรีในป่า",
-      eventDate: "02/01/2023",
-      ticketType: { free: true },
-      location: "สวนจัตุจักร",
-      follows: 13,
-      eventStartTime: "17:00",
-      eventEndTime: "18:00",
-    },
-    {
-      eventName: "เทศกาลดนตรีในป่า",
-      eventDate: "02/12/2023",
-      ticketType: { free: true },
-      location: "สวนจัตุจักร",
-      follows: 13,
-      eventStartTime: "17:00",
-      eventEndTime: "18:00",
-    },
-  ];
+  const { data: event, isLoading } = useGetAllEvents();
+  if (isLoading) {
+    return (
+      <Flex m="auto">
+        <CircularProgress isIndeterminate color="primary.500" />
+      </Flex>
+    );
+  }
+
+  if (!event) {
+    return (
+      <Flex m="auto">
+        <Text> Not Found Event</Text>
+      </Flex>
+    );
+  }
+
   return (
     <VStack sx={{ w: "100%", alignItems: "center", pt: 9, px: { base: 6 } }}>
       <Text
@@ -79,10 +47,11 @@ const EventsPage = () => {
           justifyItems: "center",
           borderRadius: "8px",
           p: "16px",
+          h: "auto",
         }}
       >
-        {MOCK_EVENT.map((item, index) => (
-          <EventCard key={index} {...item} />
+        {event.map((item, index) => (
+          <EventCard key={index} data={item} />
         ))}
       </SimpleGrid>
     </VStack>

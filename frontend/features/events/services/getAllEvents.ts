@@ -1,18 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 
+import { ALL_EVENT } from "../constants";
 import { _axios, useDefaultAxiosHeader } from "@/lib/hooks/axios";
-import { EventResponse, RawEventResponse } from "../types";
-import { EVENT } from "../constants";
+import { EventResponse } from "@/features/eventInformation/types";
 
-export const useGetEventInfo = (event: string) => {
+export const useGetAllEvents = () => {
   const headers = useDefaultAxiosHeader();
-  return useQuery<EventResponse>({
-    queryKey: [EVENT],
+  return useQuery<EventResponse[]>({
+    queryKey: [ALL_EVENT],
     queryFn: async function () {
-      const { data } = await _axios<RawEventResponse>({
+      const { data } = await _axios<{ data: EventResponse[] }>({
         method: "get",
-        url: "/events/info",
-        params: { eventName: event },
+        url: "/events/all",
         headers,
       });
 

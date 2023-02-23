@@ -1,23 +1,23 @@
 import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
-import { EventInfoResponse } from "../types";
+import { EventResponse } from "../types";
 import { Information } from "./Information";
 import { Lineup } from "./Lineup";
 
 type Props = {
-  eventInfo?: EventInfoResponse;
+  eventInfo?: EventResponse;
 };
 export const EventInformation = ({ eventInfo }: Props) => {
   const TAB = ["รายละเอียด", "ตารางเวลา"];
   return (
     <Box>
-      <Tabs size="md" variant="enclosed">
+      <Tabs size="lg" variant="enclosed">
         <TabList sx={{}}>
           {TAB.map((item) => {
             return (
               <Tab
                 key={item}
                 sx={{
-                  w: { base: "", md: "250px" },
+                  w: "full",
                   textTransform: "capitalize",
                   color: "textDescription",
                   bg: "white",
