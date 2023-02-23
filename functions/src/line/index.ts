@@ -41,10 +41,11 @@ export const webhook = async (
                 });
               } else if (event.message.text.includes("ขอช่องทางสนับสนุนของ")) {
                 await requestDonation(req);
-              } else if (event.message.text.includes("ใช่แล้ว อยากส่งสลิปให้กับ")) {
+              } else if (
+                event.message.text.includes("ใช่แล้ว อยากส่งสลิปให้กับ")
+              ) {
                 await submitDonation(req);
-              }
-              else {
+              } else {
                 await postToDialogflow(req);
               }
             }

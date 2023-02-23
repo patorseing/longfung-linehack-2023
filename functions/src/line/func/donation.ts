@@ -33,7 +33,7 @@ export const requestDonation = async (req: functions.https.Request) => {
   if (!qrImage) {
     await reply(replyToken, {
       type: "text",
-      /* eslint max-len: ["error", { "code": 119 }]*/
+      // eslint-disable-next-line
       text: "ดูเหมือนว่าศิลปินจะยังไม่ได้แจ้งช่องทางให้แฟนๆ สนับสนุนในตอนนี้ หากมีมาเมื่อไร น้องโลมาจะรีบมาแจ้งนะครับ",
     });
   }
@@ -102,16 +102,18 @@ export const submitDonation = async (req: functions.https.Request) => {
     });
   }
 
-  const donationUrl = `https://loma-nkaf.web.app/band-donation/${encodeURIComponent(bandName)}`
+  const donationUrl = `https://loma-nkaf.web.app/band-donation/${encodeURIComponent(
+      bandName
+  )}`;
 
   const payload = {
     type: "text",
     text: `ส่งการสนับสนุนของคุณผ่านลิงค์นี้ได้เลยย ${donationUrl}`,
-  }
+  };
 
   const isValidMsg = await validateLineMsg("reply", [payload]);
 
   if (isValidMsg) {
     await reply(replyToken, payload);
   }
-}
+};
