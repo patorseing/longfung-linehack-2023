@@ -5,9 +5,9 @@ import * as functions from "firebase-functions";
 import {webhook, remindEventForUserPubSub} from "./line";
 
 const runtimeOpts = {
-  timeoutSeconds: 8,
-  memory: "1GB" as const,
-  minInstances: 1,
+  // timeoutSeconds: 8,
+  // memory: "1GB" as const,
+  // minInstances: 1,
 };
 const region = "asia-northeast1";
 
@@ -18,7 +18,10 @@ exports.webhook = functions
 
 import {dialogflow} from "./dialogflow";
 
-exports.dialogflowFirebaseFulfillment = functions.https.onRequest(dialogflow);
+exports.dialogflowFirebaseFulfillment = functions
+    .region(region)
+    .runWith(runtimeOpts)
+    .https.onRequest(dialogflow);
 
 import * as express from "express";
 
@@ -40,9 +43,14 @@ app.use("/bands", tokenVerification, bandsRouter);
 app.use("/events", tokenVerification, eventsRouter);
 app.use("/healthcheck", tokenVerification, healthCheckRouter);
 
-exports.api = functions.https.onRequest(app);
+exports.api = functions
+    .region(region)
+    .runWith(runtimeOpts)
+    .https.onRequest(app);
 
-exports.remindEventForUserPubSub = functions.pubsub
-    .schedule("30 19 * * 5")
+exports.remindEventForUserPubSub = functions
+    .region(region)
+    .runWith(runtimeOpts)
+    .pubsub.schedule("30 19 * * 5")
     .timeZone("Asia/Bangkok")
     .onRun(remindEventForUserPubSub);
