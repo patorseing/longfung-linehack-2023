@@ -4,7 +4,17 @@ import * as functions from "firebase-functions";
 
 import {webhook, remindEventForUserPubSub} from "./line";
 
-exports.webhook = functions.https.onRequest(webhook);
+const runtimeOpts = {
+  timeoutSeconds: 8,
+  memory: "1GB" as const,
+  minInstances: 1,
+};
+const region = "asia-northeast1";
+
+exports.webhook = functions
+    .region(region)
+    .runWith(runtimeOpts)
+    .https.onRequest(webhook);
 
 import {dialogflow} from "./dialogflow";
 

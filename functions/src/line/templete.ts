@@ -464,3 +464,63 @@ export const bandTemplete = (band: createBandDTO) => {
     },
   };
 };
+
+export const bandLineUpTemplete = (
+    bandName: string,
+    startTime: string,
+    endTime: string,
+    bandImage?: string
+) => {
+  return {
+    type: "flex",
+    altText: bandName,
+    contents: {
+      type: "bubble",
+      size: "mega",
+      body: {
+        type: "box",
+        layout: "horizontal",
+        contents: [
+          {
+            type: "image",
+            url:
+              bandImage ??
+              "https://firebasestorage.googleapis.com/v0/b/loma-nkaf.appspot.com/o/undefine.png?alt=media&token=c37fea4d-c6a9-4344-991d-d8a01fef142d",
+            size: "full",
+            aspectMode: "cover",
+          },
+          {
+            type: "box",
+            layout: "vertical",
+            contents: [
+              {
+                type: "text",
+                text: `${startTime} - ${endTime}`,
+                wrap: true,
+                size: "sm",
+              },
+              {
+                type: "text",
+                text: bandName,
+                gravity: "center",
+                wrap: false,
+                size: "xl",
+                weight: "bold",
+              },
+            ],
+            height: "50%",
+            paddingAll: "xl",
+            margin: "md",
+            offsetTop: "25px",
+          },
+        ],
+        paddingAll: "none",
+      },
+      action: {
+        type: "message",
+        label: "ดูรายละเอียดเพิ่มเติม",
+        text: `ขอรายละเอียดของวง ${bandName} นี้เพิ่มเติม`,
+      },
+    },
+  };
+};

@@ -8,7 +8,8 @@
     "strict": true,
     "target": "es2017",
     "typeRoots": ["./node_modules/@types", "./src/types"],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "lib": ["ES2021.String"]
   },
   "compileOnSave": true,
   "include": ["src"]
