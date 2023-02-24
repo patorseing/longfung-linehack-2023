@@ -28,7 +28,14 @@ const EventsPage = () => {
   }
 
   return (
-    <VStack sx={{ w: "100%", alignItems: "center", pt: 9, px: { base: 6 } }}>
+    <VStack
+      sx={{
+        w: "100%",
+        alignItems: "center",
+        pt: 9,
+        px: { base: 6 },
+      }}
+    >
       <Text
         sx={{
           fontSize: { base: "24px", md: "40px" },
