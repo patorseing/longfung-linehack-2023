@@ -40,6 +40,7 @@ export const CardInfo = (props: Props) => {
       >
         <Image
           src={img}
+          alt={`band image`}
           sx={{
             w: "inherit",
             borderTopRadius: "10px",
