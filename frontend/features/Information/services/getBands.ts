@@ -18,7 +18,6 @@ export const useBands = () => {
         params: { userId: profile?.userId },
         headers,
       });
-
       return data.data;
     },
     enabled: !!headers["X-Firebase-AppCheck"] && !!profile?.userId,

@@ -38,7 +38,7 @@ export const UploadPicture = (props: UploadPictureProps) => {
             justifyContent: "center",
           }}
         >
-          <Image src={fileSrc} sx={{ h: "full" }} />
+          <Image src={fileSrc} sx={{ h: "full" }} alt="upload image" />
         </Flex>
         <Button
           size="sm"

@@ -45,7 +45,7 @@ export const FormInput = (props: FormInputProps) => {
           {...rest}
           {...register}
           disabled={disable}
-          sx={{ fontSize: { base: "14px", md: "16px" } }}
+          sx={{ fontSize: { base: "14px", md: "16px" }, bg: "white" }}
         />
       </HStack>
       {errorMessage && (

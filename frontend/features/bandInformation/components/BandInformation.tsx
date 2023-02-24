@@ -85,7 +85,11 @@ export const BandInformation = ({ bandInfo }: Props) => {
                 p: 2,
               }}
             >
-              <Image src="/images/like-icon.svg" boxSize="28px" />
+              <Image
+                src="/images/like-icon.svg"
+                boxSize="28px"
+                alt="like image"
+              />
               <Text sx={{ fontSize: "12px", fontWeight: 400 }}>
                 คุณสามารถมั่นใจได้ว่าเงินสนับสนุนทั้งหมดจะถูกส่งตรงเข้าทาง
                 บัญชีของศิลปินโดยตรงและไม่มีการหักเงินผ่านตัวกลางใดทั้งสิ้น
@@ -96,6 +100,7 @@ export const BandInformation = ({ bandInfo }: Props) => {
               src={bandInfo.qrImage || DEFAULT_LONGFUNG}
               w="full"
               maxW="370px"
+              alt="band qr code"
             />
           </VStack>
         </TabPanel>

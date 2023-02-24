@@ -68,13 +68,21 @@ export const useCreatEvent = () => {
         title: "Success",
         description: "Create Event Successful",
         status: "success",
-        position: "top-right",
+        position: "top",
         duration: 3000,
       });
 
       setTimeout(() => {
         push("/information");
       }, 3000);
+    },
+    onError(error) {
+      toast({
+        title: "Error",
+        description: error.message,
+        status: "error",
+        position: "top",
+      });
     },
   });
 };
