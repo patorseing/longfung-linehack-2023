@@ -93,6 +93,7 @@ export const EventCard = ({ data }: Props) => {
               w: "inherit",
               borderTopRadius: "10px",
             }}
+            alt={`event image`}
           />
         </Box>
         <Grid

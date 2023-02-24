@@ -15,7 +15,7 @@ export const FormTextarea = (props: FormTextareaProps) => {
         <Text sx={{ fontSize: { base: "14px", md: "16px" } }}>{label}</Text>
       )}
       <Textarea
-        sx={{ fontSize: { base: "14px", md: "16px" } }}
+        sx={{ fontSize: { base: "14px", md: "16px" }, bg: "white" }}
         minH="116px"
         isInvalid={!!errorMessage}
         {...rest}

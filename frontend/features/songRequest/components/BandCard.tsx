@@ -28,6 +28,7 @@ export const BandCard = (props: BandCardProps) => {
           objectFit: "cover",
           borderRadius: { base: "4px", md: "6px" },
         }}
+        alt="band image"
       />
       <Box>
         {!hideOnStageText && (

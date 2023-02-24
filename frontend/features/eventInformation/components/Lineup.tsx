@@ -26,6 +26,7 @@ export const Lineup = ({ data }: Props) => {
           src={`${bandImage ?? "/images/default-band.svg"}`}
           boxSize={{ base: "32px", md: "64px" }}
           sx={{ borderRadius: "4px" }}
+          alt={`band image`}
         />
 
         <VStack sx={{ alignItems: "baseline", justifyContent: "center" }}>

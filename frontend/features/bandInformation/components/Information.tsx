@@ -29,7 +29,7 @@ export const Information = ({ data }: Props) => {
         }}
       >
         <HStack gap="8px">
-          <Image src={`/images/${img}.svg`} boxSize="20px" />
+          <Image src={`/images/${img}.svg`} boxSize="20px" alt={`${img}`} />
           <Text>{label}</Text>
         </HStack>
         {!isLink ? (
@@ -60,7 +60,11 @@ export const Information = ({ data }: Props) => {
   const SocialInfo = ({ img, link }: { img: string; link?: string }) => {
     return (
       <HStack gap="8px" sx={{ fontSize: { base: "14px", md: "16px" } }}>
-        <Image src={`/images/${img}.svg`} boxSize="20px" />
+        <Image
+          src={`/images/${img}.svg`}
+          boxSize="20px"
+          alt={`social ${img}`}
+        />
         <Text
           as="a"
           target="_blank"

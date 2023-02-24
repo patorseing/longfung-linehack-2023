@@ -51,7 +51,11 @@ export const NotificationCard = (props: NotificationCardProps) => {
         textAlign: "center",
       }}
     >
-      <Image src={picture} sx={{ boxSize: { base: "120px", md: "140px" } }} />
+      <Image
+        src={picture}
+        sx={{ boxSize: { base: "120px", md: "140px" } }}
+        alt="thanks"
+      />
       <Text
         sx={{
           fontSize: { base: "24px", md: "32px" },

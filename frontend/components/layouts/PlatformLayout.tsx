@@ -46,7 +46,11 @@ export const PlatformLayout = (
             justifyContent: "space-between",
           }}
         >
-          <Image src="/images/logo.svg" w={{ base: "60px", md: "80px" }} />
+          <Image
+            src="/images/logo.svg"
+            w={{ base: "60px", md: "80px" }}
+            alt="longfung logo"
+          />
           <HStack spacing="4">
             <Text>{profile?.displayName}</Text>
             <Avatar src={profile?.pictureUrl} size={{ base: "sm", md: "md" }} />

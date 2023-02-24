@@ -63,6 +63,7 @@ const EventInfoPage = () => {
           <Image
             src={`${event?.eventImage ?? "/images/default-band.svg"}`}
             sx={{ borderRadius: "8px", w: { base: "350px", md: "360px" } }}
+            alt="band image"
           />
         </Box>
 

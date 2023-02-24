@@ -68,6 +68,7 @@ const BandInfoPage = () => {
           src={band.bandImage || DEFAULT_LONGFUNG}
           boxSize={{ base: "350px", md: "360px" }}
           sx={{ borderRadius: "8px" }}
+          alt="band image"
         />
         <BandInformation bandInfo={band} />
       </Grid>
