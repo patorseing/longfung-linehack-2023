@@ -1,27 +1,28 @@
 "use strict";
-
+/* eslint max-len: ["error", { "code": 200 }]*/
 import * as functions from "firebase-functions";
 
-import {webhook, remindEventForUserPubSub} from "./line";
+import {
+  // webhook,
+  remindEventForUserPubSub,
+} from "./line";
 
-const runtimeOpts = {
-  // timeoutSeconds: 8,
-  // memory: "1GB" as const,
-  // minInstances: 1,
-};
 const region = "asia-northeast1";
+// const runtimeOpts = {
+//   timeoutSeconds: 8,
+//   memory: "1GB" as const,
+//   minInstances: 1,
+// };
 
-exports.webhook = functions
-    .region(region)
-    .runWith(runtimeOpts)
-    .https.onRequest(webhook);
+// exports.webhook = functions.https // .runWith(runtimeOpts) // .region(region)
+//     .onRequest(webhook);
 
 import {dialogflow} from "./dialogflow";
 
 exports.dialogflowFirebaseFulfillment = functions
     .region(region)
-    .runWith(runtimeOpts)
-    .https.onRequest(dialogflow);
+    .https // .runWith(runtimeOpts)
+    .onRequest(dialogflow);
 
 import * as express from "express";
 
@@ -45,12 +46,12 @@ app.use("/healthcheck", tokenVerification, healthCheckRouter);
 
 exports.api = functions
     .region(region)
-    .runWith(runtimeOpts)
-    .https.onRequest(app);
+    .https // .runWith(runtimeOpts)
+    .onRequest(app);
 
 exports.remindEventForUserPubSub = functions
     .region(region)
-    .runWith(runtimeOpts)
-    .pubsub.schedule("30 19 * * 5")
+    .pubsub // .runWith(runtimeOpts)
+    .schedule("30 19 * * 5")
     .timeZone("Asia/Bangkok")
     .onRun(remindEventForUserPubSub);

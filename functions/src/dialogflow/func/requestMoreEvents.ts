@@ -21,9 +21,9 @@ export const requestMoreEvents = async (agent: WebhookClient) => {
           {
             type: "button",
             action: {
-              type: "message",
+              type: "uri",
               label: "ดูงานดนตรีเพิ่มเติม",
-              text: "มีงานดนตรีมากกว่านี้อีกไหม",
+              uri: "https://liff.line.me/1657898632-vkQB6aYy/events",
             },
           },
         ],
