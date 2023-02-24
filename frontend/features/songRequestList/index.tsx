@@ -61,6 +61,10 @@ const SongRequestListPage = () => {
   };
 
   const ClearButton = () => {
+    if (!songList.length) {
+      return <></>;
+    }
+
     return (
       <Flex sx={{ justifyContent: "end" }}>
         <Button
