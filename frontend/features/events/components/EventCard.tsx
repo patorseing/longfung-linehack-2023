@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Grid,
@@ -23,6 +23,7 @@ export const EventCard = ({ data }: Props) => {
   const formatDate = data.eventDate.split("/");
   const date = formatDate[0];
   const month = formatDate[1];
+  const [isLiff, setIsLiff] = useState<boolean>(false);
 
   const InfoItem = ({ value, label }: { value?: string; label: string }) => {
     return (
@@ -62,6 +63,13 @@ export const EventCard = ({ data }: Props) => {
       value: interested.length.toLocaleString(),
     },
   ];
+  useEffect(() => {
+    async function getLiff() {
+      const liff = (await import("@line/liff")).default;
+      setIsLiff(liff.isInClient());
+    }
+    getLiff();
+  }, []);
 
   return (
     <Link
@@ -147,7 +155,7 @@ export const EventCard = ({ data }: Props) => {
                 )
               }
               disabled={
-                interested.find((item) => item === profile?.userId)
+                interested.find((item) => item === profile?.userId) && isLiff
                   ? true
                   : false
               }
@@ -158,21 +166,23 @@ export const EventCard = ({ data }: Props) => {
                 bottom: 1,
                 left: 0,
                 _hover: {
-                  bg: "rgba(255, 152, 1, 0.2)",
+                  bg: isLiff ? "rgba(255, 152, 1, 0.2)" : "transparent",
                 },
               }}
               aria-label={""}
               onClick={async (e) => {
                 e.preventDefault();
-                const liff = (await import("@line/liff")).default;
-                liff.sendMessages([
-                  { type: "text", text: `อยากติดตาม ${data.eventName}` },
-                ]);
-                setInterested((value) => {
-                  return profile
-                    ? data.interestedPerson.concat(profile.userId)
-                    : value;
-                });
+                if (isLiff) {
+                  const liff = (await import("@line/liff")).default;
+                  liff.sendMessages([
+                    { type: "text", text: `อยากติดตาม ${data.eventName}` },
+                  ]);
+                  setInterested((value) => {
+                    return profile
+                      ? data.interestedPerson.concat(profile.userId)
+                      : value;
+                  });
+                }
               }}
             />
           </VStack>
