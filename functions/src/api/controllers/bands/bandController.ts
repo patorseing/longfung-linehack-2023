@@ -59,7 +59,7 @@ export const createBand = async (req: Request, res: Response) => {
         req,
         async (_: FormErrors, fields: FormFields, files: FormFiles) => {
           const socialMedia = JSON.parse(fields.socialMedia || "{}");
-          /* eslint max-len: ["error", { "code": 83 }]*/
+          /* eslint max-len: ["error", { "code": 200 }]*/
           const streamingPlatform = JSON.parse(fields.streamingPlatform || "{}");
           const songRequest = fields.songRequest === "true";
           const lineBeacon = JSON.parse(fields.lineBeacon || "[]");
