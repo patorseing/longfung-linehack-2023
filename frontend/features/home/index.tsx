@@ -9,6 +9,7 @@ const Home = () => {
   const { profile } = useProfileContext();
 
   useEffect(() => {
+    console.log("this", profile?.userId);
     profile?.userId && router.push("/registration");
   }, []);
 
