@@ -8,6 +8,11 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: "/",
+        destination: '/registration',
+        permanent: false,
+      },
+      {
         source: "/band-info",
         destination: `/band-info/%20`,
         permanent: false,
