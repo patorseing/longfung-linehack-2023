@@ -11,7 +11,7 @@ const Home = () => {
   useEffect(() => {
     console.log("this", profile?.userId);
     profile?.userId && router.push("/registration");
-  }, []);
+  }, [profile?.userId]);
 
   return (
     <>
