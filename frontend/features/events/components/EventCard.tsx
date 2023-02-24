@@ -29,7 +29,7 @@ export const EventCard = ({ data }: Props) => {
     return (
       <Grid
         sx={{
-          gridTemplateColumns: { base: "1fr 1fr", md: "70px auto" },
+          gridTemplateColumns: { base: "1fr 2fr", md: "70px auto" },
           w: "100%",
           fontSize: { base: "12px", md: "14px" },
           wordBreak: "break-word",
@@ -118,7 +118,7 @@ export const EventCard = ({ data }: Props) => {
             },
           }}
         >
-          <VStack sx={{ w: "40px", textAlign: "center", h: "100%" }}>
+          <VStack sx={{ w: "40px", textAlign: "center" }}>
             <Text sx={{ color: "primary.800", fontWeight: "bold" }}>
               {MONTH[Number(month) - 1]}
             </Text>
