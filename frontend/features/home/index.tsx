@@ -1,12 +1,15 @@
+import { useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+
+import { useProfileContext } from "@/context/profile";
 
 const Home = () => {
   const router = useRouter();
+  const { profile } = useProfileContext();
 
   useEffect(() => {
-    router.push("/registration");
+    profile?.userId && router.push("/registration");
   }, []);
 
   return (
