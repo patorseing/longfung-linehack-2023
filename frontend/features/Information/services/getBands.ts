@@ -15,7 +15,7 @@ export const useBands = () => {
       const { data } = await _axios<RawBandResponse>({
         method: "get",
         url: "/bands",
-        params: { userId: profile?.userId ?? "123" },
+        params: { userId: profile?.userId },
         headers,
       });
 

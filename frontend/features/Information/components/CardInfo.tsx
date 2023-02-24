@@ -26,7 +26,9 @@ export const CardInfo = (props: Props) => {
         alignItems: "center",
       }}
       onClick={() => {
-        push({ pathname: `/${path}-info/${name}` });
+        push({
+          pathname: `/${path}-info/${name}`,
+        });
       }}
     >
       <Box
@@ -47,7 +49,6 @@ export const CardInfo = (props: Props) => {
       <Flex
         sx={{
           alignItems: "center",
-          h: { base: `calc(250px - 180px)`, md: `calc(250px - 180px)` },
           mt: "0 !important",
         }}
       >
@@ -56,6 +57,7 @@ export const CardInfo = (props: Props) => {
             textAlign: "center",
             fontSize: { base: "16px", md: "20px" },
             fontWeight: "bold",
+            p: "10px",
           }}
         >
           {name}

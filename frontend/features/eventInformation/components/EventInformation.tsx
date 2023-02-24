@@ -1,4 +1,12 @@
-import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+} from "@chakra-ui/react";
 import { EventResponse } from "../types";
 import { Information } from "./Information";
 import { Lineup } from "./Lineup";
@@ -34,6 +42,7 @@ export const EventInformation = ({ eventInfo }: Props) => {
         </TabList>
         <TabPanels
           sx={{
+            minH: "625px",
             w: { base: "", md: "732px" },
             borderTop: "3px solid",
             borderColor: "primary.800",
@@ -46,7 +55,11 @@ export const EventInformation = ({ eventInfo }: Props) => {
             <Information data={eventInfo} />
           </TabPanel>
           <TabPanel sx={{ p: { base: "8px", md: "16px" } }}>
-            <Lineup data={eventInfo?.lineUp} />
+            {eventInfo?.lineUp.length ? (
+              <Lineup data={eventInfo?.lineUp} />
+            ) : (
+              <Flex sx={{ m: "auto", justifyContent: "center" }}>No Data</Flex>
+            )}
           </TabPanel>
         </TabPanels>
       </Tabs>

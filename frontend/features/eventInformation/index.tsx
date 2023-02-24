@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import {
   VStack,
   Text,
@@ -5,16 +6,16 @@ import {
   Grid,
   CircularProgress,
   Flex,
+  Box,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
+
 import { EventInformation } from "./components/EventInformation";
 import { useGetEventInfo } from "./services";
 
 const EventInfoPage = () => {
   const router = useRouter();
-  const { data: event, isLoading } = useGetEventInfo(
-    router.query?.event as string
-  );
+  const query = router.query?.eventName as string;
+  const { data: event, isLoading } = useGetEventInfo(query);
 
   if (isLoading) {
     return (
@@ -33,13 +34,20 @@ const EventInfoPage = () => {
   }
 
   return (
-    <VStack sx={{ w: "100%", alignItems: "center", pt: 9, px: { base: 6 } }}>
+    <VStack
+      sx={{
+        w: "100%",
+        alignItems: "center",
+        textAlign: "center",
+        pt: 9,
+        px: { base: 6 },
+      }}
+    >
       <Text
         sx={{
           fontSize: { base: "24px", md: "40px" },
           fontWeight: "bold",
           color: "white",
-
           mb: { base: 2, xl: 4 },
         }}
       >
@@ -51,11 +59,13 @@ const EventInfoPage = () => {
           gap: "16px",
         }}
       >
-        <Image
-          src={`${event?.eventImage ?? "/images/default-band.svg"}`}
-          boxSize={{ base: "350px", md: "360px" }}
-          sx={{ borderRadius: "8px" }}
-        />
+        <Box sx={{ m: "0 auto" }}>
+          <Image
+            src={`${event?.eventImage ?? "/images/default-band.svg"}`}
+            sx={{ borderRadius: "8px", w: { base: "350px", md: "360px" } }}
+          />
+        </Box>
+
         <EventInformation eventInfo={event} />
       </Grid>
     </VStack>
