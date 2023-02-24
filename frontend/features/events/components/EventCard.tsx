@@ -146,6 +146,11 @@ export const EventCard = ({ data }: Props) => {
                   <BsHeart color="black" size={12} />
                 )
               }
+              disabled={
+                interested.find((item) => item === profile?.userId)
+                  ? true
+                  : false
+              }
               size="sm"
               sx={{
                 borderRadius: "50%",
@@ -157,14 +162,13 @@ export const EventCard = ({ data }: Props) => {
                 },
               }}
               aria-label={""}
-              onClick={(e) => {
+              onClick={async (e) => {
                 e.preventDefault();
+                const liff = (await import("@line/liff")).default;
+                liff.sendMessages([
+                  { type: "text", text: `อยากติดตาม ${data.eventName}` },
+                ]);
                 setInterested((value) => {
-                  if (interested.find((item) => item === profile?.userId)) {
-                    return interested.filter(
-                      (item) => item !== profile?.userId
-                    );
-                  }
                   return profile
                     ? data.interestedPerson.concat(profile.userId)
                     : value;
