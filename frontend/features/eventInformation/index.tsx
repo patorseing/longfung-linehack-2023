@@ -14,7 +14,7 @@ import { useGetEventInfo } from "./services";
 
 const EventInfoPage = () => {
   const router = useRouter();
-  const query = router.query?.eventName as string;
+  const query = router.query?.event as string;
   const { data: event, isLoading } = useGetEventInfo(query);
 
   if (isLoading) {
