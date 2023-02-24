@@ -5,10 +5,11 @@ import { DEFAULT_LONGFUNG } from "@/constants";
 
 type BandCardProps = {
   data: BandResponse;
+  hideOnStageText?: boolean;
 };
 
 export const BandCard = (props: BandCardProps) => {
-  const { data } = props;
+  const { data, hideOnStageText } = props;
 
   return (
     <HStack
@@ -29,9 +30,11 @@ export const BandCard = (props: BandCardProps) => {
         }}
       />
       <Box>
-        <Text layerStyle="textValue" sx={{ color: "textDescription" }}>
-          On stage band
-        </Text>
+        {!hideOnStageText && (
+          <Text layerStyle="textValue" sx={{ color: "textDescription" }}>
+            On stage band
+          </Text>
+        )}
         <Text
           sx={{
             fontSize: {

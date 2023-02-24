@@ -34,6 +34,14 @@
       {
         "source": "/song-request/**",
         "destination": "/song-request/[band]/index.html"
+      },
+      {
+        "source": "/song-request-list/**",
+        "destination": "/song-request-list/[band]/index.html"
+      },
+      {
+        "source": "/band-donation/**",
+        "destination": "/band-donation/[band]/index.html"
       }
     ]
   },
