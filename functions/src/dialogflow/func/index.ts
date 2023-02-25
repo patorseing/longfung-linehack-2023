@@ -1,5 +1,5 @@
 export * from "./interestEvent";
 export * from "./moreEventInfo";
 export * from "./requestMoreEvents";
-export * from "./requstSong";
+export * from "./reqeustSong";
 export * from "./moreBandInfo";
