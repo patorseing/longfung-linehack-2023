@@ -44,7 +44,6 @@ export const useCreateBand = () => {
       formData.append("lineMelody", data.line_melody_url);
       formData.append("songRequest", JSON.stringify(data.song_request));
       formData.append("description", data.description);
-      formData.append("lineBeacon", JSON.stringify(data.beacons));
       formData.append("bandImage", data.band_image as FileWithPath);
       formData.append("qrImage", data.qr_image as FileWithPath);
 
