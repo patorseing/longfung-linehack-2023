@@ -9,7 +9,7 @@ import {validateLineMsg, pushMessage} from "../../line/util";
 export const requestMoreEvents = async (agent: WebhookClient) => {
   await agent.add("รอแป๊บนึงน้าาา ขอน้องโลมาหาก่อน");
   const lineUid = agent.originalRequest.payload.data.source.userId;
-  const events = await find7DaysEvent({limit: true});
+  const events = await find7DaysEvent();
 
   if (events.length) {
     const moreEvents = {
@@ -46,6 +46,7 @@ export const requestMoreEvents = async (agent: WebhookClient) => {
     };
 
     for (const event of events.slice(0, 3)) {
+      functions.logger.debug("MORE EVENT", event);
       const eventFlex = eventTemplate({event: event as Event});
 
       functions.logger.debug(eventFlex);

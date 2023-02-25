@@ -1,16 +1,12 @@
 import * as functions from "firebase-functions";
 
 import {format} from "date-fns-tz";
-import {add, toDate} from "date-fns";
+import {add} from "date-fns";
 
 import {Event} from "../../api/dto/event";
 import {firestore} from "..";
 
-export const find7DaysEvent = async ({
-  limit = false,
-}: {
-  limit?: boolean;
-}) => {
+export const find7DaysEvent = async () => {
   const start = format(new Date(), "dd/MM/yyyy", {
     timeZone: "Asia/Bangkok",
   });
@@ -20,7 +16,7 @@ export const find7DaysEvent = async ({
 
   functions.logger.debug("ALERT EVENT", start, end);
   const eventRef = await firestore.collection("Event").get();
-  const eventData = eventRef.docs
+  const eventData = (eventRef.docs ?? [])
       .map((doc) => {
         const event = doc.data();
         const eventDate = (event as Event).eventDate
@@ -28,6 +24,7 @@ export const find7DaysEvent = async ({
             .reverse()
             .join("-");
 
+        functions.logger.debug("EVENT DATE", start, end, eventDate);
         if (
           new Date(eventDate).getDate() >= new Date().getDate() &&
         new Date(eventDate).getDate() < add(new Date(), {days: 7}).getDate()
