@@ -25,7 +25,7 @@ export const getBand = async (req: Request, res: Response) => {
     return res.status(404).json({error: "band not found"});
   }
 
-  return res.status(200).json({data: band.data()});
+  return res.status(200).json({data: {token: bandToken, ...band.data()}});
 };
 
 export const getBands = async (req: Request, res: Response) => {
@@ -42,7 +42,7 @@ export const getBands = async (req: Request, res: Response) => {
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          bandList.push(doc.data());
+          bandList.push({token: doc.ref.id, ...doc.data()});
         });
       });
 
@@ -81,14 +81,14 @@ export const createBand = async (req: Request, res: Response) => {
 
           const bandImage = files.bandImage;
 
-          if (!bandImage) {
+          if (bandImage === undefined) {
             const imageUrl = await fileUploader(bucketName, bandImage.path);
 
             band.bandImage = imageUrl;
           }
 
           const qrImage = files.qrImage;
-          if (!qrImage) {
+          if (qrImage === undefined) {
             const imageUrl = await fileUploader(bucketName, qrImage.path);
 
             band.qrImage = imageUrl;
