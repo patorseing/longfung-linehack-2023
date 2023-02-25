@@ -6,9 +6,6 @@ export const isEventActive = (event: {
   const currentDate = admin.firestore.Timestamp.now();
   const eventEndTime = event.eventEndTime;
 
-  console.log(currentDate);
-  console.log(eventEndTime);
-
   return eventEndTime > currentDate;
 };
 
@@ -22,4 +19,12 @@ export const convertStringToData = (date: string, time: string): Date => {
 
 const transformDateString = (date: string) => {
   return date.split("/").reverse().join("-");
+};
+
+export const timestampToString = (timestamp: FirebaseFirestore.Timestamp) => {
+  return getTimeStringFromDate(timestamp.toDate());
+};
+
+const getTimeStringFromDate = (date: Date) => {
+  return date.toTimeString().substring(0, 5);
 };
