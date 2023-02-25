@@ -33,7 +33,7 @@ export const eventSchema = yup.object({
     yup.object({
       startTime: yup.string().required("Start time is required"),
       endTime: yup.string().required("End time is required"),
-      bandName: yup.string().required("Band name is required"),
+      bandName: yup.string().required("Band is required"),
     })
   ),
 });
