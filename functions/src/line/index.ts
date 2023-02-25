@@ -12,7 +12,7 @@ import {
 // import { find7DaysEvent } from "../firebase/db/event";
 // import { Event } from "../api/dto/event";
 // import { eventTemplate } from "../line/templete";
-import {requestDonation, submitDonation} from "./func/donation";
+import {requestDonation} from "./func/donation";
 
 export const webhook = async (
     req: functions.https.Request,
@@ -29,7 +29,6 @@ export const webhook = async (
     } else {
       const events = req.body.events;
       for (const event of events) {
-        functions.logger.debug(event);
         switch (event.type) {
           case "beacon":
             await beaconEvent(event);
@@ -41,12 +40,6 @@ export const webhook = async (
                   type: "text",
                   text: JSON.stringify(event),
                 });
-              } else if (event.message.text.includes("ขอช่องทางสนับสนุนของ")) {
-                await requestDonation(req);
-              } else if (
-                event.message.text.includes("ใช่แล้ว อยากส่งสลิปให้กับ")
-              ) {
-                await submitDonation(req);
               } else if (event.message.text.includes("ไม่เป็นไรน้องโลมา")) {
                 await reply(event.replyToken, {
                   type: "text",
@@ -72,6 +65,8 @@ export const webhook = async (
                 type: "text",
                 text: "น้องโลมาติดตาม ให้แล้วนะครับ",
               });
+            } else if (event.postback.data.includes("ขอช่องทางสนับสนุนของ")) {
+              await requestDonation(req);
             }
             break;
           default:
