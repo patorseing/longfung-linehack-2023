@@ -187,7 +187,7 @@ export const interestedEvent = async (req: Request, res: Response) => {
         interestedPerson: admin.firestore.FieldValue.arrayUnion(userId),
       });
     }
-    return res.status(200).send(true);
+    return res.status(200).json({sucess: true});
   } catch (e) {
     return res.status(500).send(e);
   }
