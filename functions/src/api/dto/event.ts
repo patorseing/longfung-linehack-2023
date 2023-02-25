@@ -31,8 +31,8 @@ export interface Event {
   eventName: string;
   userId: string;
   eventDate: string;
-  eventStartTime: string;
-  eventEndTime: string;
+  eventStartTime: Date;
+  eventEndTime: Date;
   socialMedia?: SocialMedia;
   eventLocation: {
     address: string;
