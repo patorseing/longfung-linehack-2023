@@ -13,7 +13,11 @@ import {
   defaultTicketType,
 } from "../../constants";
 import {FormErrors, FormFields, FormFiles} from "../../types";
-import {convertStringToData, isEventActive} from "../../utils/event";
+import {
+  convertStringToData,
+  isEventActive,
+  timestampToString,
+} from "../../utils/event";
 
 export const getAllEvents = async (_req: Request, res: Response) => {
   const event: FirebaseFirestore.DocumentData[] = [];
@@ -28,7 +32,13 @@ export const getAllEvents = async (_req: Request, res: Response) => {
               eventEndTime: doc.data().eventEndTime,
             })
           ) {
-            event.push({token: doc.ref.id, ...doc.data()});
+            console.log(timestampToString(doc.data().eventEndTime));
+            event.push({
+              token: doc.ref.id,
+              ...doc.data(),
+              eventEndTime: timestampToString(doc.data().eventEndTime),
+              eventStartTime: timestampToString(doc.data().eventStartTime),
+            });
           }
         });
       });
@@ -81,7 +91,12 @@ export const getEvent = async (req: Request, res: Response) => {
       )
   );
 
-  const response = {...eventData, lineUp: finalLineUp};
+  const response = {
+    ...eventData,
+    lineUp: finalLineUp,
+    eventEndTime: timestampToString(event.data()?.eventEndTime),
+    eventStartTime: timestampToString(event.data()?.eventStartTime),
+  };
 
   return res.status(200).json({data: response});
 };
@@ -101,7 +116,12 @@ export const getEvents = async (req: Request, res: Response) => {
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          eventList.push({token: doc.ref.id, ...doc.data()});
+          eventList.push({
+            token: doc.ref.id,
+            ...doc.data(),
+            eventEndTime: timestampToString(doc.data().eventEndTime),
+            eventStartTime: timestampToString(doc.data().eventStartTime),
+          });
         });
       });
 
