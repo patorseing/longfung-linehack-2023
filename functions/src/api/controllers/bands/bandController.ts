@@ -10,15 +10,15 @@ import {getOldHardwareIds} from "../../middlewares/bandMiddleware";
 import {FormErrors, FormFields, FormFiles} from "../../types";
 
 export const getBand = async (req: Request, res: Response) => {
-  const bandName = req.query.bandName;
+  const bandToken = req.query.token;
 
-  if (bandName === undefined) {
-    return res.status(400).json({error: "bandName cannot be blank"});
+  if (!bandToken) {
+    return res.status(400).json({error: "token cannot be blank"});
   }
 
   const band = await firestore
       .collection("Band")
-      .doc(bandName as string)
+      .doc(bandToken as string)
       .get();
 
   if (!band.exists) {
@@ -30,10 +30,9 @@ export const getBand = async (req: Request, res: Response) => {
 
 export const getBands = async (req: Request, res: Response) => {
   const bandList: FirebaseFirestore.DocumentData[] = [];
-
   const userId = req.query.userId;
 
-  if (userId === undefined) {
+  if (!userId) {
     return res.status(400).json({error: "userId cannot be blank"});
   }
 
