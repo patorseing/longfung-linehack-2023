@@ -22,7 +22,7 @@ export const useClearSongRequest = () => {
         method: "put",
         url: "/bands/song-request/clear",
         data: {
-          bandName,
+          token: bandName,
           userId: profile?.userId,
         },
         headers,

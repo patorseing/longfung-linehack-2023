@@ -4,17 +4,17 @@ import { Box, Button, Flex, Icon, Text } from "@chakra-ui/react";
 import { MdArrowForward, MdArrowBack } from "react-icons/md";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { BandFormValue } from "../../types"
-import { bandSchema } from "../../schema"
-import { useCreateBand } from "../../services"
+import { BandFormValue } from "../../types";
+import { bandSchema } from "../../schema";
+import { useCreateBand } from "../../services";
 
-import { Step } from "@/components/Step"
-import { PictureContextProvider } from "../../context/previewImage"
-import { FormStep1, FormStep2, FormStep3 } from "../../components/band"
+import { Step } from "@/components/Step";
+import { PictureContextProvider } from "../../context/previewImage";
+import { FormStep1, FormStep2, FormStep3 } from "../../components/band";
 
 const BandRegisterPage = () => {
-  const [step, setStep] = useState<number>(1)
-  const { mutate, isLoading } = useCreateBand()
+  const [step, setStep] = useState<number>(1);
+  const { mutate, isLoading } = useCreateBand();
 
   const methods = useForm<BandFormValue>({
     resolver: yupResolver(bandSchema),
@@ -30,17 +30,17 @@ const BandRegisterPage = () => {
         setStep((prev) => prev + 1);
 
         break;
-      case 2:
+      /* case 2:
         setStep((prev) => prev + 1);
-        break;
+        break; */
       default:
         return;
     }
   };
 
   const onSubmit = methods.handleSubmit((data) => {
-    mutate({ data })
-  })
+    mutate({ data });
+  });
 
   const renderForm = () => {
     switch (step) {
@@ -79,7 +79,7 @@ const BandRegisterPage = () => {
             >
               Band Information
             </Text>
-            <Step currentStep={step} totalStep={3} />
+            <Step currentStep={step} totalStep={2} />
             <Box
               sx={{
                 w: { base: "full", lg: "900px" },
@@ -117,7 +117,7 @@ const BandRegisterPage = () => {
                   Back
                 </Button>
               )}
-              {step === 3 && (
+              {step === 2 && (
                 <Button
                   isLoading={isLoading}
                   type="submit"
@@ -129,7 +129,7 @@ const BandRegisterPage = () => {
                   Submit
                 </Button>
               )}
-              {step !== 3 && (
+              {step !== 2 && (
                 <Button
                   sx={{
                     w: { base: "100px", sm: "130px", md: "155px" },
@@ -151,6 +151,6 @@ const BandRegisterPage = () => {
 
 BandRegisterPage.LayoutProps = {
   headTitle: "Registration | LongFung",
-}
+};
 
-export default BandRegisterPage
+export default BandRegisterPage;
