@@ -1,3 +1,4 @@
+import * as admin from "firebase-admin";
 import {Request, Response} from "express";
 import * as functions from "firebase-functions";
 import * as formidable from "formidable-serverless";
@@ -167,5 +168,27 @@ export const createEvent = async (req: Request, res: Response) => {
     return;
   } catch (err) {
     return res.status(500).send(err);
+  }
+};
+
+export const interestedEvent = async (req: Request, res: Response) => {
+  try {
+    const {userId, eventId} = req.body;
+
+    const eventRef = firestore.collection("Event").doc(eventId);
+    const event = await eventRef.get();
+    const eventData = event.data() as Event;
+    if (eventData.interestedPerson.includes(userId)) {
+      await eventRef.update({
+        interestedPerson: admin.firestore.FieldValue.arrayRemove(eventId),
+      });
+    } else {
+      await eventRef.update({
+        interestedPerson: admin.firestore.FieldValue.arrayUnion(userId),
+      });
+    }
+    return res.status(200).send(true);
+  } catch (e) {
+    return res.status(500).send(e);
   }
 };

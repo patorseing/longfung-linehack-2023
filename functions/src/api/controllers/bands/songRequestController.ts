@@ -152,5 +152,5 @@ export const clearAllSongRequest = async (req: Request, res: Response) => {
         });
       });
 
-  return res.status(200).json({sucess: true})
+  return res.status(200).json({sucess: true});
 };
