@@ -1,4 +1,4 @@
-import { EventInfoType } from "@/lib/type";
+import { useRouter } from "next/router";
 import {
   VStack,
   Text,
@@ -6,11 +6,29 @@ import {
   CircularProgress,
   Flex,
 } from "@chakra-ui/react";
+
 import { EventCard } from "./components/EventCard";
 import { useGetAllEvents } from "./services/getAllEvents";
+import { useMemo } from "react";
+import { useProfileContext } from "@/context/profile";
 
 const EventsPage = () => {
+  const router = useRouter();
   const { data: event, isLoading } = useGetAllEvents();
+  const { profile } = useProfileContext();
+
+  const isAllEvents = useMemo(() => {
+    if (router.pathname === "/events") return true;
+    return false;
+  }, [router.pathname]);
+
+  const eventData = useMemo(() => {
+    if (isAllEvents) return event;
+    return event?.filter((item) =>
+      item.interestedPerson?.find((interest) => interest === profile?.userId)
+    );
+  }, [isAllEvents, event, profile?.userId]);
+
   if (isLoading) {
     return (
       <Flex m="auto">
@@ -44,23 +62,29 @@ const EventsPage = () => {
           mb: { base: 2, xl: 4 },
         }}
       >
-        Upcoming Events
+        {isAllEvents ? "Upcoming Events" : "Your interested events"}
       </Text>
-      <SimpleGrid
-        columns={{ base: 1, md: 3, xl: 4 }}
-        row={{ base: 10, md: 4, xl: 2 }}
-        spacing={{ base: 5, md: 8 }}
-        sx={{
-          justifyItems: "center",
-          borderRadius: "8px",
-          p: "16px",
-          h: "auto",
-        }}
-      >
-        {event.map((item, index) => (
-          <EventCard key={index} data={item} />
-        ))}
-      </SimpleGrid>
+      {eventData?.length ? (
+        <SimpleGrid
+          columns={{ base: 1, md: 3, xl: 4 }}
+          row={{ base: 10, md: 4, xl: 2 }}
+          spacing={{ base: 5, md: 8 }}
+          sx={{
+            justifyItems: "center",
+            borderRadius: "8px",
+            p: "16px",
+            h: "auto",
+          }}
+        >
+          {eventData?.map((item, index) => (
+            <EventCard key={index} data={item} />
+          ))}
+        </SimpleGrid>
+      ) : (
+        <Flex sx={{ m: "auto", justifyContent: "center", w: "100%" }}>
+          No Data
+        </Flex>
+      )}
     </VStack>
   );
 };
