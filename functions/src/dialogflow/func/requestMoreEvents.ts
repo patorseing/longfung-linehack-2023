@@ -11,7 +11,7 @@ export const requestMoreEvents = async (agent: WebhookClient) => {
   const lineUid = agent.originalRequest.payload.data.source.userId;
   const events = await find7DaysEvent({limit: true});
 
-  if (events.docs.length) {
+  if (events.length) {
     const moreEvents = {
       type: "bubble",
       footer: {
@@ -45,16 +45,15 @@ export const requestMoreEvents = async (agent: WebhookClient) => {
       },
     };
 
-    for (const event of events.docs.slice(0, 3)) {
-      const eventData = event.data() as Event;
-      const eventFlex = eventTemplate({event: eventData});
+    for (const event of events.slice(0, 3)) {
+      const eventFlex = eventTemplate({event: event as Event});
 
       functions.logger.debug(eventFlex);
 
       payloadJson.contents.contents.push(eventFlex.contents as EventTemp);
     }
 
-    if (events.docs.length === 4) {
+    if (events.length === 4) {
       payloadJson.contents.contents.push(moreEvents);
     }
 
