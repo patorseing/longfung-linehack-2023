@@ -18,6 +18,7 @@ import {
   isEventActive,
   timestampToString,
 } from "../../utils/event";
+import {v4 as uuidv4} from "uuid";
 
 export const getAllEvents = async (_req: Request, res: Response) => {
   const event: FirebaseFirestore.DocumentData[] = [];
@@ -171,14 +172,19 @@ export const createEvent = async (req: Request, res: Response) => {
             event.eventImage = imageUrl;
           }
 
+          const key = uuidv4().replace(/-/g, "").substring(0, 20);
+
           event.lineBeacon?.forEach(async (el) => {
             await firestore.collection("LineBeacon").doc(el.hardwareId).set({
               hardwareId: el.hardwareId,
-              eventName: event.eventName,
+              eventToken: key,
             });
           });
 
-          const newEvent = await firestore.collection("Event").doc().set(event);
+          const newEvent = await firestore
+              .collection("Event")
+              .doc(key)
+              .set(event);
 
           return res.status(201).send({data: newEvent});
         }
