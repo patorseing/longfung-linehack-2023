@@ -8,6 +8,7 @@ import {fileUploader} from "../../utils/fileUploader";
 import {defaultSocialMedia, defaultSteamingPlatform} from "../../constants";
 import {getOldHardwareIds} from "../../middlewares/bandMiddleware";
 import {FormErrors, FormFields, FormFiles} from "../../types";
+import { v4 as uuidv4 } from 'uuid';
 
 export const getBandsList = async (req: Request, res: Response) => {
   const bands: FirebaseFirestore.DocumentData[] = [];
@@ -109,12 +110,14 @@ export const createBand = async (req: Request, res: Response) => {
             band.qrImage = imageUrl;
           }
 
-          const newBand = await firestore
+          const key = uuidv4().replace(/-/g, '').substring(0, 20)
+
+          await firestore
               .collection("Band")
-              .doc()
+              .doc(key)
               .set(band);
 
-          return res.status(201).send({data: newBand});
+          return res.status(201).send({data: key});
         }
     );
     return;
