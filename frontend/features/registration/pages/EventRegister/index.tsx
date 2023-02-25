@@ -50,6 +50,7 @@ const EventRegisterPage = () => {
         break;
       case 3:
         const result3 = await methods.trigger("lineBeacon");
+
         if (!result3) return;
         setStep((prev) => prev + 1);
         break;

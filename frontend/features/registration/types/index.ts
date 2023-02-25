@@ -27,6 +27,7 @@ export type BandFormValue = {
 export type LineUpType = {
   startTime: string;
   endTime: string;
+  bandToken: string;
   bandName: string;
 };
 

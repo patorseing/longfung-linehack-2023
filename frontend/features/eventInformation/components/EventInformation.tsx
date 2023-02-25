@@ -42,7 +42,7 @@ export const EventInformation = ({ eventInfo }: Props) => {
         </TabList>
         <TabPanels
           sx={{
-            minH: "625px",
+            minH: { base: "300px", md: "625px" },
             w: { base: "", md: "732px" },
             borderTop: "3px solid",
             borderColor: "primary.800",
@@ -55,10 +55,12 @@ export const EventInformation = ({ eventInfo }: Props) => {
             <Information data={eventInfo} />
           </TabPanel>
           <TabPanel sx={{ p: { base: "8px", md: "16px" } }}>
-            {eventInfo?.lineUp.length ? (
+            {!eventInfo?.lineUp.length ? (
               <Lineup data={eventInfo?.lineUp} />
             ) : (
-              <Flex sx={{ m: "auto", justifyContent: "center" }}>No Data</Flex>
+              <Flex sx={{ m: "auto", justifyContent: "center", w: "100%" }}>
+                No Data
+              </Flex>
             )}
           </TabPanel>
         </TabPanels>

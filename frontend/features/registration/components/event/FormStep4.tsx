@@ -1,4 +1,4 @@
-import { Button, Grid, HStack, Stack, Text, VStack } from "@chakra-ui/react";
+import { Button, Grid, Stack, Text, VStack } from "@chakra-ui/react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 import { EventFormValue } from "../../types";
@@ -24,7 +24,12 @@ export const FormStep4 = () => {
           {!fields.length && (
             <Button
               onClick={() => {
-                append({ startTime: "", endTime: "", bandName: "" });
+                append({
+                  startTime: "",
+                  endTime: "",
+                  bandToken: "",
+                  bandName: "",
+                });
               }}
             >
               Add line up
@@ -42,23 +47,31 @@ export const FormStep4 = () => {
             </Grid>
           )}
           <Stack spacing={5} sx={{ w: "100%" }}>
-            {fields.map((beacon, idx) => (
-              <LineupCard
-                key={beacon.id}
-                name={`Queue ${idx + 1}`}
-                onAdd={() => {
-                  append({ startTime: "", endTime: "", bandName: "" });
-                }}
-                onDelete={() => {
-                  remove(idx);
-                }}
-                idx={idx}
-                bandRegister={register(`lineUp.${idx}.bandName`)}
-                startTimeError={errors.lineUp?.[idx]?.startTime?.message}
-                endTimeError={errors.lineUp?.[idx]?.endTime?.message}
-                bandNameError={errors.lineUp?.[idx]?.bandName?.message}
-              />
-            ))}
+            {fields.map((beacon, idx) => {
+              console.log("error", errors);
+              return (
+                <LineupCard
+                  key={beacon.id}
+                  name={`Queue ${idx + 1}`}
+                  onAdd={() => {
+                    append({
+                      startTime: "",
+                      endTime: "",
+                      bandToken: "",
+                      bandName: "",
+                    });
+                  }}
+                  onDelete={() => {
+                    remove(idx);
+                  }}
+                  idx={idx}
+                  bandRegister={register(`lineUp.${idx}.bandName`)}
+                  startTimeError={errors.lineUp?.[idx]?.startTime?.message}
+                  endTimeError={errors.lineUp?.[idx]?.endTime?.message}
+                  bandError={errors.lineUp?.[idx]?.bandName?.message}
+                />
+              );
+            })}
           </Stack>
         </Stack>
       </VStack>

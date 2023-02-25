@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+  AspectRatio,
   Box,
   Grid,
   HStack,
@@ -67,7 +68,7 @@ export const EventCard = ({ data }: Props) => {
 
   return (
     <Link
-      href={`/event-info/${data.eventName}`}
+      href={`/event-info/${data.token}`}
       sx={{ _hover: { textDecoration: "none" } }}
     >
       <VStack
@@ -89,14 +90,19 @@ export const EventCard = ({ data }: Props) => {
             overflow: "hidden",
           }}
         >
-          <Image
-            src={`${data?.eventImage ?? DEFAULT_LONGFUNG}`}
-            sx={{
-              w: "inherit",
-              borderTopRadius: "10px",
-            }}
-            alt={`event image`}
-          />
+          <AspectRatio
+            maxW={{ base: "290px", md: "280px", xl: "300px" }}
+            ratio={4 / 3}
+          >
+            <Image
+              src={`${data?.eventImage ?? DEFAULT_LONGFUNG}`}
+              sx={{
+                borderTopRadius: "10px",
+              }}
+              objectFit="cover"
+              alt={`event image`}
+            />
+          </AspectRatio>
         </Box>
         <Grid
           sx={{

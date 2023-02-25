@@ -12,9 +12,11 @@ import { MdAdd } from "react-icons/md";
 import { IoTrashOutline } from "react-icons/io5";
 import { useFormContext, UseFormRegisterReturn } from "react-hook-form";
 
-import { FormInput } from "../../../../components/FormInput";
 import { EventFormValue } from "@/features/registration/types";
 import { TimePicker } from "../../../../components/TimePicker";
+import { Select } from "@/components";
+import { OptionT } from "@/lib/type";
+import { useGetBandList } from "../../services";
 
 type Props = {
   name?: string;
@@ -24,7 +26,7 @@ type Props = {
   bandRegister?: UseFormRegisterReturn;
   startTimeError?: string;
   endTimeError?: string;
-  bandNameError?: string;
+  bandError?: string;
 };
 
 export const LineupCard = (props: Props) => {
@@ -36,7 +38,7 @@ export const LineupCard = (props: Props) => {
     bandRegister,
     startTimeError,
     endTimeError,
-    bandNameError,
+    bandError,
   } = props;
   const isMobile = useBreakpointValue({
     base: true,
@@ -47,6 +49,8 @@ export const LineupCard = (props: Props) => {
     setValue,
     formState: { errors },
   } = useFormContext<EventFormValue>();
+
+  const { data: bandOption } = useGetBandList();
 
   if (isMobile) {
     return (
@@ -117,12 +121,16 @@ export const LineupCard = (props: Props) => {
             }}
             errorMessage={endTimeError}
           />
-          <FormInput
-            fontSize={14}
+
+          <Select
+            errorMessage={bandError}
+            options={bandOption}
             label="Music band"
             placeholder="Music band"
-            register={bandRegister}
-            errorMessage={bandNameError}
+            onChange={(value: OptionT) => {
+              setValue(`lineUp.${idx}.bandName`, value.label);
+              setValue(`lineUp.${idx}.bandToken`, value.value);
+            }}
           />
         </VStack>
       </Stack>
@@ -152,12 +160,14 @@ export const LineupCard = (props: Props) => {
             errorMessage={endTimeError}
           />
         </HStack>
-
-        <FormInput
-          fontSize={14}
+        <Select
+          errorMessage={bandError}
+          options={bandOption}
           placeholder="Music band"
-          register={bandRegister}
-          errorMessage={bandNameError}
+          onChange={(value: OptionT) => {
+            setValue(`lineUp.${idx}.bandName`, value.label);
+            setValue(`lineUp.${idx}.bandToken`, value.value);
+          }}
         />
         <Flex sx={{ justifyContent: "space-between", pb: "6px" }}>
           <IconButton

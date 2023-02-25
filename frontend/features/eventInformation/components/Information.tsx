@@ -21,6 +21,7 @@ export const Information = ({ data }: Props) => {
           fontSize: { base: "14px", md: "16px" },
           wordBreak: "break-word",
           alignItems: "start",
+          textAlign: "start",
         }}
       >
         <HStack gap="8px">
@@ -51,7 +52,14 @@ export const Information = ({ data }: Props) => {
 
   const SocialInfo = ({ img, link }: { img: string; link?: string }) => {
     return (
-      <HStack gap="8px" sx={{ fontSize: { base: "14px", md: "16px" } }}>
+      <HStack
+        gap="8px"
+        sx={{
+          fontSize: { base: "14px", md: "16px" },
+          alignItems: "start",
+          textAlign: "start",
+        }}
+      >
         <Image
           src={`/images/${img}.svg`}
           boxSize="20px"
@@ -118,17 +126,17 @@ export const Information = ({ data }: Props) => {
     {
       img: "age-icon",
       label: "จำกัดอายุ",
-      value: data?.ageLimitation ?? "ไม่จำกัดอายุ",
+      value: data?.ageLimitation ? data?.ageLimitation : "ไม่จำกัดอายุ",
     },
     {
       img: "alcohol-icon",
       label: "แอลกอฮอล์",
-      value: data?.alcoholFree ? "ได้" : "ไม่อนุญาต",
+      value: data?.alcoholFree ? "อนุญาต" : "ไม่อนุญาต",
     },
     {
       img: "song-icon",
       label: "การขอเพลง",
-      value: data?.songRequested ? "ได้" : "ไม่อนุญาต",
+      value: data?.songRequested ? "อนุญาต" : "ไม่อนุญาต",
     },
   ];
 
@@ -177,7 +185,9 @@ export const Information = ({ data }: Props) => {
         <Text sx={{ fontSize: { base: "14px", md: "16px" } }}>
           รายละเอียดเพิ่มเติม
         </Text>
-        <Text sx={{ fontSize: { base: "14px", md: "14px" } }}>
+        <Text
+          sx={{ fontSize: { base: "14px", md: "14px" }, textAlign: "start" }}
+        >
           {data?.eventDescription}
         </Text>
       </VStack>
