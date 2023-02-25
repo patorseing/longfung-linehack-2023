@@ -1,5 +1,5 @@
-import {Event} from "../api/dto/event";
-import {createBandDTO} from "../api/dto/band";
+import { Event } from "../api/dto/event";
+import { createBandDTO } from "../api/dto/band";
 
 const regex = new RegExp("([\u0E00-\u0E7F]+)");
 
@@ -8,11 +8,10 @@ export const eventTemplate = ({
   interested,
   userId,
 }: {
-  event: Event;
+  event: { token: string } & Event;
   interested?: boolean;
   userId?: string;
 }) => {
-  const isThai = regex.test(event.eventName);
   return {
     type: "flex",
     altText: event.eventName,
@@ -34,18 +33,18 @@ export const eventTemplate = ({
         layout: "vertical",
         contents: [
           ...[
-            event.ticketType.free ?
-              {
-                type: "text",
-                text: "Free Event",
-                color: "#F83333",
-                size: "xs",
-              } :
-              {
-                type: "text",
-                text: `${event.ticketType?.price} ฿`,
-                size: "xs",
-              },
+            event.ticketType.free
+              ? {
+                  type: "text",
+                  text: "Free Event",
+                  color: "#F83333",
+                  size: "xs",
+                }
+              : {
+                  type: "text",
+                  text: `${event.ticketType?.price} ฿`,
+                  size: "xs",
+                },
           ],
           {
             type: "box",
@@ -149,49 +148,39 @@ export const eventTemplate = ({
         type: "box",
         layout: "vertical",
         contents: [
-          ...(event.eventLocation?.googleMapLink ?
-            [
-              {
-                type: "button",
-                action: {
-                  type: "uri",
-                  label: "เปิดแผนที่",
-                  uri: event.eventLocation?.googleMapLink,
+          ...(event.eventLocation?.googleMapLink
+            ? [
+                {
+                  type: "button",
+                  action: {
+                    type: "uri",
+                    label: "เปิดแผนที่",
+                    uri: event.eventLocation?.googleMapLink,
+                  },
+                  style: "link",
+                  height: "sm",
                 },
-                style: "link",
-                height: "sm",
-              },
-            ] :
-            []),
-          ...(interested || event.interestedPerson.includes(userId ?? "") ?
-            [] :
-            [
-              {
-                type: "button",
-                action: {
-                  type: "message",
-                  label: "ติดตามอีเว้นท์นี้",
-                  text: `ฉันอยากติดตาม ${event.eventName}`,
+              ]
+            : []),
+          ...(interested || event.interestedPerson.includes(userId ?? "")
+            ? []
+            : [
+                {
+                  type: "button",
+                  action: {
+                    type: "message",
+                    label: "ติดตามอีเว้นท์นี้",
+                    text: `ฉันอยากติดตาม ${event.eventName}`,
+                  },
+                  height: "sm",
                 },
-                height: "sm",
-              },
-            ]),
+              ]),
           {
             type: "button",
             action: {
-              type: isThai ? "message" : "uri",
+              type: "uri",
               label: "รายละเอียดเพิ่มเติม",
-              ...(isThai ?
-                {
-                  /* eslint max-len: ["error", { "code": 90 }]*/
-                  text: `ขอรายละเอียดเพิ่มเติมของงาน ${event.eventName} นี้หน่อย`,
-                } :
-                {
-                  /* eslint max-len: ["error", { "code": 100 }]*/
-                  uri: `ttps://liff.line.me/1657898632-vkQB6aYy/event-info/${event.eventName
-                      .trim()
-                      .replaceAll(" ", "%20")}`,
-                }),
+              uri: `ttps://liff.line.me/1657898632-vkQB6aYy/event-info/${event.token}`,
             },
             height: "sm",
           },
@@ -373,66 +362,66 @@ export const bandTemplete = (band: createBandDTO) => {
             weight: "bold",
             size: "xl",
           },
-          ...(band?.firstPromotedSong || band?.secondPromotedSong ?
-            [
-              {
-                type: "text",
-                text: [band?.firstPromotedSong, band?.secondPromotedSong]
+          ...(band?.firstPromotedSong || band?.secondPromotedSong
+            ? [
+                {
+                  type: "text",
+                  text: [band?.firstPromotedSong, band?.secondPromotedSong]
                     .filter((song) => song)
                     .join(", "),
-                color: "#929292",
-              },
-            ] :
-            []),
+                  color: "#929292",
+                },
+              ]
+            : []),
           {
             type: "box",
             layout: "horizontal",
             contents: [
-              ...(band?.streamingPlatform?.spotify ?
-                [
-                  {
-                    type: "image",
-                    url: "https://firebasestorage.googleapis.com/v0/b/loma-nkaf.appspot.com/o/social%2Fspotify.svg?alt=media&token=81115900-a641-450c-9ae3-b37abbdd4168",
-                    size: "40px",
-                    align: "end",
-                    offsetTop: "xs",
-                    action: {
-                      type: "uri",
-                      label: "action",
-                      uri: band?.streamingPlatform?.spotify,
+              ...(band?.streamingPlatform?.spotify
+                ? [
+                    {
+                      type: "image",
+                      url: "https://firebasestorage.googleapis.com/v0/b/loma-nkaf.appspot.com/o/social%2Fspotify.svg?alt=media&token=81115900-a641-450c-9ae3-b37abbdd4168",
+                      size: "40px",
+                      align: "end",
+                      offsetTop: "xs",
+                      action: {
+                        type: "uri",
+                        label: "action",
+                        uri: band?.streamingPlatform?.spotify,
+                      },
                     },
-                  },
-                ] :
-                []),
-              ...(band?.streamingPlatform?.appleMusic ?
-                [
-                  {
-                    type: "image",
-                    url: "https://firebasestorage.googleapis.com/v0/b/loma-nkaf.appspot.com/o/social%2Fapple-music.svg?alt=media&token=3072d292-c7c3-4d8c-ad65-4dccdc037778",
-                    size: "45px",
-                    align: "end",
-                    action: {
-                      type: "uri",
-                      label: "action",
-                      uri: band?.streamingPlatform?.appleMusic,
+                  ]
+                : []),
+              ...(band?.streamingPlatform?.appleMusic
+                ? [
+                    {
+                      type: "image",
+                      url: "https://firebasestorage.googleapis.com/v0/b/loma-nkaf.appspot.com/o/social%2Fapple-music.svg?alt=media&token=3072d292-c7c3-4d8c-ad65-4dccdc037778",
+                      size: "45px",
+                      align: "end",
+                      action: {
+                        type: "uri",
+                        label: "action",
+                        uri: band?.streamingPlatform?.appleMusic,
+                      },
                     },
-                  },
-                ] :
-                []),
-              ...(band?.streamingPlatform?.youtube ?
-                [
-                  {
-                    type: "image",
-                    url: "https://firebasestorage.googleapis.com/v0/b/loma-nkaf.appspot.com/o/social%2Fyoutube.svg?alt=media&token=c8fc7182-a955-4954-9b91-815a4e0480e6",
-                    size: "47px",
-                    action: {
-                      type: "uri",
-                      label: "action",
-                      uri: band?.streamingPlatform?.youtube,
+                  ]
+                : []),
+              ...(band?.streamingPlatform?.youtube
+                ? [
+                    {
+                      type: "image",
+                      url: "https://firebasestorage.googleapis.com/v0/b/loma-nkaf.appspot.com/o/social%2Fyoutube.svg?alt=media&token=c8fc7182-a955-4954-9b91-815a4e0480e6",
+                      size: "47px",
+                      action: {
+                        type: "uri",
+                        label: "action",
+                        uri: band?.streamingPlatform?.youtube,
+                      },
                     },
-                  },
-                ] :
-                []),
+                  ]
+                : []),
             ],
             spacing: "md",
             width: "150px",
@@ -451,13 +440,13 @@ export const bandTemplete = (band: createBandDTO) => {
             action: {
               type: isThai ? "message" : "uri",
               label: "ขอเพลง",
-              ...(isThai ?
-                {text: `ขอเพลงจากวง ${band.bandName} นี้ได้ไหม`} :
-                {
-                  uri: `https://liff.line.me/1657898632-vkQB6aYy/song-request/${band.bandName
+              ...(isThai
+                ? { text: `ขอเพลงจากวง ${band.bandName} นี้ได้ไหม` }
+                : {
+                    uri: `https://liff.line.me/1657898632-vkQB6aYy/song-request/${band.bandName
                       .trim()
                       .replaceAll(" ", "%20")}`,
-                }),
+                  }),
             },
           },
           {
@@ -467,13 +456,13 @@ export const bandTemplete = (band: createBandDTO) => {
             action: {
               type: isThai ? "message" : "uri",
               label: "ดูรายละเอียดเพิ่มเติม",
-              ...(isThai ?
-                {text: `ขอรายละเอียดของวง ${band.bandName} นี้เพิ่มเติม`} :
-                {
-                  uri: `ttps://liff.line.me/1657898632-vkQB6aYy/band-info/${band.bandName
+              ...(isThai
+                ? { text: `ขอรายละเอียดของวง ${band.bandName} นี้เพิ่มเติม` }
+                : {
+                    uri: `ttps://liff.line.me/1657898632-vkQB6aYy/band-info/${band.bandName
                       .trim()
                       .replaceAll(" ", "%20")}`,
-                }),
+                  }),
             },
           },
           {
@@ -495,10 +484,10 @@ export const bandTemplete = (band: createBandDTO) => {
 };
 
 export const bandLineUpTemplete = (
-    bandName: string,
-    startTime: string,
-    endTime: string,
-    bandImage?: string
+  bandName: string,
+  startTime: string,
+  endTime: string,
+  bandImage?: string
 ) => {
   const isThai = regex.test(bandName);
   return {
@@ -549,13 +538,13 @@ export const bandLineUpTemplete = (
       action: {
         type: isThai ? "message" : "uri",
         label: "ดูรายละเอียดเพิ่มเติม",
-        ...(isThai ?
-          {text: `ขอรายละเอียดของวง ${bandName} นี้เพิ่มเติม`} :
-          {
-            uri: `ttps://liff.line.me/1657898632-vkQB6aYy/band-info/${bandName
+        ...(isThai
+          ? { text: `ขอรายละเอียดของวง ${bandName} นี้เพิ่มเติม` }
+          : {
+              uri: `ttps://liff.line.me/1657898632-vkQB6aYy/band-info/${bandName
                 .trim()
                 .replaceAll(" ", "%20")}`,
-          }),
+            }),
       },
     },
   };

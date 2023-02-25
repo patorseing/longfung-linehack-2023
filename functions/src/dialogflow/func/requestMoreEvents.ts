@@ -7,7 +7,7 @@ import {eventTemplate, EventTemp} from "../../line/templete";
 import {validateLineMsg, pushMessage} from "../../line/util";
 
 export const requestMoreEvents = async (agent: WebhookClient) => {
-  await agent.add("รอแป๊บนึงน้าาา ขอน้องโลมาหาก่อน");
+  agent.add("รอแป๊บนึงน้าาา ขอน้องโลมาหาก่อน");
   const lineUid = agent.originalRequest.payload.data.source.userId;
   const events = await find7DaysEvent();
 
@@ -47,7 +47,9 @@ export const requestMoreEvents = async (agent: WebhookClient) => {
 
     for (const event of events.slice(0, 3)) {
       functions.logger.debug("MORE EVENT", event);
-      const eventFlex = eventTemplate({event: event as Event});
+      const eventFlex = eventTemplate({
+        event: event as { token: string } & Event,
+      });
 
       functions.logger.debug(eventFlex);
 

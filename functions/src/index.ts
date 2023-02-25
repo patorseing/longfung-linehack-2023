@@ -2,7 +2,10 @@
 /* eslint max-len: ["error", { "code": 200 }]*/
 import * as functions from "firebase-functions";
 
-import {webhook, remindEventForUserPubSub} from "./line";
+import {
+  webhook,
+  // remindEventForUserPubSub
+} from "./line";
 
 const region = "asia-northeast1";
 // const runtimeOpts = {
@@ -48,9 +51,9 @@ exports.api = functions
     .https // .runWith(runtimeOpts)
     .onRequest(app);
 
-exports.remindEventForUserPubSub = functions
-    .region(region)
-    .pubsub // .runWith(runtimeOpts)
-    .schedule("30 19 * * 5")
-    .timeZone("Asia/Bangkok")
-    .onRun(remindEventForUserPubSub);
+// exports.remindEventForUserPubSub = functions
+//     .region(region)
+//     .pubsub // .runWith(runtimeOpts)
+//     .schedule("30 19 * * 5")
+//     .timeZone("Asia/Bangkok")
+//     .onRun(remindEventForUserPubSub);
