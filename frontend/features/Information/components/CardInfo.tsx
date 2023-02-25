@@ -6,11 +6,12 @@ import { DEFAULT_LONGFUNG } from "@/constants";
 type Props = {
   img: string;
   name: string;
+  token: string;
   path: "band" | "event";
 };
 
 export const CardInfo = (props: Props) => {
-  const { img = DEFAULT_LONGFUNG, name, path } = props;
+  const { img = DEFAULT_LONGFUNG, name, token, path } = props;
   const { push } = useRouter();
 
   return (
@@ -27,7 +28,7 @@ export const CardInfo = (props: Props) => {
       }}
       onClick={() => {
         push({
-          pathname: `/${path}-info/${name}`,
+          pathname: `/${path}-info/${token}`,
         });
       }}
     >

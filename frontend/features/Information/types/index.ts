@@ -26,6 +26,7 @@ export type BandResponse = {
   songRequest: boolean;
   streamingPlatform: Streaming;
   userId: string;
+  token: string;
 };
 
 export type RawBandResponse = {

@@ -28,6 +28,7 @@ const InformationPage = () => {
     return bands?.map((band) => ({
       img: band.bandImage,
       name: band.bandName,
+      token: band.token,
     }));
   }, [JSON.stringify(bands)]);
 
@@ -37,11 +38,12 @@ const InformationPage = () => {
     return events?.map((event) => ({
       img: event.eventImage,
       name: event.eventName,
+      token: event.token,
     }));
   }, [JSON.stringify(events)]);
 
   const RenderContainer = (
-    data: { img: string; name: string }[],
+    data: { img: string; name: string; token: string }[],
     type: "band" | "event"
   ) => {
     if (

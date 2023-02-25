@@ -24,6 +24,7 @@ export type EventResponse = {
   songRequested: boolean;
   ticketType: { free: boolean; price: number };
   userId: string;
+  token: string;
 };
 
 export type RawEventResponse = {
