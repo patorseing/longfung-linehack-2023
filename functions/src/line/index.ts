@@ -45,9 +45,7 @@ export const webhook = async (
                 event.message.text.includes("ใช่แล้ว อยากส่งสลิปให้กับ")
               ) {
                 await submitDonation(req);
-              } else if (
-                event.message.text.includes("ไม่เป็นไรน้องโลมา")
-              ) {
+              } else if (event.message.text.includes("ไม่เป็นไรน้องโลมา")) {
                 await reply(event.replyToken, {
                   type: "text",
                   text: "โอเคครับ น้องโลมารับทราบ",
@@ -67,10 +65,10 @@ export const webhook = async (
 };
 
 export const remindEventForUserPubSub = async () => {
-  const events = await find7DaysEvent({});
+  const events = await find7DaysEvent();
 
-  for (const event of events.docs) {
-    const eventData = event.data() as Event;
+  for (const event of events) {
+    const eventData = event as Event;
     const temp = eventTemplate({event: eventData, interested: true});
     const payload = [temp];
     functions.logger.debug(temp);

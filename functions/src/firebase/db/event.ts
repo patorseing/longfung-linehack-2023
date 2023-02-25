@@ -3,9 +3,10 @@ import * as functions from "firebase-functions";
 import {format} from "date-fns-tz";
 import {add} from "date-fns";
 
+import {Event} from "../../api/dto/event";
 import {firestore} from "..";
 
-export const find7DaysEvent = ({limit = false}: { limit?: boolean }) => {
+export const find7DaysEvent = async () => {
   const start = format(new Date(), "dd/MM/yyyy", {
     timeZone: "Asia/Bangkok",
   });
@@ -14,24 +15,24 @@ export const find7DaysEvent = ({limit = false}: { limit?: boolean }) => {
   });
 
   functions.logger.debug("ALERT EVENT", start, end);
-  let eventRef = firestore
-      .collection("Event")
-      .where(
-          "eventDate",
-          ">=",
-          format(new Date(), "dd/MM/yyyy", {timeZone: "Asia/Bangkok"})
-      )
-      .where(
-          "eventDate",
-          "<",
-          format(add(new Date(), {days: 7}), "dd/MM/yyyy", {
-            timeZone: "Asia/Bangkok",
-          })
-      );
+  const eventRef = await firestore.collection("Event").get();
+  const eventData = (eventRef.docs ?? [])
+      .map((doc) => {
+        const event = doc.data();
+        const eventDate = (event as Event).eventDate
+            .split("/")
+            .reverse()
+            .join("-");
 
-  if (limit) {
-    eventRef = eventRef.limit(4);
-  }
+        functions.logger.debug("EVENT DATE", start, end, eventDate);
+        if (
+          new Date(eventDate).getDate() >= new Date().getDate() &&
+        new Date(eventDate).getDate() < add(new Date(), {days: 7}).getDate()
+        ) {
+          return event;
+        }
+      })
+      .slice(0, 4);
 
-  return eventRef.get();
+  return eventData;
 };

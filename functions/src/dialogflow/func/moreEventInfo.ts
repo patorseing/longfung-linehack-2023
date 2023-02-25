@@ -15,7 +15,7 @@ export const moreEventInfo = async (agent: WebhookClient) => {
     // params.append("event", eventName);
     agent.add(
         /* eslint max-len: ["error", { "code": 100 }]*/
-        `https://liff.line.me/1657898632-vkQB6aYy/event-info${eventName
+        `https://liff.line.me/1657898632-vkQB6aYy/event-info/${eventName
             .trim()
             .replaceAll(" ", "%20")}`
     );

@@ -12,7 +12,7 @@ export const interestEvent = async (agent: WebhookClient) => {
   const eventData = event.data();
 
   if (eventData) {
-    eventRef.update({
+    await eventRef.update({
       interestedPerson: admin.firestore.FieldValue.arrayUnion(
           agent.originalRequest.payload.data.source.userId
       ),
