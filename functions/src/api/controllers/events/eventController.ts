@@ -71,8 +71,8 @@ export const getEvent = async (req: Request, res: Response) => {
           async (el: {
         bandToken: string | null;
         bandName: string | null;
-        startTime: any;
-        endTime: any;
+        startTime: string;
+        endTime: string;
         bandImage: string | null;
       }) => {
             const band = await firestore
@@ -83,8 +83,8 @@ export const getEvent = async (req: Request, res: Response) => {
             finalLineUp.push({
               bandToken: band.ref.id,
               bandName: band.data()?.bandName || null,
-              startTime: timestampToString(el.startTime),
-              endTime: timestampToString(el.endTime),
+              startTime: el.startTime,
+              endTime: el.endTime,
               bandImage: band.data()?.bandImage || null,
             });
           }
