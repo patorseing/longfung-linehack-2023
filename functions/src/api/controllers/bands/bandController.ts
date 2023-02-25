@@ -9,6 +9,21 @@ import {defaultSocialMedia, defaultSteamingPlatform} from "../../constants";
 import {getOldHardwareIds} from "../../middlewares/bandMiddleware";
 import {FormErrors, FormFields, FormFiles} from "../../types";
 
+export const getBandsList = async (req: Request, res: Response) => {
+  const bands: FirebaseFirestore.DocumentData[] = [];
+
+  await firestore
+      .collection("Band")
+      .get()
+      .then((QuerySnapshot) => {
+        QuerySnapshot.forEach((doc) => {
+          bands.push({token: doc.ref.id, ...doc.data()});
+        });
+      });
+
+  return res.status(200).json({data: bands});
+};
+
 export const getBand = async (req: Request, res: Response) => {
   const bandToken = req.query.token;
 

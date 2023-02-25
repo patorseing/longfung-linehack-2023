@@ -4,6 +4,7 @@ import {
   createBand,
   getBand,
   getBands,
+  getBandsList,
   updateBand,
 } from "../controllers/bands/bandController";
 import {submitDonation} from "../controllers/bands/donationController";
@@ -41,5 +42,7 @@ router.post("/song-request", createSongRequest);
 router.get("/song-request", getSongRequests);
 router.put("/song-request", updateSongRequest);
 router.put("/song-request/clear", clearAllSongRequest);
+
+router.get("/list", getBandsList);
 
 export default router;
