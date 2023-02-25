@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Grid,
@@ -15,15 +15,16 @@ import { useProfileContext } from "@/context/profile";
 import { DEFAULT_LONGFUNG } from "@/constants";
 import { EventResponse } from "@/features/eventInformation/types";
 import { MONTH } from "../constants";
+import { usePostInterestedEvents } from "../services";
 
 type Props = { data: EventResponse };
 export const EventCard = ({ data }: Props) => {
   const [interested, setInterested] = useState<string[]>(data.interestedPerson);
+  const { mutate, isLoading, isSuccess } = usePostInterestedEvents();
   const { profile } = useProfileContext();
   const formatDate = data.eventDate.split("/");
   const date = formatDate[0];
   const month = formatDate[1];
-  const [isLiff, setIsLiff] = useState<boolean>(false);
 
   const InfoItem = ({ value, label }: { value?: string; label: string }) => {
     return (
@@ -63,13 +64,6 @@ export const EventCard = ({ data }: Props) => {
       value: interested.length.toLocaleString(),
     },
   ];
-  useEffect(() => {
-    async function getLiff() {
-      const liff = (await import("@line/liff")).default;
-      setIsLiff(liff.isInClient());
-    }
-    getLiff();
-  }, []);
 
   return (
     <Link
@@ -154,11 +148,6 @@ export const EventCard = ({ data }: Props) => {
                   <BsHeart color="black" size={12} />
                 )
               }
-              disabled={
-                interested.find((item) => item === profile?.userId) && isLiff
-                  ? true
-                  : false
-              }
               size="sm"
               sx={{
                 borderRadius: "50%",
@@ -166,23 +155,24 @@ export const EventCard = ({ data }: Props) => {
                 bottom: 1,
                 left: 0,
                 _hover: {
-                  bg: isLiff ? "rgba(255, 152, 1, 0.2)" : "transparent",
+                  bg: "rgba(255, 152, 1, 0.2)",
                 },
               }}
               aria-label={""}
               onClick={async (e) => {
                 e.preventDefault();
-                if (isLiff) {
-                  const liff = (await import("@line/liff")).default;
-                  liff.sendMessages([
-                    { type: "text", text: `อยากติดตาม ${data.eventName}` },
-                  ]);
-                  setInterested((value) => {
-                    return profile
-                      ? data.interestedPerson.concat(profile.userId)
-                      : value;
-                  });
-                }
+                profile?.userId &&
+                  mutate({ userId: profile.userId, eventId: data.token });
+                setInterested((value) => {
+                  if (interested.find((item) => item === profile?.userId)) {
+                    return interested.filter(
+                      (item) => item !== profile?.userId
+                    );
+                  }
+                  return profile
+                    ? data.interestedPerson.concat(profile.userId)
+                    : value;
+                });
               }}
             />
           </VStack>
