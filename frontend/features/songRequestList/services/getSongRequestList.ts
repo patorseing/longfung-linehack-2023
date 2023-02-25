@@ -33,6 +33,6 @@ export const useSongRequestList = (props: Props) => {
     },
     enabled:
       !!headers["X-Firebase-AppCheck"] && !!bandName && !!profile?.userId,
-    refetchInterval: 180000,
+    refetchInterval: 5000,
   });
 };

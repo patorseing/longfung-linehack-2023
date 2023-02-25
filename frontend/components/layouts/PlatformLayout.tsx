@@ -1,6 +1,18 @@
-import Head from "next/head";
 import { useEffect } from "react";
-import { Avatar, Box, Flex, HStack, Image, Text } from "@chakra-ui/react";
+import Link from "next/link";
+import Head from "next/head";
+import {
+  Avatar,
+  Box,
+  Flex,
+  HStack,
+  Image,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Text,
+} from "@chakra-ui/react";
 
 import { useProfileContext } from "@/context/profile";
 
@@ -53,7 +65,32 @@ export const PlatformLayout = (
           />
           <HStack spacing="4">
             <Text>{profile?.displayName}</Text>
-            <Avatar src={profile?.pictureUrl} size={{ base: "sm", md: "md" }} />
+
+            <Menu>
+              <MenuButton>
+                <Avatar
+                  src={profile?.pictureUrl}
+                  size={{ base: "sm", md: "md" }}
+                />
+              </MenuButton>
+
+              <MenuList
+                minWidth="140px"
+                sx={{ color: "black", fontSize: "12px" }}
+              >
+                <Link href={"/information"}>
+                  <MenuItem
+                    sx={{
+                      _hover: {
+                        bg: "primary.100",
+                      },
+                    }}
+                  >
+                    Your Information
+                  </MenuItem>
+                </Link>
+              </MenuList>
+            </Menu>
           </HStack>
         </Flex>
         <Box

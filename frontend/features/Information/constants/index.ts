@@ -1,1 +1,1 @@
-export const TABS = ["Bands", "Events"] as const;
+export const TABS = ["Bands"] as const;
