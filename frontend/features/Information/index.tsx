@@ -13,14 +13,14 @@ import {
 import { useMemo } from "react";
 
 import { TABS } from "./constants";
-import { useBands, useEvents } from "./services";
+import { useBands } from "./services";
 
 import { AddCard } from "./components/AddCard";
 import { CardInfo } from "./components/CardInfo";
 
 const InformationPage = () => {
   const { data: bands, isLoading: bandsLoading } = useBands();
-  const { data: events, isLoading: eventsLoading } = useEvents();
+  // const { data: events, isLoading: eventsLoading } = useEvents();
 
   const BandsData = useMemo(() => {
     if (!bands) return [];
@@ -32,24 +32,21 @@ const InformationPage = () => {
     }));
   }, [JSON.stringify(bands)]);
 
-  const EventsData = useMemo(() => {
-    if (!events) return [];
+  // const EventsData = useMemo(() => {
+  //   if (!events) return [];
 
-    return events?.map((event) => ({
-      img: event.eventImage,
-      name: event.eventName,
-      token: event.token,
-    }));
-  }, [JSON.stringify(events)]);
+  //   return events?.map((event) => ({
+  //     img: event.eventImage,
+  //     name: event.eventName,
+  //     token: event.token,
+  //   }));
+  // }, [JSON.stringify(events)]);
 
   const RenderContainer = (
     data: { img: string; name: string; token: string }[],
     type: "band" | "event"
   ) => {
-    if (
-      (bandsLoading && type === "band") ||
-      (eventsLoading && type === "event")
-    ) {
+    if (bandsLoading && type === "band") {
       return (
         <Flex justifyContent="center" mt="6">
           <CircularProgress isIndeterminate color="primary.500" />
@@ -83,7 +80,7 @@ const InformationPage = () => {
           mb: { base: 2, xl: 4 },
         }}
       >
-        Your Bands And Events
+        Your Information
       </Text>
       <Tabs size="lg" variant="enclosed">
         <TabList sx={{}}>
@@ -124,9 +121,9 @@ const InformationPage = () => {
           <TabPanel sx={{ p: "0" }}>
             {RenderContainer(BandsData, "band")}
           </TabPanel>
-          <TabPanel sx={{ p: "0" }}>
+          {/* <TabPanel sx={{ p: "0" }}>
             {RenderContainer(EventsData, "event")}
-          </TabPanel>
+          </TabPanel> */}
         </TabPanels>
       </Tabs>
     </VStack>
