@@ -19,7 +19,7 @@ export const useBandDonation = () => {
     mutationFn: async function ({ data, bandName }) {
       const formData = new FormData();
 
-      formData.append("bandName", bandName);
+      formData.append("token", bandName);
       formData.append("slip", data.slip as FileWithPath);
 
       await _axios({

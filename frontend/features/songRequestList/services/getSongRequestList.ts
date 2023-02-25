@@ -22,7 +22,7 @@ export const useSongRequestList = (props: Props) => {
         method: "get",
         url: "/bands/song-request",
         params: {
-          bandName,
+          token: bandName,
           userId: profile?.userId,
           active: isRequestTab,
         },

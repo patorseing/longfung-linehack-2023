@@ -19,7 +19,7 @@ export const useBand = (props: Props) => {
       const { data } = await _axios<RawBandInfoReponse>({
         method: "get",
         url: "/bands/info",
-        params: { bandName },
+        params: { token: bandName },
         headers,
       });
 

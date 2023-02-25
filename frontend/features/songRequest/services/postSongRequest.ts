@@ -24,7 +24,7 @@ export const useCreateSongRequest = () => {
         method: "post",
         url: "/bands/song-request",
         data: {
-          bandName,
+          token: bandName,
           songName: data.song_name,
           note: data.note,
           userId: profile?.displayName,

@@ -12,7 +12,7 @@ export const useGetEventInfo = (event: string) => {
       const { data } = await _axios<RawEventResponse>({
         method: "get",
         url: "/events/info",
-        params: { eventName: event },
+        params: { token: event },
         headers,
       });
 
