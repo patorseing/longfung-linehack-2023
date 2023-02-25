@@ -127,7 +127,7 @@ export const LineupCard = (props: Props) => {
             options={bandOption}
             label="Music band"
             placeholder="Music band"
-            onChange={(value: OptionT) => {
+            onValueChange={(value: OptionT) => {
               setValue(`lineUp.${idx}.bandName`, value.label);
               setValue(`lineUp.${idx}.bandToken`, value.value);
             }}
@@ -164,7 +164,7 @@ export const LineupCard = (props: Props) => {
           errorMessage={bandError}
           options={bandOption}
           placeholder="Music band"
-          onChange={(value: OptionT) => {
+          onValueChange={(value: OptionT) => {
             setValue(`lineUp.${idx}.bandName`, value.label);
             setValue(`lineUp.${idx}.bandToken`, value.value);
           }}

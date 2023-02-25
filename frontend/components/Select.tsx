@@ -16,14 +16,14 @@ type Props = InputProps & {
   errorMessage?: string;
   register?: UseFormRegisterReturn;
   disable?: boolean;
-  onChange?: (value: OptionT) => void;
+  onValueChange?: (value: OptionT) => void;
   options?: OptionT[];
   placeholder?: string;
 };
 export const Select = ({
   label,
   errorMessage,
-  onChange,
+  onValueChange,
   options = [],
   placeholder,
 }: Props) => {
@@ -78,12 +78,14 @@ export const Select = ({
         options={options}
         styles={customSelectStyle()}
         onChange={(e) => {
-          if ((e as OptionT & { __isNew__?: boolean })?.__isNew__) {
-            const value = { value: "", label: e?.label ?? "" };
-            onChange?.(value);
-            return;
+          if (e) {
+            if ((e as OptionT & { __isNew__?: boolean })?.__isNew__) {
+              const value = { value: "", label: e?.label ?? "" };
+              onValueChange?.(value);
+            } else {
+              onValueChange?.({ label: e.label, value: e.value });
+            }
           }
-          onChange?.(e as OptionT);
         }}
       />
 
