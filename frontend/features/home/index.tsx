@@ -1,13 +1,15 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
+import { Center, CircularProgress } from "@chakra-ui/react";
 
 const Home = () => {
-  const router = useRouter();
   return (
     <>
       <Head>
         <title>LongFung</title>
       </Head>
+      <Center sx={{ w: "100vw", h: "100vh" }}>
+        <CircularProgress isIndeterminate color="primary.500" />
+      </Center>
     </>
   );
 };
