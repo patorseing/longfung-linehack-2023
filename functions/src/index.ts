@@ -2,10 +2,7 @@
 /* eslint max-len: ["error", { "code": 200 }]*/
 import * as functions from "firebase-functions";
 
-import {
-  // webhook,
-  remindEventForUserPubSub,
-} from "./line";
+import {webhook, remindEventForUserPubSub} from "./line";
 
 const region = "asia-northeast1";
 // const runtimeOpts = {
@@ -14,8 +11,10 @@ const region = "asia-northeast1";
 //   minInstances: 1,
 // };
 
-// exports.webhook = functions.https // .runWith(runtimeOpts) // .region(region)
-//     .onRequest(webhook);
+exports.webhook = functions
+    .region(region)
+// .runWith(runtimeOpts)
+    .https.onRequest(webhook);
 
 import {dialogflow} from "./dialogflow";
 
