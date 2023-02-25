@@ -61,7 +61,7 @@ export const requestMoreEvents = async (agent: WebhookClient) => {
     }
 
     const isValidMsg = await validateLineMsg("push", [payloadJson]);
-    functions.logger.debug(isValidMsg);
+    functions.logger.debug("Verify", isValidMsg);
     functions.logger.debug(payloadJson);
     if (isValidMsg) {
       pushMessage(lineUid, payloadJson);

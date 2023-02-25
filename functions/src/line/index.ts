@@ -1,5 +1,6 @@
+import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
-
+import {firestore} from "../firebase";
 import {beaconEvent} from "./beacon";
 import {
   postToDialogflow,
@@ -28,6 +29,7 @@ export const webhook = async (
     } else {
       const events = req.body.events;
       for (const event of events) {
+        functions.logger.debug(event);
         switch (event.type) {
           case "beacon":
             await beaconEvent(event);
@@ -53,6 +55,23 @@ export const webhook = async (
               } else {
                 await postToDialogflow(req);
               }
+            }
+            break;
+          case "postback":
+            if (event.postback.data.includes("ติดตาม")) {
+              const token = event.postback.data.split(" ")[1];
+              await firestore
+                  .collection("Event")
+                  .doc(token)
+                  .update({
+                    interestedPerson: admin.firestore.FieldValue.arrayUnion(
+                        event.source.userId
+                    ),
+                  });
+              await reply(event.replyToken, {
+                type: "text",
+                text: "น้องโลมาติดตาม ให้แล้วนะครับ",
+              });
             }
             break;
           default:
