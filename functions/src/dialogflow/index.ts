@@ -1,11 +1,11 @@
 import * as functions from "firebase-functions";
 import {WebhookClient} from "dialogflow-fulfillment";
 import {
-  interestEvent,
-  moreEventInfo,
+  // interestEvent,
+  // moreEventInfo,
   requestMoreEvents,
-  requstSong,
-  requstMoreBandInfo,
+  // requstSong,
+  // requstMoreBandInfo,
 } from "./func";
 
 process.env.DEBUG = "dialogflow:debug"; // enables lib debugging statements
@@ -20,10 +20,10 @@ export const dialogflow = (
 
   // Run the proper function handler based on the matched Dialogflow intent name
   const intentMap = new Map();
-  intentMap.set("Interest Event", interestEvent);
-  intentMap.set("More Event Information", moreEventInfo);
   intentMap.set("Request More Events", requestMoreEvents);
-  intentMap.set("Request Song", requstSong);
-  intentMap.set("More Band Info", requstMoreBandInfo);
+  // intentMap.set("Interest Event", interestEvent);
+  // intentMap.set("More Event Information", moreEventInfo);
+  // intentMap.set("Request Song", requstSong);
+  // intentMap.set("More Band Info", requstMoreBandInfo);
   agent.handleRequest(intentMap);
 };

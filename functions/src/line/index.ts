@@ -1,16 +1,17 @@
+import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
-
+import {firestore} from "../firebase";
 import {beaconEvent} from "./beacon";
 import {
   postToDialogflow,
   verifySignature,
   reply,
-  validateLineMsg,
-  pushMessage,
+  // validateLineMsg,
+  // pushMessage,
 } from "./util";
-import {find7DaysEvent} from "../firebase/db/event";
-import {Event} from "../api/dto/event";
-import {eventTemplate} from "../line/templete";
+// import { find7DaysEvent } from "../firebase/db/event";
+// import { Event } from "../api/dto/event";
+// import { eventTemplate } from "../line/templete";
 import {requestDonation, submitDonation} from "./func/donation";
 
 export const webhook = async (
@@ -28,6 +29,7 @@ export const webhook = async (
     } else {
       const events = req.body.events;
       for (const event of events) {
+        functions.logger.debug(event);
         switch (event.type) {
           case "beacon":
             await beaconEvent(event);
@@ -55,6 +57,23 @@ export const webhook = async (
               }
             }
             break;
+          case "postback":
+            if (event.postback.data.includes("ติดตาม")) {
+              const token = event.postback.data.split(" ")[1];
+              await firestore
+                  .collection("Event")
+                  .doc(token)
+                  .update({
+                    interestedPerson: admin.firestore.FieldValue.arrayUnion(
+                        event.source.userId
+                    ),
+                  });
+              await reply(event.replyToken, {
+                type: "text",
+                text: "น้องโลมาติดตาม ให้แล้วนะครับ",
+              });
+            }
+            break;
           default:
             break;
         }
@@ -64,20 +83,20 @@ export const webhook = async (
   res.status(200).end();
 };
 
-export const remindEventForUserPubSub = async () => {
-  const events = await find7DaysEvent();
+// export const remindEventForUserPubSub = async () => {
+//   const events = await find7DaysEvent();
 
-  for (const event of events) {
-    const eventData = event as Event;
-    const temp = eventTemplate({event: eventData, interested: true});
-    const payload = [temp];
-    functions.logger.debug(temp);
-    const isValidMsg = await validateLineMsg("push", payload);
-    functions.logger.debug(isValidMsg);
-    if (isValidMsg) {
-      eventData?.interestedPerson?.forEach((person) =>
-        pushMessage(person, payload)
-      );
-    }
-  }
-};
+//   for (const event of events) {
+//     const eventData = event as Event;
+//     const temp = eventTemplate({event: eventData, interested: true});
+//     const payload = [temp];
+//     functions.logger.debug(temp);
+//     const isValidMsg = await validateLineMsg("push", payload);
+//     functions.logger.debug(isValidMsg);
+//     if (isValidMsg) {
+//       eventData?.interestedPerson?.forEach((person) =>
+//         pushMessage(person, payload)
+//       );
+//     }
+//   }
+// };

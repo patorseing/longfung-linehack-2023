@@ -197,10 +197,14 @@ export const interestedEvent = async (req: Request, res: Response) => {
     const event = await eventRef.get();
     const eventData = event.data() as Event;
     if (eventData.interestedPerson.includes(userId)) {
+      functions.logger.debug("REMOVE USER");
       await eventRef.update({
-        interestedPerson: admin.firestore.FieldValue.arrayRemove(eventId),
+        interestedPerson: eventData.interestedPerson.filter(
+            (person) => person !== userId
+        ),
       });
     } else {
+      functions.logger.debug("ADD USER");
       await eventRef.update({
         interestedPerson: admin.firestore.FieldValue.arrayUnion(userId),
       });

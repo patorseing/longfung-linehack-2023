@@ -86,7 +86,7 @@ export const enterEvent = async (
       let enterEventTemp;
       if (eventData) {
         enterEventTemp = eventTemplate({
-          event: eventData as Event,
+          event: eventData as { token: string } & Event,
           userId: profile.userId,
         });
       }

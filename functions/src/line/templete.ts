@@ -1,5 +1,6 @@
 import {Event} from "../api/dto/event";
 import {createBandDTO} from "../api/dto/band";
+import {format} from "date-fns-tz";
 
 const regex = new RegExp("([\u0E00-\u0E7F]+)");
 
@@ -8,11 +9,10 @@ export const eventTemplate = ({
   interested,
   userId,
 }: {
-  event: Event;
+  event: { token: string } & Event;
   interested?: boolean;
   userId?: string;
 }) => {
-  const isThai = regex.test(event.eventName);
   return {
     type: "flex",
     altText: event.eventName,
@@ -92,7 +92,17 @@ export const eventTemplate = ({
                       },
                       {
                         type: "text",
-                        text: `${event.eventStartTime} - ${event.eventEndTime}`,
+                        text: `${format(
+                            (
+                            event.eventStartTime as FirebaseFirestore.Timestamp
+                            ).toDate(),
+                            "HH:mm"
+                        )} - ${format(
+                            (
+                            event.eventEndTime as FirebaseFirestore.Timestamp
+                            ).toDate(),
+                            "HH:mm"
+                        )}`,
                         flex: 5,
                         color: "#929292",
                       },
@@ -169,9 +179,9 @@ export const eventTemplate = ({
               {
                 type: "button",
                 action: {
-                  type: "message",
-                  label: "ติดตามอีเว้นท์นี้",
-                  text: `ฉันอยากติดตาม ${event.eventName}`,
+                  type: "postback",
+                  label: "ติดตาม",
+                  data: `ติดตาม ${event.token}`,
                 },
                 height: "sm",
               },
@@ -179,19 +189,9 @@ export const eventTemplate = ({
           {
             type: "button",
             action: {
-              type: isThai ? "message" : "uri",
+              type: "uri",
               label: "รายละเอียดเพิ่มเติม",
-              ...(isThai ?
-                {
-                  /* eslint max-len: ["error", { "code": 90 }]*/
-                  text: `ขอรายละเอียดเพิ่มเติมของงาน ${event.eventName} นี้หน่อย`,
-                } :
-                {
-                  /* eslint max-len: ["error", { "code": 100 }]*/
-                  uri: `ttps://liff.line.me/1657898632-vkQB6aYy/event-info/${event.eventName
-                      .trim()
-                      .replaceAll(" ", "%20")}`,
-                }),
+              uri: `https://liff.line.me/1657898632-vkQB6aYy/event-info/${event.token}`,
             },
             height: "sm",
           },

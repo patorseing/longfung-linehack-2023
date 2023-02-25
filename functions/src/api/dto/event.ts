@@ -1,3 +1,4 @@
+import * as admin from "firebase-admin";
 export interface SocialMedia {
   facebook?: string;
   instagram?: string;
@@ -31,8 +32,8 @@ export interface Event {
   eventName: string;
   userId: string;
   eventDate: string;
-  eventStartTime: Date;
-  eventEndTime: Date;
+  eventStartTime: Date | admin.firestore.Timestamp;
+  eventEndTime: Date | admin.firestore.Timestamp;
   socialMedia?: SocialMedia;
   eventLocation: {
     address: string;
