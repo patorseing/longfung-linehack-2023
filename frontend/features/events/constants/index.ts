@@ -14,3 +14,4 @@ export const MONTH = [
 ];
 
 export const ALL_EVENT = "allEvent";
+export const INTERESTED_EVENT = "interestedEvent";
