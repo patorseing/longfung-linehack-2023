@@ -1,7 +1,9 @@
-import * as admin from 'firebase-admin'
+import * as admin from "firebase-admin";
 
-export const isEventActive = (event: { eventEndTime: FirebaseFirestore.Timestamp }) => {
-  const currentDate = admin.firestore.Timestamp.now()
+export const isEventActive = (event: {
+  eventEndTime: FirebaseFirestore.Timestamp;
+}) => {
+  const currentDate = admin.firestore.Timestamp.now();
   const eventEndTime = event.eventEndTime;
 
   console.log(currentDate);
