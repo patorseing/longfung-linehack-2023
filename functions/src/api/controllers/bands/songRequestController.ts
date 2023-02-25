@@ -3,31 +3,33 @@ import {firestore} from "../../../firebase";
 import {getCurrentDateTime} from "../../utils/payload";
 
 export const getSongRequests = async (req: Request, res: Response) => {
-  const {bandName, userId, active} = req.query;
+  const {token, userId, active} = req.query;
 
   const activeParams =
     active === undefined ? true : JSON.parse(active as string);
 
-  if (bandName === undefined) {
-    return res.status(400).json({error: "bandName cannot be blank"});
+  if (token === undefined) {
+    return res.status(400).json({error: "token cannot be blank"});
   }
 
   if (userId === undefined) {
     return res.status(400).json({error: "userId cannot be blank"});
   }
-  const songRequestList: FirebaseFirestore.DocumentData[] = [];
 
   const band = await firestore
       .collection("Band")
-      .doc(bandName as string)
+      .doc(token as string)
       .get();
+
   if (!band.exists || band.data()?.userId !== userId) {
-    return res.status(404).json({error: "Band not found", param: bandName});
+    return res.status(404).json({error: "Band not found"});
   }
+
+  const songRequestList: FirebaseFirestore.DocumentData[] = [];
 
   await firestore
       .collection("SongRequest")
-      .where("bandName", "==", bandName)
+      .where("bandToken", "==", token)
       .where("active", "==", activeParams)
       .get()
       .then((querySnapshot) => {
@@ -39,30 +41,20 @@ export const getSongRequests = async (req: Request, res: Response) => {
   return res.status(200).json({data: songRequestList});
 };
 
-type Payload = {
-  bandName: string;
-  songName: string;
-  note: string | null;
-  userId: string | null;
-  requestedAt: string;
-  status: "pending" | "accept" | "reject";
-  active: boolean;
-};
-
 export const createSongRequest = async (req: Request, res: Response) => {
-  const {bandName, songName, note, userId, isAnonymous} = req.body;
+  const {token, songName, note, userId, isAnonymous} = req.body;
 
-  if (bandName === undefined) {
-    return res.status(400).json({error: "bandName cannot be blank"});
+  if (token === undefined) {
+    return res.status(400).json({error: "token cannot be blank"});
   }
 
   if (songName === undefined) {
     return res.status(400).json({error: "songName cannot be blank"});
   }
 
-  const band = await firestore.collection("Band").doc(bandName).get();
+  const band = await firestore.collection("Band").doc(token).get();
   if (!band.exists) {
-    return res.status(404).json({error: "Band not found", param: bandName});
+    return res.status(404).json({error: "Band not found"});
   }
 
   const enableSongRequest = band.data()?.songRequest;
@@ -74,8 +66,8 @@ export const createSongRequest = async (req: Request, res: Response) => {
 
   // TODO: need to check if user can able to request the song or not
 
-  const payload: Payload = {
-    bandName: bandName,
+  const payload: any = {
+    bandToken: token,
     songName: songName,
     note: note || null,
     userId: isAnonymous ? null : userId,
@@ -127,10 +119,10 @@ export const updateSongRequest = async (req: Request, res: Response) => {
 };
 
 export const clearAllSongRequest = async (req: Request, res: Response) => {
-  const {bandName, userId} = req.body;
+  const {token, userId} = req.body;
 
-  if (bandName === undefined) {
-    return res.status(400).json({error: "bandName cannot be blank"});
+  if (token === undefined) {
+    return res.status(400).json({error: "token cannot be blank"});
   }
 
   if (userId === undefined) {
@@ -139,15 +131,15 @@ export const clearAllSongRequest = async (req: Request, res: Response) => {
 
   const band = await firestore
       .collection("Band")
-      .doc(bandName as string)
+      .doc(token as string)
       .get();
   if (!band.exists || band.data()?.userId !== userId) {
-    return res.status(404).json({error: "Band not found", param: bandName});
+    return res.status(404).json({error: "Band not found"});
   }
 
   await firestore
       .collection("SongRequest")
-      .where("bandName", "==", bandName)
+      .where("bandToken", "==", token)
       .get()
       .then((res) => {
         const batch = firestore.batch();
@@ -160,5 +152,5 @@ export const clearAllSongRequest = async (req: Request, res: Response) => {
         });
       });
 
-  return res.send("Hello");
+  return res.status(200).json({sucess: true})
 };

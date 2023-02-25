@@ -15,21 +15,21 @@ export const submitDonation = async (req: Request, res: Response) => {
       req,
       async (_error: FormErrors, fields: FormFields, files: FormFiles) => {
         const slipImage = files.slip;
-        const bandName = fields.bandName;
+        const bandToken = fields.token;
 
-        if (bandName === undefined) {
-          return res.status(400).json({error: "bandName cannot be blank"});
+        if (bandToken === undefined) {
+          return res.status(400).json({error: "token cannot be blank"});
         }
 
         if (slipImage === undefined) {
           return res.status(400).json({error: "slip cannot be blank"});
         }
 
-        const band = await firestore.collection("Band").doc(bandName).get();
+        const band = await firestore.collection("Band").doc(bandToken).get();
         if (!band.exists) {
           return res
               .status(404)
-              .json({error: "Band not found", param: bandName});
+              .json({error: "Band not found"});
         }
 
         const bucketName = functions.config().uploader.bucket_name;
@@ -51,7 +51,7 @@ export const submitDonation = async (req: Request, res: Response) => {
           previewImageUrl: imageUrl,
         };
 
-        pushMessage(userId, [textPayload, imagePayload]);
+        await pushMessage(userId, [textPayload, imagePayload]);
 
         return res.status(200).json({success: true});
       }
