@@ -3,22 +3,22 @@ import * as functions from "firebase-functions";
 import * as formidable from "formidable-serverless";
 
 import {firestore} from "../../../firebase";
-import {createBandDTO, updateBandDTO} from "../../dto/band";
+import {updateBandDTO} from "../../dto/band";
 import {fileUploader} from "../../utils/fileUploader";
 import {defaultSocialMedia, defaultSteamingPlatform} from "../../constants";
 import {getOldHardwareIds} from "../../middlewares/bandMiddleware";
 import {FormErrors, FormFields, FormFiles} from "../../types";
 
 export const getBand = async (req: Request, res: Response) => {
-  const bandName = req.query.bandName;
+  const bandToken = req.query.token;
 
-  if (bandName === undefined) {
-    return res.status(400).json({error: "bandName cannot be blank"});
+  if (!bandToken) {
+    return res.status(400).json({error: "token cannot be blank"});
   }
 
   const band = await firestore
       .collection("Band")
-      .doc(bandName as string)
+      .doc(bandToken as string)
       .get();
 
   if (!band.exists) {
@@ -30,10 +30,9 @@ export const getBand = async (req: Request, res: Response) => {
 
 export const getBands = async (req: Request, res: Response) => {
   const bandList: FirebaseFirestore.DocumentData[] = [];
-
   const userId = req.query.userId;
 
-  if (userId === undefined) {
+  if (!userId) {
     return res.status(400).json({error: "userId cannot be blank"});
   }
 
@@ -59,12 +58,11 @@ export const createBand = async (req: Request, res: Response) => {
         req,
         async (_: FormErrors, fields: FormFields, files: FormFiles) => {
           const socialMedia = JSON.parse(fields.socialMedia || "{}");
-          /* eslint max-len: ["error", { "code": 83 }]*/
+          /* eslint max-len: ["error", { "code": 200 }]*/
           const streamingPlatform = JSON.parse(fields.streamingPlatform || "{}");
           const songRequest = fields.songRequest === "true";
-          const lineBeacon = JSON.parse(fields.lineBeacon || "[]");
 
-          const band: createBandDTO = {
+          const band: any = {
             bandName: fields.bandName,
             firstPromotedSong: fields.firstPromotedSong || null,
             secondPromotedSong: fields.secondPromotedSong || null,
@@ -77,36 +75,28 @@ export const createBand = async (req: Request, res: Response) => {
             lineMelody: fields.lineMelody || null,
             songRequest: songRequest || false,
             description: fields.description || null,
-            lineBeacon: lineBeacon || [],
           };
 
           const bucketName = functions.config().uploader.bucket_name;
 
           const bandImage = files.bandImage;
 
-          if (bandImage !== undefined) {
+          if (!bandImage) {
             const imageUrl = await fileUploader(bucketName, bandImage.path);
 
             band.bandImage = imageUrl;
           }
 
           const qrImage = files.qrImage;
-          if (qrImage !== undefined) {
+          if (!qrImage) {
             const imageUrl = await fileUploader(bucketName, qrImage.path);
 
             band.qrImage = imageUrl;
           }
 
-          band.lineBeacon?.forEach(async (el) => {
-            await firestore.collection("LineBeacon").doc(el.hardwareId).set({
-              hardwareId: el.hardwareId,
-              bandName: band.bandName,
-            });
-          });
-
           const newBand = await firestore
               .collection("Band")
-              .doc(band.bandName)
+              .doc()
               .set(band);
 
           return res.status(201).send({data: newBand});

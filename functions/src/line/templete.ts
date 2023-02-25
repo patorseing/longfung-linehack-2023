@@ -1,6 +1,8 @@
 import {Event} from "../api/dto/event";
 import {createBandDTO} from "../api/dto/band";
 
+const regex = new RegExp("([\u0E00-\u0E7F]+)");
+
 export const eventTemplate = ({
   event,
   interested,
@@ -9,183 +11,196 @@ export const eventTemplate = ({
   event: Event;
   interested?: boolean;
   userId?: string;
-}) => ({
-  type: "flex",
-  altText: event.eventName,
-  contents: {
-    type: "bubble",
-    size: "mega",
-    hero: {
-      type: "image",
-      url:
-        event?.eventImage ??
-        "https://firebasestorage.googleapis.com/v0/b/loma-nkaf.appspot.com/o/undefine.png?alt=media&token=c37fea4d-c6a9-4344-991d-d8a01fef142d",
-      size: "full",
-      aspectMode: "cover",
-      animated: false,
-      aspectRatio: "20:13",
-    },
-    body: {
-      type: "box",
-      layout: "vertical",
-      contents: [
-        ...[
-          event.ticketType.free ?
-            {
-              type: "text",
-              text: "Free Event",
-              color: "#F83333",
-              size: "xs",
-            } :
-            {
-              type: "text",
-              text: `${event.ticketType?.price} ฿`,
-              size: "xs",
-            },
-        ],
-        {
-          type: "box",
-          layout: "vertical",
-          contents: [
-            {
-              type: "text",
-              text: event.eventName,
-              weight: "bold",
-              wrap: true,
-              size: "xl",
-            },
-            {
-              type: "box",
-              layout: "vertical",
-              contents: [
-                {
-                  type: "box",
-                  layout: "horizontal",
-                  contents: [
-                    {
-                      type: "text",
-                      text: "วันจัดแสดง",
-                      flex: 3,
-                      color: "#929292",
-                    },
-                    {
-                      type: "text",
-                      text: event.eventDate,
-                      flex: 5,
-                      color: "#929292",
-                    },
-                  ],
-                },
-                {
-                  type: "box",
-                  layout: "horizontal",
-                  contents: [
-                    {
-                      type: "text",
-                      text: "เวลา",
-                      flex: 3,
-                      color: "#929292",
-                    },
-                    {
-                      type: "text",
-                      text: `${event.eventStartTime} - ${event.eventEndTime}`,
-                      flex: 5,
-                      color: "#929292",
-                    },
-                  ],
-                },
-                {
-                  type: "box",
-                  layout: "horizontal",
-                  contents: [
-                    {
-                      type: "text",
-                      text: "สถานที่",
-                      flex: 3,
-                      color: "#929292",
-                    },
-                    {
-                      type: "text",
-                      text: event.eventLocation.address,
-                      flex: 5,
-                      color: "#929292",
-                      wrap: true,
-                    },
-                  ],
-                },
-                {
-                  type: "box",
-                  layout: "horizontal",
-                  contents: [
-                    {
-                      type: "text",
-                      text: "ผู้ติดตาม",
-                      flex: 3,
-                      color: "#929292",
-                    },
-                    {
-                      type: "text",
-                      text: `${event.interestedPerson.length}`,
-                      flex: 5,
-                      color: "#929292",
-                      wrap: true,
-                    },
-                  ],
-                },
-              ],
-              spacing: "md",
-            },
+}) => {
+  const isThai = regex.test(event.eventName);
+  return {
+    type: "flex",
+    altText: event.eventName,
+    contents: {
+      type: "bubble",
+      size: "mega",
+      hero: {
+        type: "image",
+        url:
+          event?.eventImage ??
+          "https://firebasestorage.googleapis.com/v0/b/loma-nkaf.appspot.com/o/undefine.png?alt=media&token=c37fea4d-c6a9-4344-991d-d8a01fef142d",
+        size: "full",
+        aspectMode: "cover",
+        animated: false,
+        aspectRatio: "20:13",
+      },
+      body: {
+        type: "box",
+        layout: "vertical",
+        contents: [
+          ...[
+            event.ticketType.free ?
+              {
+                type: "text",
+                text: "Free Event",
+                color: "#F83333",
+                size: "xs",
+              } :
+              {
+                type: "text",
+                text: `${event.ticketType?.price} ฿`,
+                size: "xs",
+              },
           ],
-          spacing: "xxl",
-        },
-      ],
-      spacing: "md",
-    },
-    footer: {
-      type: "box",
-      layout: "vertical",
-      contents: [
-        ...(event.eventLocation?.googleMapLink ?
-          [
-            {
-              type: "button",
-              action: {
-                type: "uri",
-                label: "เปิดแผนที่",
-                uri: event.eventLocation?.googleMapLink,
+          {
+            type: "box",
+            layout: "vertical",
+            contents: [
+              {
+                type: "text",
+                text: event.eventName,
+                weight: "bold",
+                wrap: true,
+                size: "xl",
               },
-              style: "link",
-              height: "sm",
-            },
-          ] :
-          []),
-        ...(interested || event.interestedPerson.includes(userId ?? "") ?
-          [] :
-          [
-            {
-              type: "button",
-              action: {
-                type: "message",
-                label: "ติดตามอีเว้นท์นี้",
-                text: `ฉันอยากติดตาม ${event.eventName}`,
+              {
+                type: "box",
+                layout: "vertical",
+                contents: [
+                  {
+                    type: "box",
+                    layout: "horizontal",
+                    contents: [
+                      {
+                        type: "text",
+                        text: "วันจัดแสดง",
+                        flex: 3,
+                        color: "#929292",
+                      },
+                      {
+                        type: "text",
+                        text: event.eventDate,
+                        flex: 5,
+                        color: "#929292",
+                      },
+                    ],
+                  },
+                  {
+                    type: "box",
+                    layout: "horizontal",
+                    contents: [
+                      {
+                        type: "text",
+                        text: "เวลา",
+                        flex: 3,
+                        color: "#929292",
+                      },
+                      {
+                        type: "text",
+                        text: `${event.eventStartTime} - ${event.eventEndTime}`,
+                        flex: 5,
+                        color: "#929292",
+                      },
+                    ],
+                  },
+                  {
+                    type: "box",
+                    layout: "horizontal",
+                    contents: [
+                      {
+                        type: "text",
+                        text: "สถานที่",
+                        flex: 3,
+                        color: "#929292",
+                      },
+                      {
+                        type: "text",
+                        text: event.eventLocation.address,
+                        flex: 5,
+                        color: "#929292",
+                        wrap: true,
+                      },
+                    ],
+                  },
+                  {
+                    type: "box",
+                    layout: "horizontal",
+                    contents: [
+                      {
+                        type: "text",
+                        text: "ผู้ติดตาม",
+                        flex: 3,
+                        color: "#929292",
+                      },
+                      {
+                        type: "text",
+                        text: `${event.interestedPerson.length}`,
+                        flex: 5,
+                        color: "#929292",
+                        wrap: true,
+                      },
+                    ],
+                  },
+                ],
+                spacing: "md",
               },
-              height: "sm",
-            },
-          ]),
-        {
-          type: "button",
-          action: {
-            type: "message",
-            label: "รายละเอียดเพิ่มเติม",
-            text: `ขอรายละเอียดเพิ่มเติมของงาน ${event.eventName} นี้หน่อย`,
+            ],
+            spacing: "xxl",
           },
-          height: "sm",
-        },
-      ],
-      paddingAll: "none",
+        ],
+        spacing: "md",
+      },
+      footer: {
+        type: "box",
+        layout: "vertical",
+        contents: [
+          ...(event.eventLocation?.googleMapLink ?
+            [
+              {
+                type: "button",
+                action: {
+                  type: "uri",
+                  label: "เปิดแผนที่",
+                  uri: event.eventLocation?.googleMapLink,
+                },
+                style: "link",
+                height: "sm",
+              },
+            ] :
+            []),
+          ...(interested || event.interestedPerson.includes(userId ?? "") ?
+            [] :
+            [
+              {
+                type: "button",
+                action: {
+                  type: "message",
+                  label: "ติดตามอีเว้นท์นี้",
+                  text: `ฉันอยากติดตาม ${event.eventName}`,
+                },
+                height: "sm",
+              },
+            ]),
+          {
+            type: "button",
+            action: {
+              type: isThai ? "message" : "uri",
+              label: "รายละเอียดเพิ่มเติม",
+              ...(isThai ?
+                {
+                  /* eslint max-len: ["error", { "code": 90 }]*/
+                  text: `ขอรายละเอียดเพิ่มเติมของงาน ${event.eventName} นี้หน่อย`,
+                } :
+                {
+                  /* eslint max-len: ["error", { "code": 100 }]*/
+                  uri: `ttps://liff.line.me/1657898632-vkQB6aYy/event-info/${event.eventName
+                      .trim()
+                      .replaceAll(" ", "%20")}`,
+                }),
+            },
+            height: "sm",
+          },
+        ],
+        paddingAll: "none",
+      },
     },
-  },
-});
+  };
+};
 
 export type EventTemp = {
   type: "bubble";
@@ -332,6 +347,7 @@ export type EventTemp = {
 };
 
 export const bandTemplete = (band: createBandDTO) => {
+  const isThai = regex.test(band.bandName);
   return {
     type: "flex",
     altText: band.bandName,
@@ -341,6 +357,7 @@ export const bandTemplete = (band: createBandDTO) => {
         type: "image",
         url:
           band?.bandImage ??
+          /* eslint max-len: ["error", { "code": 200 }]*/
           "https://firebasestorage.googleapis.com/v0/b/loma-nkaf.appspot.com/o/undefine.png?alt=media&token=c37fea4d-c6a9-4344-991d-d8a01fef142d",
         size: "full",
         aspectRatio: "20:13",
@@ -432,9 +449,15 @@ export const bandTemplete = (band: createBandDTO) => {
             style: "link",
             height: "sm",
             action: {
-              type: "message",
+              type: isThai ? "message" : "uri",
               label: "ขอเพลง",
-              text: `ขอเพลงจากวง ${band.bandName} นี้ได้ไหม`,
+              ...(isThai ?
+                {text: `ขอเพลงจากวง ${band.bandName} นี้ได้ไหม`} :
+                {
+                  uri: `https://liff.line.me/1657898632-vkQB6aYy/song-request/${band.bandName
+                      .trim()
+                      .replaceAll(" ", "%20")}`,
+                }),
             },
           },
           {
@@ -442,9 +465,15 @@ export const bandTemplete = (band: createBandDTO) => {
             style: "link",
             height: "sm",
             action: {
-              type: "message",
+              type: isThai ? "message" : "uri",
               label: "ดูรายละเอียดเพิ่มเติม",
-              text: `ขอรายละเอียดของวง ${band.bandName} นี้เพิ่มเติม`,
+              ...(isThai ?
+                {text: `ขอรายละเอียดของวง ${band.bandName} นี้เพิ่มเติม`} :
+                {
+                  uri: `ttps://liff.line.me/1657898632-vkQB6aYy/band-info/${band.bandName
+                      .trim()
+                      .replaceAll(" ", "%20")}`,
+                }),
             },
           },
           {
@@ -471,6 +500,7 @@ export const bandLineUpTemplete = (
     endTime: string,
     bandImage?: string
 ) => {
+  const isThai = regex.test(bandName);
   return {
     type: "flex",
     altText: bandName,
@@ -517,9 +547,15 @@ export const bandLineUpTemplete = (
         paddingAll: "none",
       },
       action: {
-        type: "message",
+        type: isThai ? "message" : "uri",
         label: "ดูรายละเอียดเพิ่มเติม",
-        text: `ขอรายละเอียดของวง ${bandName} นี้เพิ่มเติม`,
+        ...(isThai ?
+          {text: `ขอรายละเอียดของวง ${bandName} นี้เพิ่มเติม`} :
+          {
+            uri: `ttps://liff.line.me/1657898632-vkQB6aYy/band-info/${bandName
+                .trim()
+                .replaceAll(" ", "%20")}`,
+          }),
       },
     },
   };

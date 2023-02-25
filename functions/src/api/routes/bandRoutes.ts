@@ -15,10 +15,7 @@ import {
 } from "../controllers/bands/songRequestController";
 import {
   checkBandExisting,
-  checkDuplicatedBandName,
-  checkDuplicatedHardwareId,
   checkUpdatedHardwareId,
-  validateCreateBandSchema,
   validateUpdateBandSchema,
 } from "../middlewares/bandMiddleware";
 
@@ -28,13 +25,7 @@ const router = express.Router();
 router.get("/info", getBand);
 router.get("/", getBands);
 
-router.post(
-    "/",
-    validateCreateBandSchema,
-    checkDuplicatedBandName,
-    checkDuplicatedHardwareId,
-    createBand
-);
+router.post("/", createBand);
 
 router.put(
     "/",
