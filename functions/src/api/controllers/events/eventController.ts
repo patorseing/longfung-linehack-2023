@@ -14,13 +14,6 @@ import {
 import {FormErrors, FormFields, FormFiles} from "../../types";
 import {isEventActive} from "../../utils/event";
 
-type LineUp = {
-  bandName: string;
-  startTime: string;
-  endTime: string;
-  bandImage: string | undefined;
-};
-
 export const getAllEvents = async (_req: Request, res: Response) => {
   const event: FirebaseFirestore.DocumentData[] = [];
 
@@ -35,7 +28,7 @@ export const getAllEvents = async (_req: Request, res: Response) => {
               eventEndTime: doc.data().eventEndTime,
             })
           ) {
-            event.push(doc.data());
+            event.push({token: doc.ref.id, ...doc.data()});
           }
         });
       });
@@ -44,15 +37,15 @@ export const getAllEvents = async (_req: Request, res: Response) => {
 };
 
 export const getEvent = async (req: Request, res: Response) => {
-  const eventName = req.query.eventName;
+  const token = req.query.token;
 
-  if (eventName === undefined) {
-    return res.status(400).json({error: "eventName cannot be blank"});
+  if (token === undefined) {
+    return res.status(400).json({error: "token cannot be blank"});
   }
 
   const event = await firestore
       .collection("Event")
-      .doc(eventName as string)
+      .doc(token as string)
       .get();
 
   if (!event.exists) {
@@ -61,25 +54,28 @@ export const getEvent = async (req: Request, res: Response) => {
 
   const eventData = event.data();
 
-  const finalLineUp: LineUp[] = [];
+  const finalLineUp: any[] = [];
 
   await Promise.all(
       eventData?.lineUp.map(
           async (el: {
-        bandName: string;
+        bandToken: string | null;
+        bandName: string | null;
         startTime: string;
         endTime: string;
         bandImage: string | null;
       }) => {
-            const bandName = el.bandName;
-
-            const band = await firestore.collection("Band").doc(bandName).get();
+            const band = await firestore
+                .collection("Band")
+                .doc(el.bandToken as string)
+                .get();
 
             finalLineUp.push({
-              bandName: bandName,
+              bandToken: band.ref.id,
+              bandName: band.data()?.bandName || null,
               startTime: el.startTime,
               endTime: el.endTime,
-              bandImage: band.data()?.bandImage,
+              bandImage: band.data()?.bandImage || null,
             });
           }
       )
@@ -105,7 +101,7 @@ export const getEvents = async (req: Request, res: Response) => {
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          eventList.push(doc.data());
+          eventList.push({token: doc.ref.id, ...doc.data()});
         });
       });
 
@@ -156,10 +152,7 @@ export const createEvent = async (req: Request, res: Response) => {
             });
           });
 
-          const newEvent = await firestore
-              .collection("Event")
-              .doc(event.eventName)
-              .set(event);
+          const newEvent = await firestore.collection("Event").doc().set(event);
 
           return res.status(201).send({data: newEvent});
         }
