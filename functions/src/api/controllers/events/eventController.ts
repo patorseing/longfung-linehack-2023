@@ -13,7 +13,7 @@ import {
   defaultTicketType,
 } from "../../constants";
 import {FormErrors, FormFields, FormFiles} from "../../types";
-import {isEventActive} from "../../utils/event";
+import {convertStringToData, isEventActive} from "../../utils/event";
 
 export const getAllEvents = async (_req: Request, res: Response) => {
   const event: FirebaseFirestore.DocumentData[] = [];
@@ -25,7 +25,6 @@ export const getAllEvents = async (_req: Request, res: Response) => {
         QuerySnapshot.forEach((doc) => {
           if (
             isEventActive({
-              eventDate: doc.data().eventDate,
               eventEndTime: doc.data().eventEndTime,
             })
           ) {
@@ -122,8 +121,14 @@ export const createEvent = async (req: Request, res: Response) => {
             eventName: payload.eventName || "",
             userId: payload.userId || "",
             eventDate: payload.eventDate || "",
-            eventStartTime: payload.eventStartTime || "",
-            eventEndTime: payload.eventEndTime || "",
+            eventStartTime: convertStringToData(
+            payload.eventDate as string,
+            payload.eventStartTime as string
+            ),
+            eventEndTime: convertStringToData(
+            payload.eventDate as string,
+            payload.eventEndTime as string
+            ),
             socialMedia: {...defaultSocialMedia, ...payload.socialMedia},
             eventLocation: {...defaultEventLocation, ...payload.eventLocation},
             availableSeat: payload.availableSeat,

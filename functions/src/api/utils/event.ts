@@ -1,20 +1,23 @@
+import * as admin from "firebase-admin";
+
 export const isEventActive = (event: {
-  eventDate: string;
-  eventEndTime: string;
+  eventEndTime: FirebaseFirestore.Timestamp;
 }) => {
-  const eventDate = event.eventDate as string;
-  const eventEndTime = event.eventEndTime as string;
+  const currentDate = admin.firestore.Timestamp.now();
+  const eventEndTime = event.eventEndTime;
 
-  const endDate = convertStringToData(eventDate, eventEndTime);
-  const currentDate = new Date();
+  console.log(currentDate);
+  console.log(eventEndTime);
 
-  return endDate > currentDate;
+  return eventEndTime > currentDate;
 };
 
-const convertStringToData = (date: string, time: string) => {
+export const convertStringToData = (date: string, time: string): Date => {
   const fullDateTime = `${transformDateString(date)}T${time}`;
 
-  return new Date(fullDateTime);
+  const result = new Date(fullDateTime);
+  result.setHours(result.getHours() - 7);
+  return result;
 };
 
 const transformDateString = (date: string) => {
