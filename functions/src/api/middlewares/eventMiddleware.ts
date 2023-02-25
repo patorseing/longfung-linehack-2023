@@ -52,24 +52,9 @@ export const validateCreateEventPayload = async (
             }
         );
 
-        const lineUpError = payload.lineUp.some(
-            (el: { bandName: string; startTime: string; endTime: string }) => {
-              return (
-                /* eslint max-len: ["error", { "code": 85 }]*/
-                el.bandName === null || el.startTime === null || el.endTime === null
-              );
-            }
-        );
-
         if (lineBeaconError) {
           errors.push(
               "lineBeacon.hardwareId and lineBeacon.passcode cannot be blank"
-          );
-        }
-
-        if (lineUpError) {
-          errors.push(
-              "lineUp cannot be blank"
           );
         }
 

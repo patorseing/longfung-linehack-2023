@@ -13,6 +13,7 @@ export interface lineBeacon {
 
 export interface lineUp {
   bandName?: string;
+  bandToken?: string;
   startTime?: string;
   endTime?: string;
 }
