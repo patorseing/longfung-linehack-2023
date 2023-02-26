@@ -55,7 +55,7 @@ export const EventInformation = ({ eventInfo }: Props) => {
             <Information data={eventInfo} />
           </TabPanel>
           <TabPanel sx={{ p: { base: "8px", md: "16px" } }}>
-            {!eventInfo?.lineUp.length ? (
+            {eventInfo?.lineUp.length ? (
               <Lineup data={eventInfo?.lineUp} />
             ) : (
               <Flex sx={{ m: "auto", justifyContent: "center", w: "100%" }}>

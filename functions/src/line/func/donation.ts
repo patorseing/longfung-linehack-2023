@@ -9,13 +9,12 @@ const extractBandName = (message: string): string => {
 export const requestDonation = async (req: functions.https.Request) => {
   const event = req.body.events[0];
   const replyToken = event.replyToken;
-  const message = event.message.text;
+  const message = event.postback.data;
 
-  const bandName = extractBandName(message);
+  console.log(message);
+  const bandToken = extractBandName(message);
 
-  const band = await firestore.collection("Band").doc(bandName).get();
-
-  functions.logger.debug(band);
+  const band = await firestore.collection("Band").doc(bandToken).get();
 
   if (!band.exists) {
     await reply(replyToken, {
@@ -44,33 +43,78 @@ export const requestDonation = async (req: functions.https.Request) => {
     previewImageUrl: qrImage,
   };
 
-  // quick reply
-  const quickReplyPlayload = {
-    type: "text",
-    text: "อยากส่งสลิปให้ศิลปินมั้ยเอ่ย",
-    quickReply: {
-      items: [
+  const bubblePayload = {
+    type: "bubble",
+    body: {
+      type: "box",
+      layout: "horizontal",
+      contents: [
         {
-          type: "action",
+          type: "box",
+          layout: "vertical",
+          contents: [
+            {
+              type: "text",
+              text: "Yes",
+              align: "center",
+              color: "#FFFFFF",
+              weight: "bold",
+              size: "24px",
+            },
+          ],
+          backgroundColor: "#FFB03E",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "60px",
           action: {
-            type: "message",
-            label: "ใช่",
-            text: `ใช่แล้ว อยากส่งสลิปให้กับ ${bandName}`,
+            type: "uri",
+            label: "action",
+            // eslint-disable-next-line
+            uri: `https://liff.line.me/1657898632-vkQB6aYy/band-donation/${bandToken}`,
           },
         },
         {
-          type: "action",
+          type: "box",
+          layout: "vertical",
+          contents: [
+            {
+              type: "text",
+              text: "No",
+              color: "#C6C3C3",
+              size: "24px",
+              weight: "bold",
+            },
+          ],
+          height: "60px",
+          backgroundColor: "#FFFFFF",
+          alignItems: "center",
+          justifyContent: "center",
           action: {
             type: "message",
-            label: "ไม่",
+            label: "action",
             text: "ไม่เป็นไรน้องโลมา",
           },
         },
       ],
+      margin: "none",
+      paddingAll: "0px",
     },
   };
 
-  const payload = [qrPayload, quickReplyPlayload];
+  console.log(bubblePayload);
+
+  const payload = [
+    qrPayload,
+    {
+      type: "text",
+      text: "อย่างส่งสลิปให้กับศิลปินมั้ยครับ",
+    },
+    {
+      type: "flex",
+      altText: bandToken,
+      contents: bubblePayload,
+    },
+  ];
 
   functions.logger.debug(payload);
 
