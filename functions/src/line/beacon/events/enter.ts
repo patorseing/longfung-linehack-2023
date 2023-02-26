@@ -1,4 +1,5 @@
 import * as functions from "firebase-functions";
+import * as admin from "firebase-admin";
 import {Profile} from "@line/bot-sdk";
 import {format} from "date-fns-tz";
 import {add} from "date-fns";
@@ -19,29 +20,40 @@ export const enterEvent = async (
     profile: Profile,
     replyToken: string
 ) => {
+  functions.logger.debug("LINE BEACON hardwareId", hardwareId);
   const lineBeaconRef = firestore.collection("LineBeacon").doc(hardwareId);
   const uniqueLineBeacon = await lineBeaconRef.get();
   const lineBeaconData = uniqueLineBeacon.data();
 
   functions.logger.debug("LINE BEACON DATA", lineBeaconData);
 
-  const eventName = lineBeaconData?.eventName;
-  const bandName = lineBeaconData?.bandName;
+  const eventToken = lineBeaconData?.eventToken;
 
-  if (eventName) {
+  if (eventToken) {
     let eventMessage: Array<any> = [];
-    const eventRef = firestore.collection("Event").doc(eventName);
+    const eventRef = firestore.collection("Event").doc(eventToken);
     const event = await eventRef.get();
-    const eventData = event.data() as Event;
-
+    const eventData = {token: event.ref.id, ...event.data()} as {
+      token: string;
+    } & Event;
+    const currentDate = format(add(new Date(), {hours: 7}), "dd/MM/yyyy", {
+      timeZone: "Asia/Bangkok",
+    });
+    const currentTime = format(add(new Date(), {hours: 7}), "HH:mm", {
+      timeZone: "Asia/Bangkok",
+    });
+    functions.logger.debug(
+        "isAction",
+        eventData?.eventDate === currentDate &&
+        eventData?.eventEndTime > admin.firestore.Timestamp.now() &&
+        eventData?.eventStartTime <= admin.firestore.Timestamp.now()
+    );
     if (
-      eventData?.eventDate ===
-      format(new Date(), "dd/MM/yyyy", {timeZone: "Asia/Bangkok"})
+      eventData?.eventDate === currentDate &&
+      eventData?.eventEndTime > admin.firestore.Timestamp.now() &&
+      eventData?.eventStartTime <= admin.firestore.Timestamp.now()
     ) {
       const lineUpBandFlex = [];
-      const currentTime = format(add(new Date(), {hours: 7}), "HH:mm", {
-        timeZone: "Asia/Bangkok",
-      });
 
       for (const data of eventData?.lineUp ?? []) {
         functions.logger.debug(
@@ -50,43 +62,74 @@ export const enterEvent = async (
             data?.startTime,
             currentTime
         );
+
+        const alertUser = await firestore
+            .collection("StayEvent")
+            .where("eventToken", "==", eventToken)
+            .where("userID", "==", profile.userId)
+            .where("bandName", "==", data?.bandName)
+            .get();
+
+        functions.logger.debug(
+            "LINE UP isActive",
+            alertUser.empty,
+            data?.startTime,
+            data?.endTime,
+            currentTime,
+            data?.endTime &&
+            data?.startTime &&
+            data?.startTime <= currentTime &&
+            data?.endTime > currentTime,
+            data?.startTime && data?.startTime <= currentTime,
+            data?.endTime && data?.endTime > currentTime
+        );
         if (
+          alertUser.empty &&
           data?.endTime &&
           data?.startTime &&
           data?.startTime <= currentTime &&
           data?.endTime > currentTime
         ) {
-          const bandRef = firestore
-              .collection("Band")
-              .doc(data?.bandName ?? "");
-          const band = await bandRef.get();
-          const bandData = band.data() as createBandDTO;
-
           const lineUpFlex = bandLineUpTemplete(
               data?.bandName ?? "",
               data?.startTime,
-              data?.endTime,
-              bandData?.bandImage
+              data?.endTime
+              // bandData?.bandImage
           );
+          functions.logger.debug("FLEX LINE UP", lineUpFlex);
+
+          lineUpBandFlex.push(lineUpFlex);
+
+          const bandRef = firestore
+              .collection("Band")
+              .doc(data?.bandToken ?? "");
+          const band = await bandRef.get();
+          const bandData = {
+            token: band.ref.id,
+            ...band.data(),
+          } as unknown as { token: string } & createBandDTO;
+
+          if (bandData) {
+            const bandTemp = bandTemplete(bandData);
+            lineUpBandFlex.push(bandTemp);
+            functions.logger.debug("FLEX BAND", bandTemp);
+          }
 
           firestore
               .collection("StayEvent")
-              .doc(`${eventName}-${data?.bandName}`)
+              .doc(`${eventToken}-${data?.bandName}`)
               .set({
-                eventName,
+                eventToken,
                 userID: profile.userId,
                 bandName: data?.bandName,
               });
-
-          functions.logger.debug("FLEX LINE UP", lineUpFlex);
-          lineUpBandFlex.push(lineUpFlex);
         }
       }
 
       let enterEventTemp;
       if (eventData) {
         enterEventTemp = eventTemplate({
-          event: eventData as { token: string } & Event,
+          event: eventData,
           userId: profile.userId,
         });
       }
@@ -94,8 +137,8 @@ export const enterEvent = async (
       eventMessage = [
         {
           type: "text",
-          /* eslint max-len: ["error", { "code": 100 }]*/
-          text: `สวัสดีครับ ${profile.displayName} น้องโลมายินดีต้อนรับสู่งาน ${eventName} 🎶`,
+          /* eslint max-len: ["error", { "code": 200 }]*/
+          text: `สวัสดีครับ ${profile.displayName} น้องโลมายินดีต้อนรับสู่งาน ${eventData?.eventName} 🎶`,
         },
         ...(enterEventTemp ? [enterEventTemp] : []),
         ...(lineUpBandFlex ? lineUpBandFlex : []),
@@ -109,34 +152,6 @@ export const enterEvent = async (
         functions.logger.debug("MESSAGE EVENT", eventMessage);
         await reply(replyToken, eventMessage);
       }
-    } else {
-      await reply(replyToken, [
-        {
-          type: "text",
-          /* eslint max-len: ["error", { "code": 100 }]*/
-          text: `'งานดนตรี ${eventName} 🎶 ยังไม่เริ่มนะครับ`,
-        },
-      ]);
-    }
-  }
-  functions.logger.debug("BAND NAME", bandName);
-  if (bandName) {
-    const bandRef = firestore.collection("Band").doc(bandName);
-    const band = await bandRef.get();
-    const bandData = band.data();
-    functions.logger.debug("BAND DATA", bandData);
-    let bandMessage: Array<any> = [];
-    if (bandData) {
-      const enterBandTemp = bandTemplete(bandData as createBandDTO);
-      functions.logger.debug("FLEX BAND", enterBandTemp);
-      bandMessage = [enterBandTemp];
-    }
-
-    const isValiBandMsg = await validateLineMsg("reply", bandMessage);
-
-    if (isValiBandMsg) {
-      functions.logger.debug("MESSAGE BAND", bandMessage);
-      await reply(replyToken, bandMessage);
     }
   }
 };

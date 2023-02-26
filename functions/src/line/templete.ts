@@ -2,8 +2,6 @@ import {Event} from "../api/dto/event";
 import {createBandDTO} from "../api/dto/band";
 import {format} from "date-fns-tz";
 
-const regex = new RegExp("([\u0E00-\u0E7F]+)");
-
 export const eventTemplate = ({
   event,
   interested,
@@ -77,6 +75,7 @@ export const eventTemplate = ({
                         text: event.eventDate,
                         flex: 5,
                         color: "#929292",
+                        offsetTop: "4px",
                       },
                     ],
                   },
@@ -105,6 +104,7 @@ export const eventTemplate = ({
                         )}`,
                         flex: 5,
                         color: "#929292",
+                        offsetTop: "4px",
                       },
                     ],
                   },
@@ -143,6 +143,7 @@ export const eventTemplate = ({
                         flex: 5,
                         color: "#929292",
                         wrap: true,
+                        offsetTop: "4px",
                       },
                     ],
                   },
@@ -346,8 +347,7 @@ export type EventTemp = {
   };
 };
 
-export const bandTemplete = (band: createBandDTO) => {
-  const isThai = regex.test(band.bandName);
+export const bandTemplete = (band: { token: string } & createBandDTO) => {
   return {
     type: "flex",
     altText: band.bandName,
@@ -384,59 +384,65 @@ export const bandTemplete = (band: createBandDTO) => {
               },
             ] :
             []),
-          {
-            type: "box",
-            layout: "horizontal",
-            contents: [
-              ...(band?.streamingPlatform?.spotify ?
-                [
-                  {
-                    type: "image",
-                    url: "https://firebasestorage.googleapis.com/v0/b/loma-nkaf.appspot.com/o/social%2Fspotify.svg?alt=media&token=81115900-a641-450c-9ae3-b37abbdd4168",
-                    size: "40px",
-                    align: "end",
-                    offsetTop: "xs",
-                    action: {
-                      type: "uri",
-                      label: "action",
-                      uri: band?.streamingPlatform?.spotify,
-                    },
-                  },
-                ] :
-                []),
-              ...(band?.streamingPlatform?.appleMusic ?
-                [
-                  {
-                    type: "image",
-                    url: "https://firebasestorage.googleapis.com/v0/b/loma-nkaf.appspot.com/o/social%2Fapple-music.svg?alt=media&token=3072d292-c7c3-4d8c-ad65-4dccdc037778",
-                    size: "45px",
-                    align: "end",
-                    action: {
-                      type: "uri",
-                      label: "action",
-                      uri: band?.streamingPlatform?.appleMusic,
-                    },
-                  },
-                ] :
-                []),
-              ...(band?.streamingPlatform?.youtube ?
-                [
-                  {
-                    type: "image",
-                    url: "https://firebasestorage.googleapis.com/v0/b/loma-nkaf.appspot.com/o/social%2Fyoutube.svg?alt=media&token=c8fc7182-a955-4954-9b91-815a4e0480e6",
-                    size: "47px",
-                    action: {
-                      type: "uri",
-                      label: "action",
-                      uri: band?.streamingPlatform?.youtube,
-                    },
-                  },
-                ] :
-                []),
-            ],
-            spacing: "md",
-            width: "150px",
-          },
+          ...(band?.streamingPlatform?.appleMusic ||
+          band?.streamingPlatform?.spotify ||
+          band?.streamingPlatform?.youtube ?
+            [
+              {
+                type: "box",
+                layout: "horizontal",
+                contents: [
+                  ...(band?.streamingPlatform?.spotify ?
+                      [
+                        {
+                          type: "image",
+                          url: "https://firebasestorage.googleapis.com/v0/b/loma-nkaf.appspot.com/o/social%2Fspotify.svg?alt=media&token=81115900-a641-450c-9ae3-b37abbdd4168",
+                          size: "40px",
+                          align: "end",
+                          offsetTop: "xs",
+                          action: {
+                            type: "uri",
+                            label: "action",
+                            uri: band?.streamingPlatform?.spotify,
+                          },
+                        },
+                      ] :
+                      []),
+                  ...(band?.streamingPlatform?.appleMusic ?
+                      [
+                        {
+                          type: "image",
+                          url: "https://firebasestorage.googleapis.com/v0/b/loma-nkaf.appspot.com/o/social%2Fapple-music.svg?alt=media&token=3072d292-c7c3-4d8c-ad65-4dccdc037778",
+                          size: "45px",
+                          align: "end",
+                          action: {
+                            type: "uri",
+                            label: "action",
+                            uri: band?.streamingPlatform?.appleMusic,
+                          },
+                        },
+                      ] :
+                      []),
+                  ...(band?.streamingPlatform?.youtube ?
+                      [
+                        {
+                          type: "image",
+                          url: "https://firebasestorage.googleapis.com/v0/b/loma-nkaf.appspot.com/o/social%2Fyoutube.svg?alt=media&token=c8fc7182-a955-4954-9b91-815a4e0480e6",
+                          size: "47px",
+                          action: {
+                            type: "uri",
+                            label: "action",
+                            uri: band?.streamingPlatform?.youtube,
+                          },
+                        },
+                      ] :
+                      []),
+                ],
+                spacing: "md",
+                width: "150px",
+              },
+            ] :
+            []),
         ],
       },
       footer: {
@@ -449,15 +455,9 @@ export const bandTemplete = (band: createBandDTO) => {
             style: "link",
             height: "sm",
             action: {
-              type: isThai ? "message" : "uri",
+              type: "uri",
               label: "ขอเพลง",
-              ...(isThai ?
-                {text: `ขอเพลงจากวง ${band.bandName} นี้ได้ไหม`} :
-                {
-                  uri: `https://liff.line.me/1657898632-vkQB6aYy/song-request/${band.bandName
-                      .trim()
-                      .replaceAll(" ", "%20")}`,
-                }),
+              uri: `https://liff.line.me/1657898632-vkQB6aYy/song-request/${band.token}`,
             },
           },
           {
@@ -465,15 +465,9 @@ export const bandTemplete = (band: createBandDTO) => {
             style: "link",
             height: "sm",
             action: {
-              type: isThai ? "message" : "uri",
+              type: "uri",
               label: "ดูรายละเอียดเพิ่มเติม",
-              ...(isThai ?
-                {text: `ขอรายละเอียดของวง ${band.bandName} นี้เพิ่มเติม`} :
-                {
-                  uri: `ttps://liff.line.me/1657898632-vkQB6aYy/band-info/${band.bandName
-                      .trim()
-                      .replaceAll(" ", "%20")}`,
-                }),
+              uri: `https://liff.line.me/1657898632-vkQB6aYy/band-info/${band.token}`,
             },
           },
           {
@@ -481,9 +475,9 @@ export const bandTemplete = (band: createBandDTO) => {
             style: "link",
             height: "sm",
             action: {
-              type: "message",
+              type: "postback",
               label: "สนับสนุนวงดนตรีนี้",
-              text: `ขอช่องทางสนับสนุนของ ${band.bandName}`,
+              data: `ขอช่องทางสนับสนุนของ ${band.token}`,
             },
           },
         ],
@@ -500,7 +494,6 @@ export const bandLineUpTemplete = (
     endTime: string,
     bandImage?: string
 ) => {
-  const isThai = regex.test(bandName);
   return {
     type: "flex",
     altText: bandName,
@@ -545,17 +538,6 @@ export const bandLineUpTemplete = (
           },
         ],
         paddingAll: "none",
-      },
-      action: {
-        type: isThai ? "message" : "uri",
-        label: "ดูรายละเอียดเพิ่มเติม",
-        ...(isThai ?
-          {text: `ขอรายละเอียดของวง ${bandName} นี้เพิ่มเติม`} :
-          {
-            uri: `ttps://liff.line.me/1657898632-vkQB6aYy/band-info/${bandName
-                .trim()
-                .replaceAll(" ", "%20")}`,
-          }),
       },
     },
   };

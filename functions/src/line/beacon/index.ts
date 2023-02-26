@@ -1,7 +1,10 @@
 import * as functions from "firebase-functions";
 import * as line from "@line/bot-sdk";
 
-import {enterEvent, stayEvent} from "./events";
+import {
+  enterEvent,
+  // stayEvent
+} from "./events";
 
 import {getUserProfile} from "../util";
 
@@ -19,9 +22,9 @@ export const beaconEvent = async (event: line.BeaconEvent) => {
         await enterEvent(hardwareId, profile, replyToken);
         break;
 
-      case "stay":
-        await stayEvent(hardwareId, profile, replyToken);
-        break;
+        // case "stay":
+        //   await stayEvent(hardwareId, profile, replyToken);
+        //   break;
 
       default:
         break;
