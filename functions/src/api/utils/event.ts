@@ -1,4 +1,6 @@
 import * as admin from "firebase-admin";
+import {format} from "date-fns-tz";
+import {add} from "date-fns";
 
 export const isEventActive = (event: {
   eventEndTime: FirebaseFirestore.Timestamp;
@@ -26,5 +28,7 @@ export const timestampToString = (timestamp: FirebaseFirestore.Timestamp) => {
 };
 
 const getTimeStringFromDate = (date: Date) => {
-  return date.toTimeString().substring(0, 5);
+  return format(add(date, {hours: -17}), "HH:mm", {
+    timeZone: "asia/Bamgkok",
+  });
 };

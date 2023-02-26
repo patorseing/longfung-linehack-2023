@@ -1,6 +1,8 @@
+import {format} from "date-fns-tz";
+import {add} from "date-fns";
+
 import {Event} from "../api/dto/event";
 import {createBandDTO} from "../api/dto/band";
-import {format} from "date-fns-tz";
 
 export const eventTemplate = ({
   event,
@@ -92,15 +94,23 @@ export const eventTemplate = ({
                       {
                         type: "text",
                         text: `${format(
-                            (
-                            event.eventStartTime as FirebaseFirestore.Timestamp
-                            ).toDate(),
-                            "HH:mm"
+                            add(
+                                (
+                              event.eventStartTime as FirebaseFirestore.Timestamp
+                                ).toDate(),
+                                {hours: -17}
+                            ),
+                            "HH:mm",
+                            {timeZone: "asia/Bangkok"}
                         )} - ${format(
-                            (
-                            event.eventEndTime as FirebaseFirestore.Timestamp
-                            ).toDate(),
-                            "HH:mm"
+                            add(
+                                (
+                              event.eventEndTime as FirebaseFirestore.Timestamp
+                                ).toDate(),
+                                {hours: -17}
+                            ),
+                            "HH:mm",
+                            {timeZone: "asia/Bangkok"}
                         )}`,
                         flex: 5,
                         color: "#929292",

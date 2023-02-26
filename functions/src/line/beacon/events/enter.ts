@@ -5,15 +5,11 @@ import {format} from "date-fns-tz";
 import {add} from "date-fns";
 
 import {reply, validateLineMsg} from "../../util";
-import {
-  eventTemplate,
-  bandTemplete,
-  bandLineUpTemplete,
-} from "../../templete";
+import {eventTemplate} from "../../templete";
+import {lineUpTemp} from "../../func/lineuptemp";
 import {Event} from "../../../api/dto/event";
 
 import {firestore} from "../../../firebase";
-import {createBandDTO} from "../../../api/dto/band";
 
 export const enterEvent = async (
     hardwareId: string,
@@ -36,10 +32,8 @@ export const enterEvent = async (
     const eventData = {token: event.ref.id, ...event.data()} as {
       token: string;
     } & Event;
+
     const currentDate = format(add(new Date(), {hours: 7}), "dd/MM/yyyy", {
-      timeZone: "Asia/Bangkok",
-    });
-    const currentTime = format(add(new Date(), {hours: 7}), "HH:mm", {
       timeZone: "Asia/Bangkok",
     });
     functions.logger.debug(
@@ -53,78 +47,77 @@ export const enterEvent = async (
       eventData?.eventEndTime > admin.firestore.Timestamp.now() &&
       eventData?.eventStartTime <= admin.firestore.Timestamp.now()
     ) {
-      const lineUpBandFlex = [];
+      // for (const data of eventData?.lineUp ?? []) {
+      //   functions.logger.debug(
+      //       "LINE UP STR",
+      //       data?.endTime,
+      //       data?.startTime,
+      //       currentTime
+      //   );
 
-      for (const data of eventData?.lineUp ?? []) {
-        functions.logger.debug(
-            "LINE UP STR",
-            data?.endTime,
-            data?.startTime,
-            currentTime
-        );
+      //   const alertUser = await firestore
+      //       .collection("StayEvent")
+      //       .where("eventToken", "==", eventToken)
+      //       .where("userID", "==", profile.userId)
+      //       .where("bandName", "==", data?.bandName)
+      //       .get();
 
-        const alertUser = await firestore
-            .collection("StayEvent")
-            .where("eventToken", "==", eventToken)
-            .where("userID", "==", profile.userId)
-            .where("bandName", "==", data?.bandName)
-            .get();
+      //   functions.logger.debug(
+      //       "LINE UP isActive",
+      //       alertUser.empty,
+      //       data?.startTime,
+      //       data?.endTime,
+      //       currentTime,
+      //       data?.endTime &&
+      //       data?.startTime &&
+      //       data?.startTime <= currentTime &&
+      //       data?.endTime > currentTime,
+      //       data?.startTime && data?.startTime <= currentTime,
+      //       data?.endTime && data?.endTime > currentTime
+      //   );
+      //   if (
+      //     alertUser.empty &&
+      //     data?.endTime &&
+      //     data?.startTime &&
+      //     data?.startTime <= currentTime &&
+      //     data?.endTime > currentTime
+      //   ) {
+      //     const lineUpFlex = bandLineUpTemplete(
+      //         data?.bandName ?? "",
+      //         data?.startTime,
+      //         data?.endTime
+      //         // bandData?.bandImage
+      //     );
+      //     functions.logger.debug("FLEX LINE UP", lineUpFlex);
 
-        functions.logger.debug(
-            "LINE UP isActive",
-            alertUser.empty,
-            data?.startTime,
-            data?.endTime,
-            currentTime,
-            data?.endTime &&
-            data?.startTime &&
-            data?.startTime <= currentTime &&
-            data?.endTime > currentTime,
-            data?.startTime && data?.startTime <= currentTime,
-            data?.endTime && data?.endTime > currentTime
-        );
-        if (
-          alertUser.empty &&
-          data?.endTime &&
-          data?.startTime &&
-          data?.startTime <= currentTime &&
-          data?.endTime > currentTime
-        ) {
-          const lineUpFlex = bandLineUpTemplete(
-              data?.bandName ?? "",
-              data?.startTime,
-              data?.endTime
-              // bandData?.bandImage
-          );
-          functions.logger.debug("FLEX LINE UP", lineUpFlex);
+      //     lineUpBandFlex.push(lineUpFlex);
 
-          lineUpBandFlex.push(lineUpFlex);
+      //     const bandRef = firestore
+      //         .collection("Band")
+      //         .doc(data?.bandToken ?? "");
+      //     const band = await bandRef.get();
+      //     const bandData = {
+      //       token: band.ref.id,
+      //       ...band.data(),
+      //     } as unknown as { token: string } & createBandDTO;
 
-          const bandRef = firestore
-              .collection("Band")
-              .doc(data?.bandToken ?? "");
-          const band = await bandRef.get();
-          const bandData = {
-            token: band.ref.id,
-            ...band.data(),
-          } as unknown as { token: string } & createBandDTO;
+      //     if (bandData) {
+      //       const bandTemp = bandTemplete(bandData);
+      //       lineUpBandFlex.push(bandTemp);
+      //       functions.logger.debug("FLEX BAND", bandTemp);
+      //     }
 
-          if (bandData) {
-            const bandTemp = bandTemplete(bandData);
-            lineUpBandFlex.push(bandTemp);
-            functions.logger.debug("FLEX BAND", bandTemp);
-          }
-
-          firestore
-              .collection("StayEvent")
-              .doc(`${eventToken}-${data?.bandName}`)
-              .set({
-                eventToken,
-                userID: profile.userId,
-                bandName: data?.bandName,
-              });
-        }
-      }
+      //     firestore
+      //         .collection("StayEvent")
+      //         .doc(`${eventToken}-${data?.bandName}`)
+      //         .set({
+      //           eventToken,
+      //           userID: profile.userId,
+      //           bandName: data?.bandName,
+      //         });
+      //   }
+      // }
+      const lineUpBandFlex = await lineUpTemp({eventData, profile});
 
       let enterEventTemp;
       if (eventData) {
